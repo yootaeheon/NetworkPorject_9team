@@ -22,13 +22,13 @@ public class BaseMission : MonoBehaviour
         _coDict = new Dictionary<(string, System.Type), Component>(); 
     }
 
-    protected GameObject GetObject(string name)
+    protected GameObject GetMissionObject(string name)
     { 
         _goDict.TryGetValue(name, out GameObject go); 
         return go;
     }
 
-    protected T GetComponent<T>(string name) where T : Component
+    protected T GetMissionComponent<T>(string name) where T : Component
     {
         (string, System.Type) _key = (name, typeof(T));
 
