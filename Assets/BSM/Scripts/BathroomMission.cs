@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class BathroomMission : MonoBehaviour
 {
-    private int _clearCount = 5;
+    [SerializeField] private List<AudioClip> _clips = new List<AudioClip>(2);
 
     private MissionController _missionController;
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(5);
-    private Coroutine _clearRoutine;
+    private Coroutine _clearRoutine; 
+    
 
     private void Awake() => Init();
 
@@ -25,7 +26,7 @@ public class BathroomMission : MonoBehaviour
     private void Init()
     {
         _missionController = GetComponent<MissionController>();
-        _missionState = GetComponent<MissionState>();
+        _missionState = GetComponent<MissionState>(); 
     }
 
     /// <summary>
@@ -62,8 +63,7 @@ public class BathroomMission : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            //분무기 소리 재생 
-
+            SoundManager.Instance.SFXPlay(_clips[0]);
 
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a - 0.35f);
 
@@ -94,9 +94,8 @@ public class BathroomMission : MonoBehaviour
     private IEnumerator ClearCoroutine()
     {
         yield return Util.GetDelay(0.5f);
-        //미션 클리어 사운드 재생
-        //총 미션 게이지 증가
-
+        //총 미션 게이지 증가 추가 필요
+        SoundManager.Instance.SFXPlay(_clips[1]);
 
         gameObject.SetActive(false);
     }
