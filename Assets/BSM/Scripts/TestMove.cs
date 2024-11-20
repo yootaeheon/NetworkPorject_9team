@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class TestMove : MonoBehaviour
 {
     [SerializeField] private float _movSpeed;
-    [SerializeField] private Image _tempMission;
+    [SerializeField] private GameObject _tempMission;
+    
 
     private Rigidbody2D _rb;
 
