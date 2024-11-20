@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class BathroomMission : MonoBehaviour
 {
-    [SerializeField] private List<AudioClip> _clips = new List<AudioClip>(2);
-
+     
     private MissionController _missionController;
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(5);
@@ -18,9 +17,9 @@ public class BathroomMission : MonoBehaviour
     private void OnEnable()
     {
         //활성화 됐을 때 상단으로 올라오는 애니메이션
+        //공통으로 추가할 MoveGameObject 추가해서 애니메이션 적용하면 될듯
         _missionState.ObjectCount = 5;
-
-
+         
     }
 
     private void Init()
@@ -35,10 +34,13 @@ public class BathroomMission : MonoBehaviour
     private void OnDisable()
     {
         //미션 종료됐을 때 하단으로 내려가는 애니메이션 재생
+        IncreaseTotalScore();
 
-        foreach (GameObject ele in _stainList)
+        foreach (GameObject element in _stainList)
         {
-            ele.gameObject.SetActive(true);
+            Image image = element.GetComponent<Image>();
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 1); 
+            element.gameObject.SetActive(true);
         }
     }
 
@@ -63,19 +65,34 @@ public class BathroomMission : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            SoundManager.Instance.SFXPlay(_clips[0]);
+            SoundManager.Instance.SFXPlay(_missionState._clips[0]);
 
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a - 0.35f);
 
+            //동일한 게임 오브젝트가 없을 경우 리스트에 추가
+            if (!_stainList.Contains(go))
+            {
+                _stainList.Add(go);
+            }
+             
             //Alpha 값이 0이 됐을 경우 비활성화 처리 및 미션 진행 카운트 감소
             if (image.color.a < 0)
             {
-                _missionState.ObjectCount--;
-                _stainList.Add(go);
+                _missionState.ObjectCount--; 
                 go.SetActive(false);
-                image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+                MissionClear();
             } 
-            MissionClear();
+            
+        }
+    }
+
+    private void IncreaseTotalScore()
+    {
+        PlayerType type = PlayerType.Duck;
+
+        if (type.Equals(PlayerType.Goose))
+        {
+            //게임매니저 점수 증가    
         }
     }
 
@@ -95,8 +112,7 @@ public class BathroomMission : MonoBehaviour
     {
         yield return Util.GetDelay(0.5f);
         //총 미션 게이지 증가 추가 필요
-        SoundManager.Instance.SFXPlay(_clips[1]);
-
+        SoundManager.Instance.SFXPlay(_missionState._clips[1]); 
         gameObject.SetActive(false);
     }
 

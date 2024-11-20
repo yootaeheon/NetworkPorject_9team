@@ -5,17 +5,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MissionController : BaseMission
-{
-    private AudioSource _closeSource;
-     
+{ 
     private GraphicRaycaster _graphicRaycaster;
     private Canvas _grCanvas;
     private PointerEventData _ped = new PointerEventData(EventSystem.current);
     private List<RaycastResult> _rayResult = new List<RaycastResult>();
 
     private MissionState _missionState;
-    public GameObject _searchObj;
-
+    [HideInInspector] public GameObject _searchObj;
  
     private void Start()
     {
@@ -65,8 +62,7 @@ public class MissionController : BaseMission
     /// </summary>
     private void CloseMissionPopUp()
     {
-        _closeSource = GetMissionComponent<AudioSource>("CloseAudioSouce");
-        SoundManager.Instance.SFXPlay(_closeSource.clip);
+        SoundManager.Instance.SFXPlay(_missionState._clips[2]);
         gameObject.SetActive(false);
     }
 
