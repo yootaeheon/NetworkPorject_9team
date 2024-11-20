@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ObjectCount>k__BackingField: 5
+  <IsDetect>k__BackingField: 0
 --- !u!114 &4324763522623114004
 MonoBehaviour:
   m_ObjectHideFlags: 0
