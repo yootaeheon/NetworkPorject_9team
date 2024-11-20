@@ -13,12 +13,19 @@ public class BathroomMission : MonoBehaviour
     private Coroutine _clearRoutine;
 
     private void Awake() => Init();
-    private void OnEnable() => _missionState.ObjectCount = 5;
+
+    private void OnEnable()
+    {
+        //활성화 됐을 때 상단으로 올라오는 애니메이션
+        _missionState.ObjectCount = 5;
+
+
+    }
 
     private void Init()
     {
         _missionController = GetComponent<MissionController>();
-        _missionState = GetComponent<MissionState>(); 
+        _missionState = GetComponent<MissionState>();
     }
 
     /// <summary>
@@ -26,17 +33,19 @@ public class BathroomMission : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
+        //미션 종료됐을 때 하단으로 내려가는 애니메이션 재생
+
         foreach (GameObject ele in _stainList)
         {
-            ele.gameObject.SetActive(true); 
-        } 
+            ele.gameObject.SetActive(true);
+        }
     }
 
     private void Update()
     {
         _missionController.PlayerInput();
         RemoveTrain();
-        MissionClear();
+        
     }
 
 
@@ -48,22 +57,26 @@ public class BathroomMission : MonoBehaviour
         //감지한 오브젝트가 없을 경우 리턴
         if (!_missionState.IsDetect) return;
 
-        GameObject go = _missionController._searchObj.gameObject; 
+        GameObject go = _missionController._searchObj.gameObject;
         Image image = go.GetComponent<Image>();
 
         if (Input.GetMouseButtonDown(0))
         {
+            //분무기 소리 재생 
+
+
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a - 0.35f);
 
             //Alpha 값이 0이 됐을 경우 비활성화 처리 및 미션 진행 카운트 감소
             if (image.color.a < 0)
-            { 
-                _missionState.ObjectCount--; 
+            {
+                _missionState.ObjectCount--;
                 _stainList.Add(go);
                 go.SetActive(false);
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
-            }
-        } 
+            } 
+            MissionClear();
+        }
     }
 
     /// <summary>
@@ -71,7 +84,7 @@ public class BathroomMission : MonoBehaviour
     /// </summary>
     private void MissionClear()
     {
-        if(_missionState.ObjectCount < 1)
+        if (_missionState.ObjectCount < 1)
         {
             _clearRoutine = StartCoroutine(ClearCoroutine());
             CoroutineManager.Instance.ManagerStartCoroutine(this, _clearRoutine);
@@ -80,9 +93,11 @@ public class BathroomMission : MonoBehaviour
 
     private IEnumerator ClearCoroutine()
     {
-        yield return Util.GetDelay(1f);
+        yield return Util.GetDelay(0.5f);
         //미션 클리어 사운드 재생
         //총 미션 게이지 증가
+
+
         gameObject.SetActive(false);
     }
 

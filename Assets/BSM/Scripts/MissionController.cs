@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MissionController : BaseMission
 {
+    private AudioSource _closeSource;
+     
     private GraphicRaycaster _graphicRaycaster;
     private Canvas _grCanvas;
     private PointerEventData _ped = new PointerEventData(EventSystem.current);
@@ -63,6 +65,8 @@ public class MissionController : BaseMission
     /// </summary>
     private void CloseMissionPopUp()
     {
+        _closeSource = GetMissionComponent<AudioSource>("CloseAudioSouce");
+        SoundManager.Instance.SFXPlay(_closeSource.clip);
         gameObject.SetActive(false);
     }
 
