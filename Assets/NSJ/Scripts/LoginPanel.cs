@@ -1,3 +1,5 @@
+using Firebase.Auth;
+using Firebase.Database;
 using Firebase.Extensions;
 using Photon.Pun;
 using System;
@@ -9,13 +11,13 @@ public class LoginPanel : BaseUI
 {
     #region private 필드
 
-    private Color _defaultInputColor;
-    enum Box { Login, Find, SignUp, SendSuccess, SendFail, ConfirmSend, Size }
+    private Color _defaultInputColor => _loginEmailInput.placeholder.color; // InputField의 placeholder컬러의 기본값 지정
+    enum Box { Login, Find, FindSend,SignUp, SendSuccess, Error, ConfirmSend, Loading,Size }
     private GameObject[] _boxs = new GameObject[(int)Box.Size];
     // 로그인 박스
     private TMP_InputField _loginEmailInput;
     private TMP_InputField _loginPasswordInput;
-    private GameObject _loginButtonOn;
+    private GameObject _loginButton;
 
     // 회원 가입
     private TMP_InputField _signUpEmailInput;
@@ -24,11 +26,11 @@ public class LoginPanel : BaseUI
     private TMP_InputField _signUp2ndNameInput;
     private TMP_InputField _signUpPasswordInput;
     private TMP_InputField _signUpConfirmInput;
-    private GameObject _signUpButtonOn;
+    private GameObject _signUpButton;
 
     // 비밀번호 찾기 
     private TMP_InputField _findEmailInput;
-    private GameObject _findButtonOn;
+    private GameObject _findButton;
     #endregion
 
     private void Awake()
@@ -44,21 +46,121 @@ public class LoginPanel : BaseUI
     }
     #region 로그인
     /// <summary>
+    /// 로그인 버튼 활성화
+    /// </summary>
+    private void ActivateLoginButton(string value)
+    {
+        _loginButton.SetActive(false);
+        // 모든 인풋필드에 작성하지 않으면 로그인버튼 비활성화
+        if (_loginEmailInput.text == string.Empty)
+            return;
+        if (_loginPasswordInput.text == string.Empty)
+            return;
+        _loginButton.SetActive(true);
+    }
+    /// <summary>
     /// 로그인
     /// </summary>
     private void Login()
     {
+        string email = _loginEmailInput.text;
+        string password = _loginPasswordInput.text;
+
+        //로딩화면 On
+        ActivateLoadingBox(true);
+        // 로그인 시도
+        BackendManager.Auth.SignInWithEmailAndPasswordAsync(email, password).
+            ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCanceled) 
+                {
+                    return;
+                } 
+                else if (task.IsFaulted)
+                {
+                    // 에러 팝업 출력
+                    ChangeBox(Box.Error);
+                }
+                else
+                {
+                    // 이메일 인증 확인
+                    bool isEmailVerified = BackendManager.Auth.CurrentUser.IsEmailVerified;
+
+                    if (isEmailVerified)
+                    {
+                        // 이메일 인증 되었을 시 유저 정보 얻어온 후 -> 서버 연결
+                        GetUserDate();
+                    }
+                    else
+                    {
+                        // 이메일 인증 안되었을 시 인증 요청
+                        ChangeBox(Box.SendSuccess);
+                        SendEmailVerify();
+                    }
+                }
+                // 로딩화면 Off
+                ActivateLoadingBox(false);
+            });
+    }
+
+    /// <summary>
+    /// 유저 데이터 얻기
+    /// </summary>
+    private void GetUserDate()
+    {
+        DatabaseReference userRef = BackendManager.Auth.CurrentUser.UserId.GetUserDataRef();
+
+        //로딩화면 On
+        ActivateLoadingBox(true);
+        // 유저 데이터 획득 시도
+        userRef.GetValueAsync()
+            .ContinueWithOnMainThread(task =>
+            {  
+                if (task.IsCanceled) 
+                {
+                    return;
+                }
+                   
+                else if (task.IsFaulted)
+                {
+                    return;
+                }                 
+                else
+                {
+                    DataSnapshot snapshot = task.Result;
+                    string json = snapshot.GetRawJsonValue();
+                    // 백앤드 매니저 UserData에 받아온 유저 데이터 캐싱
+                    BackendManager.User = JsonUtility.FromJson<UserDate>(json);
+
+                    //서버 연결
+                    ConnectedServer();
+                }
+                ActivateLoadingBox(false);
+            });
+    }
+
+    /// <summary>
+    /// 서버에 연결
+    /// </summary>
+    private void ConnectedServer()
+    {
+        //로딩화면 On
+        ActivateLoadingBox(true);
+
+        // 포톤 네트워크 플레이어 닉네임에 유저 닉네임 지정
+        PhotonNetwork.LocalPlayer.NickName = BackendManager.User.NickName;
         PhotonNetwork.ConnectUsingSettings();
     }
     #endregion
+
     #region 회원 가입
     private void ActivateSignUpButton(string value)
     {
-        _signUpButtonOn.SetActive(false);
+        _signUpButton.SetActive(false);
         // 모든 InputField 를 작성해야만 로그인 버튼 활성화
-        if (_signUpEmailInput.text == string.Empty) 
+        if (_signUpEmailInput.text == string.Empty)
             return;
-        if(_signUpPasswordInput.text == string.Empty) 
+        if (_signUpPasswordInput.text == string.Empty)
             return;
         if (_signUpConfirmInput.text == string.Empty)
             return;
@@ -68,7 +170,7 @@ public class LoginPanel : BaseUI
             return;
         if (_signUp2ndNameInput.text == string.Empty)
             return;
-        _signUpButtonOn.SetActive(true);
+        _signUpButton.SetActive(true);
     }
 
     /// <summary>
@@ -79,19 +181,167 @@ public class LoginPanel : BaseUI
         string email = _signUpEmailInput.text;
         string password = _signUpPasswordInput.text;
         string confirm = _signUpConfirmInput.text;
-        if(password != confirm)
+        if (password != confirm) // 비밀번호와 비밀번호 확인이 서로 다를경우
         {
-            _signUpPasswordInput.text = string.Empty;
-            _signUpPasswordInput.placeholder.color = Util.GetColor(Color.red, _defaultInputColor.a);
-            _signUpConfirmInput.text = string.Empty;
-            _signUpConfirmInput.placeholder.color = Util.GetColor(Color.red, _defaultInputColor.a);
+            SetErrorInput(_signUpPasswordInput);
+            SetErrorInput(_signUpConfirmInput);
         }
-
+        //로딩화면 On
+        ActivateLoadingBox(true);
         BackendManager.Auth.CreateUserWithEmailAndPasswordAsync(email, password).
             ContinueWithOnMainThread(task =>
             {
+                // 로딩화면 Off
+                ActivateLoadingBox(false);
 
+                if (task.IsCanceled)
+                    return;
+                else if (task.IsFaulted)
+                {
+                    // 에러팝업 
+                    ChangeBox(Box.Error);
+                    return;
+                }
+                else
+                {
+                    // 회원 가입 완료
+                    // 유저 정보 데이터베이스 저장
+                    SetUserInfo();
+                    // 박스 변경
+                    ChangeBox(Box.SendSuccess);
+                    // TODO : 이메일 인증 필요
+                    SendEmailVerify();
+                }
             });
+    }
+    /// <summary>
+    /// 유저정보 데이터베이스 저장
+    /// </summary>
+    private void SetUserInfo()
+    {
+        string nickName = _signUpNickNameInput.text;
+        string firstName = _signUp1stNameInput.text;
+        string secondName = _signUp2ndNameInput.text;
+
+        // UID 데이터베이스 위치 가져오기
+        DatabaseReference userRef = BackendManager.Auth.CurrentUser.UserId.GetUserDataRef();
+        // 새로운 유저 데이터 인스턴스
+        UserDate userData = new UserDate();
+        userData.NickName = nickName;
+        userData.FirstName = firstName;
+        userData.SecondName = secondName;
+        // 유저 데이터 Json화
+        string json = JsonUtility.ToJson(userData);
+        // 데이터 베이스에 저장
+        userRef.SetRawJsonValueAsync(json);
+    }
+    #endregion
+
+    #region 이메일 인증
+    /// <summary>
+    /// 이메일 인증 보내기
+    /// </summary>
+    private void SendEmailVerify()
+    {
+        FirebaseUser user = BackendManager.Auth.CurrentUser;
+
+        // 로딩화면 On
+        user.SendEmailVerificationAsync().
+            ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCanceled)
+                    return;
+                else if (task.IsFaulted)
+                {
+                    // 에러 창 
+                    ChangeBox(Box.Error);
+                }
+            });
+    }
+
+    /// <summary>
+    /// 이메일 인증 확인
+    /// </summary>
+    private void CheckEmailVerify()
+    {
+        FirebaseUser user = BackendManager.Auth.CurrentUser;
+        // 유저정보 새로 고침
+        user.ReloadAsync().
+            ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCanceled)
+                    return;
+                else if (task.IsFaulted)
+                    return;
+                else
+                {
+                    bool success = user.IsEmailVerified; // 이메일 인증 성공함?
+                    if (success)
+                    {
+                        // 서버 연결
+                        ConnectedServer();
+                    }
+                    else
+                    {
+                        ChangeBox(Box.ConfirmSend);
+                        ChangeBox(Box.Error);
+                    }
+                }
+            });
+    }
+    #endregion
+
+    #region 비밀번호 찾기
+    /// <summary>
+    /// 복구 버튼 활성화
+    /// </summary>
+    private void ActivateFindButton(string value)
+    {
+        _findButton.SetActive(false);
+        if (_findEmailInput.text == string.Empty)
+            return;
+        _findButton.SetActive(true);
+    }
+
+    /// <summary>
+    /// 비밀번호 찾기
+    /// </summary>
+    private void FindPassword()
+    {
+        string email = _findEmailInput.text; // 이메일 캐싱
+
+        // 로딩화면 On
+        ActivateLoadingBox(true);
+        BackendManager.Auth.SendPasswordResetEmailAsync(email).
+            ContinueWithOnMainThread(task =>
+            {
+                // 로딩화면 Off
+                ActivateLoadingBox(false);
+
+                if (task.IsCanceled)
+                    return;
+                else if (task.IsFaulted)
+                {
+                    ChangeBox(Box.Error);
+                    SetErrorInput(_findEmailInput);
+                }
+                else
+                {
+                    ChangeBox(Box.FindSend);
+                }
+            });
+    }
+
+    #endregion
+
+    #region  로그아웃
+    /// <summary>
+    /// 로그아웃
+    /// </summary>
+    private void LogOut()
+    {
+        BackendManager.Auth.SignOut();
+        ChangeBox(Box.Login);
     }
     #endregion
 
@@ -101,6 +351,13 @@ public class LoginPanel : BaseUI
     /// </summary>
     private void ChangeBox(Box box)
     {
+        if (box == Box.Error) // 에러창은 팝업방식으로
+        {
+            _boxs[(int)box].SetActive(true);
+            ClearBox(box);
+            return;
+        }
+
         for (int i = 0; i < _boxs.Length; i++)
         {
             if (i == (int)box) // 선택한 박스 빼고 초기화
@@ -143,7 +400,7 @@ public class LoginPanel : BaseUI
     {
         _loginEmailInput.text = string.Empty;
         _loginPasswordInput.text = string.Empty;
-        _loginButtonOn.SetActive(false);
+        _loginButton.SetActive(false);
     }
 
     /// <summary>
@@ -159,7 +416,7 @@ public class LoginPanel : BaseUI
         _signUpConfirmInput.placeholder.color = _defaultInputColor;
         _signUp1stNameInput.text = string.Empty;
         _signUp2ndNameInput.text = string.Empty;
-        _signUpButtonOn.SetActive(false);
+        _signUpButton.SetActive(false);
     }
 
     /// <summary>
@@ -168,9 +425,27 @@ public class LoginPanel : BaseUI
     private void ClearFindBox()
     {
         _findEmailInput.text = string.Empty;
-        _findButtonOn.SetActive(false);
+        _findEmailInput.placeholder.color = _defaultInputColor;
+        _findButton.SetActive(false);
     }
+
+    /// <summary>
+    /// 로딩 화면 활성화 / 비활성화
+    /// </summary>
+    private void ActivateLoadingBox(bool isActive)
+    {
+        if (isActive)
+        {
+            GetUI("LoadingBox").SetActive(true);
+        }
+        else
+        {
+            GetUI("LoadingBox").SetActive(false);
+        }
+    }
+
     #endregion
+
     #region 초기 설정
     /// <summary>
     /// 초기 설정
@@ -180,16 +455,20 @@ public class LoginPanel : BaseUI
         #region Box 배열 설정
         _boxs[(int)Box.Login] = GetUI("LoginBox");
         _boxs[(int)Box.Find] = GetUI("FindBox");
+        _boxs[(int)Box.FindSend] = GetUI("FindSendBox");
         _boxs[(int)Box.SignUp] = GetUI("SignUpBox");
         _boxs[(int)Box.SendSuccess] = GetUI("SendSuccessBox");
-        _boxs[(int)Box.SendFail] = GetUI("SendFailBox");
+        _boxs[(int)Box.Error] = GetUI("ErrorBox");
         _boxs[(int)Box.ConfirmSend] = GetUI("ConfirmSendBox");
+        _boxs[(int)Box.Loading] = GetUI("LoadingBox");
         #endregion
+
         #region LoginBox
         _loginEmailInput = GetUI<TMP_InputField>("LoginEmailInput");
         _loginPasswordInput = GetUI<TMP_InputField>("LoginPasswordInput");
-        _loginButtonOn = GetUI("LoginButton");
+        _loginButton = GetUI("LoginButton");
         #endregion
+
         #region SignUpBox
         _signUpEmailInput = GetUI<TMP_InputField>("SignUpEmailInput");
         _signUpNickNameInput = GetUI<TMP_InputField>("SignUpNickNameInput");
@@ -197,14 +476,13 @@ public class LoginPanel : BaseUI
         _signUp2ndNameInput = GetUI<TMP_InputField>("SignUp2ndNameInput");
         _signUpPasswordInput = GetUI<TMP_InputField>("SignUpPasswordInput");
         _signUpConfirmInput = GetUI<TMP_InputField>("SignUpConfirmInput");
-        _signUpButtonOn = GetUI("SignUpButton");
-        #endregion
-        #region FindBox
-        _findEmailInput = GetUI<TMP_InputField>("FindEmailInput");
-        _findButtonOn = GetUI("FindButton");
+        _signUpButton = GetUI("SignUpButton");
         #endregion
 
-        _defaultInputColor = _loginEmailInput.placeholder.color;
+        #region FindBox
+        _findEmailInput = GetUI<TMP_InputField>("FindEmailInput");
+        _findButton = GetUI("FindButton");
+        #endregion
     }
     /// <summary>
     /// 이벤트 구독
@@ -215,7 +493,10 @@ public class LoginPanel : BaseUI
         GetUI<Button>("LoginFindButton").onClick.AddListener(() => ChangeBox(Box.Find)); // 비밀번호 찾기 버튼
         GetUI<Button>("LoginSignUpButton").onClick.AddListener(() => ChangeBox(Box.SignUp)); // 회원가입 버튼
         GetUI<Button>("LoginButton").onClick.AddListener(Login);
+        _loginEmailInput.onValueChanged.AddListener(ActivateLoginButton);
+        _loginPasswordInput.onValueChanged.AddListener(ActivateLoginButton);
         #endregion
+
         #region SignUpBox
         GetUI<Button>("SignUpButton").onClick.AddListener(SignUp);
         GetUI<Button>("SignUpBackButton").onClick.AddListener(() => ChangeBox(Box.Login));
@@ -226,10 +507,35 @@ public class LoginPanel : BaseUI
         _signUp1stNameInput.onValueChanged.AddListener(ActivateSignUpButton);
         _signUp2ndNameInput.onValueChanged.AddListener(ActivateSignUpButton);
         #endregion
+
         #region FindBox
+
         GetUI<Button>("FindBackButton").onClick.AddListener(() => ChangeBox(Box.Login));
-        GetUI<Button>("FindButton").onClick.AddListener(() => {/* TODO : 비밀번호 찾기 메서드 */});
+        GetUI<Button>("FindButton").onClick.AddListener(FindPassword);
+        _findEmailInput.onValueChanged.AddListener(ActivateFindButton);
+        
         #endregion
+
+        #region FindSendBox
+
+        GetUI<Button>("FindSendCheckButton").onClick.AddListener(() => ChangeBox(Box.Login));
+
+        #endregion
+
+        #region SendSuccessBox
+        GetUI<Button>("SendSuccessCheckButton").onClick.AddListener(CheckEmailVerify);
+        #endregion
+
+        #region ConfirmSendBox
+        GetUI<Button>("ConfirmSendRetryButton").onClick.AddListener(SendEmailVerify);
+        GetUI<Button>("ConfirmSendOKButton").onClick.AddListener(CheckEmailVerify);
+        GetUI<Button>("ConfirmSendLogOutButton").onClick.AddListener(LogOut);
+        #endregion
+
+        #region ErrorBox
+        GetUI<Button>("ErrorBackButton").onClick.AddListener(() => { GetUI("ErrorBox").SetActive(false); }); // 에러버튼은 팝업형식이기 때문에 본인만 닫아주면됨
+        #endregion
+
         GetUI<Button>("QuitButton").onClick.AddListener(() =>  // 종료 버튼
         {
 #if UNITY_EDITOR
@@ -240,4 +546,16 @@ public class LoginPanel : BaseUI
         });
     }
     #endregion
+
+
+    /// <summary>
+    /// InputField 에러 상태 전환
+    /// </summary>
+    private void SetErrorInput(TMP_InputField input)
+    {
+        input.text = string.Empty;
+        input.placeholder.color = Util.GetColor(Color.red, _defaultInputColor.a);
+    }
+
 }
+

@@ -17,6 +17,9 @@ public class BackendManager : MonoBehaviour
     public static FirebaseAuth Auth { get { return Instance._auth; } private set { Instance._auth = value; } }
     private FirebaseDatabase _database;
     public static FirebaseDatabase DataBase { get { return Instance._database; }private set { Instance._database = value; } }
+
+    private UserDate _user;
+    public static UserDate User { get { return Instance._user; } set {Instance._user = value; } }
     private void Awake()
     {
         InitSingleTon();

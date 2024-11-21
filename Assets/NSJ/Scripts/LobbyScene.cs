@@ -147,7 +147,13 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="panel"></param>
     private void ChangePanel(Panel panel)
     {
-        for (int i = 0; i < _panels.Length; i++)
+#if UNITY_EDITOR
+        // 유니티 종료 중일때는 진행 금지
+        if (UnityEditor.EditorApplication.isPlaying == false) 
+            return;
+#endif
+
+            for (int i = 0; i < _panels.Length; i++)
         {
             if (i == (int)panel) // 매개변수와 일치하는 패널이면 활성화
             {
