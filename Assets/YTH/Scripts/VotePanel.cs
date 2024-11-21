@@ -1,10 +1,8 @@
+using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
 
 public class VotePanel : MonoBehaviour
 {
@@ -40,16 +38,16 @@ public class VotePanel : MonoBehaviour
         _nickNameText.text = target.NickName;
 
 
-       // 임포스터 캐릭터는 그 로컬플레이어에게만 표시
-       // if (localPlayer.IsImposter == true)
-       // {
-       //     _nickNameText.color = Color.red ;
-       // }
-       //
+        // 임포스터 캐릭터는 그 로컬플레이어에게만 표시
+        // if (localPlayer.IsImposter == true)
+        // {
+        //     _nickNameText.color = Color.red ;
+        // }
+        //
 
-       //TODO : _characterImage = ""; // 캐릭터 이미지 불러오기
+        //TODO : _characterImage = ""; // 캐릭터 이미지 불러오기
 
-       // 플레이어가 죽은 상태라면 그 플레이어 패널을 가리는 회색 패널 on
+        // 플레이어가 죽은 상태라면 그 플레이어 패널을 가리는 회색 패널 on
 
     }
     private void Awake()
@@ -59,14 +57,13 @@ public class VotePanel : MonoBehaviour
 
     private void Init()
     {
-        _voteData.ReportTimeCount = _reportTimeCountSlider.value;
-        _voteData.VoteTimeCount = _voteTimeCountSlider.value;
+        _reportTimeCountSlider.value = _voteData.ReportTimeCount;
+        _voteTimeCountSlider.value = _voteData.VoteTimeCount;
     }
 
     private void Update()
     {
         _voteData.ReportTimeCount -= (float)PhotonNetwork.Time;
-
         if (_voteData.ReportTimeCount == 0)
         {
             _voteData.VoteTimeCount -= (float)PhotonNetwork.Time;
@@ -79,7 +76,7 @@ public class VotePanel : MonoBehaviour
         _voteData.DidVote = true;
     }
 
-    public void OnClickSkip() 
+    public void OnClickSkip()
     {
         _voteData.SkipCount++;
         _voteData.DidVote = true;
