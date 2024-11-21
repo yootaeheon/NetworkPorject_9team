@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviourPun
     private void Start()
     {
         count = PhotonNetwork.ViewCount - 1;
-        body.color = new Color(1f, 0f, 0f, 1f);
+       
+        body.color = colors[count];
         Debug.Log($"플레이어 넘버{count}");
 
     }
