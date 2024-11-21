@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CoroutineManager : MonoBehaviour
@@ -8,11 +9,14 @@ public class CoroutineManager : MonoBehaviour
 
     private Dictionary<MonoBehaviour, Coroutine> _routineDict = new Dictionary<MonoBehaviour, Coroutine>();
 
-    private void Awake() => SetSingleton();
+    private void Awake()
+    {
+        SetSingleton();
+    }
 
     private void SetSingleton()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -23,6 +27,12 @@ public class CoroutineManager : MonoBehaviour
         }
 
     }
+
+    public Coroutine GetCoroutine(IEnumerator enumerator)
+    {
+        return StartCoroutine(enumerator);
+    }
+
 
     /// <summary>
     /// 시작 코루틴을 받아와서 관리하는 기능
@@ -41,18 +51,18 @@ public class CoroutineManager : MonoBehaviour
                 _routineDict.Remove(key);
             }
         }
+        _routineDict[key] = value;
 
-        
-        _routineDict.TryAdd(key, value);
         IEnumerator enumerator = _routineDict.GetEnumerator();
 
         //다음 동작이 있을 동안 반복
         while (enumerator.MoveNext())
-        {
+        { 
             //해당 코루틴의 대기 시간만큼 지연
             yield return enumerator.Current; 
-        } 
-    } 
+        }
+    }
+
 
     /// <summary>
     /// 코루틴 중지를 관리하는 기능

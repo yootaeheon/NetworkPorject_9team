@@ -69,22 +69,23 @@ public class MissionController : BaseMission
     private void CloseMissionPopUp()
     {
         SoundManager.Instance.SFXPlay(_missionState._clips[2]);
-        MissionCoroutine();
+        MissionCoroutine(0.5f);
     }
 
     /// <summary>
     /// 공용으로 사용할 팝업 종료 애니메이션 코루틴
     /// </summary>
-    public void MissionCoroutine()
-    {
-        _closeCo = StartCoroutine(CloseMission());
+    public void MissionCoroutine(float delay)
+    { 
+        _closeCo = CoroutineManager.Instance.GetCoroutine((CloseMission(delay)));
         CoroutineManager.Instance.ManagerStartCoroutine(this, _closeCo);
+   
     }
 
-    private IEnumerator CloseMission()
+    private IEnumerator CloseMission(float delay)
     {
         _missionState.ClosePopAnim();
-        yield return Util.GetDelay(0.5f);
+        yield return Util.GetDelay(delay);
         gameObject.SetActive(false);
     }
 

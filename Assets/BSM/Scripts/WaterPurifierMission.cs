@@ -1,3 +1,4 @@
+using POpusCodec.Enums;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -7,32 +8,34 @@ using UnityEngine.UI;
 public class WaterPurifierMission : MonoBehaviour
 {
     private MissionController _missionController;
-    private MissionState _missionState;
-     
-    private Vector2 _socketLocation = new Vector2(-397, 121);
-    
-    private Vector2 _startPos;
-    private GameObject _cord;
-    private LineRenderer _linerenderer;
-
+    private MissionState _missionState; 
+    private LineRenderer _linerenderer; 
     private Animator _cordAnimator;
     private int _cordHash;
     private Image _test;
+    
+
+    private Rect _socketLocation;
+    private Rect _cordStartPos;
+    private RectTransform _cord;
+    private Coroutine _plugCo;
 
     private void Awake()
     {
-        Init();
+        Init(); 
     }
 
     private void Start()
     {
         //코드 애니메이션으로 변경 필요
-        _cordAnimator = _missionController.GetMissionObj<Animator>("Spray");
-        _cordHash = Animator.StringToHash("SprayBody");
-
-        _cord = _missionController.GetMissionObj("CordObject");
-        _startPos = _cord.gameObject.transform.position;
+        _cordAnimator = _missionController.GetMissionObj<Animator>("Cord");
+        _cordHash = Animator.StringToHash("Plugin");
+ 
         _linerenderer = _missionController.GetMissionObj<LineRenderer>("SocketObject");
+        _cord = _missionController.GetMissionObj<RectTransform>("CordObject");
+ 
+        _cordStartPos = new Rect(-437, -321, 90, 120);
+        _socketLocation = new Rect(-397, 127, 90, 120);
     }
 
     private void Init()
@@ -40,44 +43,74 @@ public class WaterPurifierMission : MonoBehaviour
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
         _missionState.MissionName = "정수기 수리하기";
-         
+        
     }
 
 
     private void OnEnable()
-    {
-        //코드 위치 초기화 
-
-        _missionState.ObjectCount = 1;
+    { 
+        _missionState.ObjectCount = 1; 
     }
 
-    
+    private void OnDisable()
+    {
+        //코드 위치 초기화 
+        _cord.anchoredPosition = _cordStartPos.position; 
+    }
+
+
     private void Update()
     {
         SelectCordObj();
-        DrawLineRenderer(); 
-        MissionClear();
-        
-        
-        Debug.Log($"{_cord.transform.position}");
+        DrawLineRenderer();  
     }
-
+ 
     private void SelectCordObj()
-    { 
+    {
+ 
         if (Input.GetMouseButton(0))
         {
             _missionController.PlayerInput();
-            _cord.transform.position = _missionState.MousePos; 
+            _cord.position = _missionState.MousePos; 
         }
 
         else if (Input.GetMouseButtonUp(0))
         {
             LocationOfSocket();
-
-            _cord.transform.position = _startPos; 
+             
         } 
     }
+     
+    private void LocationOfSocket()
+    { 
+        //상,하 | 좌,우 여유 좌표 값 
+        float socketX1 = _socketLocation.position.x - 10f;
+        float socketY1 = _socketLocation.position.y - 10f;
+         
+        float socketX2 = _socketLocation.position.x + 10f;
+        float socketY2 = _socketLocation.position.y + 10f;
 
+        //코드 포지션 값
+        float cordX = (int)_cord.anchoredPosition.x;
+        float cordY = (int)_cord.anchoredPosition.y;
+
+        if ((cordX > socketX1 && cordY > socketY1) && (cordX < socketX2 && cordY < socketY2))
+        {
+            
+            _cordAnimator.Play(_cordHash);
+            _cord.anchoredPosition = _socketLocation.position;
+            _missionState.ObjectCount--;
+             
+            MissionClear();
+        } 
+        else
+        {
+            _cord.anchoredPosition = _cordStartPos.position;
+        } 
+
+    }
+ 
+     
     private void DrawLineRenderer()
     {
         //라인 렌더러 위치 정수기 몸체 > 코드까지
@@ -85,20 +118,6 @@ public class WaterPurifierMission : MonoBehaviour
         //UI Linerender 그려줌
 
     }
-
-    private void LocationOfSocket()
-    {
-        //마우스 뗐을 때 콘센트의 위치인가?
-        //애니메이션 재생
-        //Count--;
-        //MissionClear;
-        //콘센트의 위치가 아니라면 코드의 위치는 처음 위치로
-        
-
-
-    }
-
-
 
     private void IncreaseTotalScore()
     {
@@ -119,12 +138,23 @@ public class WaterPurifierMission : MonoBehaviour
     private void MissionClear()
     {
         if (_missionState.ObjectCount < 1)
-        {
+        { 
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
-            _missionController.MissionCoroutine();
+            StartCoroutine(PluginCoroutine()); 
             IncreaseTotalScore();
         }
+    } 
+
+    private IEnumerator PluginCoroutine()
+    {
+        yield return Util.GetDelay(1f);
+        _missionState.ClosePopAnim();
+        yield return Util.GetDelay(0.5f);
+        gameObject.SetActive(false);
     }
 
 
+
+
 }
+

@@ -116,7 +116,7 @@ public class BathroomMission : MonoBehaviour
         if (_missionState.ObjectCount < 1)
         {
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
-            _missionController.MissionCoroutine();
+            _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }
     } 
