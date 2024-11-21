@@ -10,15 +10,20 @@ public class BathroomMission : MonoBehaviour
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(5);
 
+    private Vector2 _offset = new Vector2(30, -80);
+    private GameObject _spray;
     private Animator _sprayAnim;
     private int _sprayHash;
+
+
 
     private void Awake() => Init();
 
     private void Start()
     {
-        _sprayAnim = _missionController.GetMission<Animator>("Spray");
-        _sprayHash = Animator.StringToHash("SprayBody"); 
+        _sprayAnim = _missionController.GetMissionObj<Animator>("Spray");
+        _sprayHash = Animator.StringToHash("SprayBody");
+        _spray = _missionController.GetMissionObj("Spray");
     }
 
     private void OnEnable()
@@ -27,9 +32,10 @@ public class BathroomMission : MonoBehaviour
     }
 
     private void Init()
-    {
-        _missionController = GetComponent<MissionController>();
-        _missionState = GetComponent<MissionState>(); 
+    { 
+        _missionController = GetComponent<MissionController>(); 
+        _missionState = GetComponent<MissionState>();
+        _missionState.MissionName = "¸ñ¿åÅÁ Ã»¼ÒÇÏ±â";
     }
 
     /// <summary>
@@ -47,6 +53,8 @@ public class BathroomMission : MonoBehaviour
 
     private void Update()
     {
+        _spray.transform.position = _missionState.MousePos + _offset;
+
         _missionController.PlayerInput();
         RemoveTrain(); 
     }

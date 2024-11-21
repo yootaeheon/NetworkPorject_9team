@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class MissionState : MonoBehaviour
 {
-    [field: SerializeField] public int ObjectCount { get; set; }
-    [field: SerializeField] public bool IsDetect { get; set; }
-    [field: SerializeField] public Vector2 MousePos { get; set; }
+    [field: HideInInspector] public string MissionName {  get; set; }
+    [field: HideInInspector] public int ObjectCount { get; set; }
+    [field: HideInInspector] public bool IsDetect { get; set; }
+    [field: HideInInspector] public Vector2 MousePos { get; set; }
     [SerializeField] public List<AudioClip> _clips = new List<AudioClip>();
     [HideInInspector] public Animator _anim;
 
-    public int _openHash;
-    public int _closeHash; 
+    [HideInInspector] public int _openHash;
+    [HideInInspector] public int _closeHash; 
       
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class MissionState : MonoBehaviour
     private void OnEnable()
     {
         _anim.Play(_openHash);
+        Debug.Log($"현재 미션 내용 : {MissionName}");
     }
 
     public void ClosePopAnim()

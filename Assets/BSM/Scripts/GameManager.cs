@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    //테스트용 코드
+
     public static GameManager Instance { get; private set; }
 
     [SerializeField] public Slider _sli;

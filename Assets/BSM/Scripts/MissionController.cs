@@ -12,12 +12,8 @@ public class MissionController : BaseMission
     private PointerEventData _ped = new PointerEventData(EventSystem.current);
     private List<RaycastResult> _rayResult = new List<RaycastResult>();
 
-    private GameObject _spray; 
-    private Vector2 _offset = new Vector2(30, -80);
-
     //팝업 종료 코루틴
-    private Coroutine _closeCo;
-
+    private Coroutine _closeCo; 
     private MissionState _missionState;
     [HideInInspector] public GameObject _searchObj;
  
@@ -35,7 +31,6 @@ public class MissionController : BaseMission
         _grCanvas = transform.parent.GetComponent<Canvas>();
         _graphicRaycaster = _grCanvas.GetComponent<GraphicRaycaster>();
         GetMissionComponent<Button>("MissionCloseButton").onClick.AddListener(CloseMissionPopUp); 
-        _spray = GetMissionObject("Spray");
     }
  
 
@@ -46,7 +41,6 @@ public class MissionController : BaseMission
     public void PlayerInput()
     {
         _missionState.MousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y); 
-        _spray.transform.position = _missionState.MousePos + _offset;
 
         _ped.position = _missionState.MousePos;
 
@@ -94,9 +88,14 @@ public class MissionController : BaseMission
         gameObject.SetActive(false);
     }
 
-    public T GetMission<T>(string name) where T : Component
+    public T GetMissionObj<T>(string name) where T : Component
     { 
         return GetMissionComponent<T>(name);
+    }
+
+    public GameObject GetMissionObj(string name)
+    { 
+        return GetMissionObject(name);
     }
 
 
