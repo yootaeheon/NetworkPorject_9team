@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestGameScene : MonoBehaviourPunCallbacks
+
+
+public class TestGameScene3 : MonoBehaviourPunCallbacks
 {
 
     public const string RoomName = "TestRoom";
