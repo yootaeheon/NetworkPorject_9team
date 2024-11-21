@@ -23,7 +23,6 @@ public class CameraController : MonoBehaviourPun
         if (photonView.IsMine == true)
         {
             cam.transform.position = transform.position + offset;
-
         }
 
     }
