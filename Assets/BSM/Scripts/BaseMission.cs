@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BaseMission : MonoBehaviour
-{
-
+{   
     private Dictionary<string, GameObject> _goDict;
     private Dictionary<(string, System.Type), Component> _coDict;
- 
+
+    protected void Awake() => Bind();
+
     protected void Bind()
     {
         Transform[] transforms = GetComponentsInChildren<Transform>(true);
