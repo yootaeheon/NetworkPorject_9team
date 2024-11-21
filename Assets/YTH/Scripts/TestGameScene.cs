@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TestGameScene : MonoBehaviourPunCallbacks
 {
-    public const string RoomName = "TestRoom";
+    public const string RoomName = "DebugGameScene1111";
     private void Start()
     {
         PhotonNetwork.LocalPlayer.NickName = $"Player {Random.Range(1000, 10000)}";
