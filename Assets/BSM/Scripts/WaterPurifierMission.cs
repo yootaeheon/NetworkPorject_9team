@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WaterPurifierMission : MonoBehaviour
 {
     private MissionController _missionController;
     private MissionState _missionState;
-
-    private Vector2 _offset = new Vector2(30, -80);
+     
+    private Vector2 _socketLocation = new Vector2(-397, 121);
+    
+    private Vector2 _startPos;
     private GameObject _cord;
+    private LineRenderer _linerenderer;
 
     private Animator _cordAnimator;
     private int _cordHash;
+    private Image _test;
 
     private void Awake()
     {
@@ -25,6 +31,8 @@ public class WaterPurifierMission : MonoBehaviour
         _cordHash = Animator.StringToHash("SprayBody");
 
         _cord = _missionController.GetMissionObj("CordObject");
+        _startPos = _cord.gameObject.transform.position;
+        _linerenderer = _missionController.GetMissionObj<LineRenderer>("SocketObject");
     }
 
     private void Init()
@@ -32,39 +40,63 @@ public class WaterPurifierMission : MonoBehaviour
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
         _missionState.MissionName = "정수기 수리하기";
+         
     }
 
 
     private void OnEnable()
     {
-        //코드 위치 초기화
-        
+        //코드 위치 초기화 
+
         _missionState.ObjectCount = 1;
     }
 
     
-
-
     private void Update()
     {
-        _cord.transform.position = _missionState.MousePos + _offset;
+        SelectCordObj();
+        DrawLineRenderer(); 
+        MissionClear();
+        
+        
+        Debug.Log($"{_cord.transform.position}");
+    }
 
+    private void SelectCordObj()
+    { 
+        if (Input.GetMouseButton(0))
+        {
+            _missionController.PlayerInput();
+            _cord.transform.position = _missionState.MousePos; 
+        }
+
+        else if (Input.GetMouseButtonUp(0))
+        {
+            LocationOfSocket();
+
+            _cord.transform.position = _startPos; 
+        } 
     }
 
     private void DrawLineRenderer()
     {
         //라인 렌더러 위치 정수기 몸체 > 코드까지
+        //_linerenderer. 
+        //UI Linerender 그려줌
 
     }
 
-    private void MoveCord()
+    private void LocationOfSocket()
     {
-        //마우스 위치를 따라다니게
-        //마우스에서 떼면 위치 초기화
+        //마우스 뗐을 때 콘센트의 위치인가?
+        //애니메이션 재생
+        //Count--;
+        //MissionClear;
+        //콘센트의 위치가 아니라면 코드의 위치는 처음 위치로
+        
+
 
     }
-
-
 
 
 
