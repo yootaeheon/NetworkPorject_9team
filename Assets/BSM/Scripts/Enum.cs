@@ -5,4 +5,4 @@ using UnityEngine;
 
 
 [System.Serializable]
-public enum PlayerType {Goose, Duck}
+public enum PlayerType {Goose, Duck} 

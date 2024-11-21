@@ -9,17 +9,21 @@ public class BathroomMission : MonoBehaviour
     private MissionController _missionController;
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(5);
-    private Coroutine _clearRoutine; 
-    
+
+    private Animator _sprayAnim;
+    private int _sprayHash;
 
     private void Awake() => Init();
 
+    private void Start()
+    {
+        _sprayAnim = _missionController.GetMission<Animator>("Spray");
+        _sprayHash = Animator.StringToHash("SprayBody"); 
+    }
+
     private void OnEnable()
     {
-        //활성화 됐을 때 상단으로 올라오는 애니메이션
-        //공통으로 추가할 MoveGameObject 추가해서 애니메이션 적용하면 될듯
         _missionState.ObjectCount = 5;
-         
     }
 
     private void Init()
@@ -33,9 +37,6 @@ public class BathroomMission : MonoBehaviour
     /// </summary>
     private void OnDisable()
     {
-        //미션 종료됐을 때 하단으로 내려가는 애니메이션 재생
-        IncreaseTotalScore();
-
         foreach (GameObject element in _stainList)
         {
             Image image = element.GetComponent<Image>();
@@ -47,8 +48,7 @@ public class BathroomMission : MonoBehaviour
     private void Update()
     {
         _missionController.PlayerInput();
-        RemoveTrain();
-        
+        RemoveTrain(); 
     }
 
 
@@ -66,6 +66,7 @@ public class BathroomMission : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+            _sprayAnim.Play("SprayBody");
 
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a - 0.35f);
 
@@ -88,11 +89,14 @@ public class BathroomMission : MonoBehaviour
 
     private void IncreaseTotalScore()
     {
+        //Player의 타입을 받아 올 수 있으면 좋음
         PlayerType type = PlayerType.Duck;
 
         if (type.Equals(PlayerType.Goose))
         {
-            //게임매니저 점수 증가    
+            //전체 미션 점수 증가
+            //미션 점수 동기화 필요 > 어디서 가져올건지
+            GameManager.Instance.TEST();
         }
     }
 
@@ -103,18 +107,9 @@ public class BathroomMission : MonoBehaviour
     {
         if (_missionState.ObjectCount < 1)
         {
-            _clearRoutine = StartCoroutine(ClearCoroutine());
-            CoroutineManager.Instance.ManagerStartCoroutine(this, _clearRoutine);
+            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            _missionController.MissionCoroutine();
+            IncreaseTotalScore();
         }
-    }
-
-    private IEnumerator ClearCoroutine()
-    {
-        yield return Util.GetDelay(0.5f);
-        //총 미션 게이지 증가 추가 필요
-        SoundManager.Instance.SFXPlay(_missionState._clips[1]); 
-        gameObject.SetActive(false);
-    }
-
-
+    } 
 }
