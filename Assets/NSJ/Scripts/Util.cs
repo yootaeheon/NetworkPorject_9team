@@ -121,4 +121,16 @@ public static partial class Util
     {
         return Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
     }
+
+    /// <summary>
+    /// 컬러 가져오기
+    /// a: 0~1
+    /// </summary>
+    public static Color GetColor(Color color, float a)
+    {
+        Color newColor = new Color();
+        newColor = color;
+        newColor.a = a;
+        return newColor;
+    }
 }
