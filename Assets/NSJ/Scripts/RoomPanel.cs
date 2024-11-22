@@ -133,6 +133,8 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void ClearRoomBox()
     {
+        if (!PhotonNetwork.InRoom) return;
+
         _roomTitleText.SetText($"{PhotonNetwork.LocalPlayer.NickName}ÀÇ ¹æ".GetText());
 
         _roomCodeText.text = $"{PhotonNetwork.CurrentRoom.Name}";

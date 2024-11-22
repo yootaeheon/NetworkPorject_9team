@@ -1,6 +1,8 @@
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -22,6 +24,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     public event UnityAction OnJoinedLobbyEvent;
     public event UnityAction OnLeftLobbyEvent;
     public event UnityAction<Player> OnMasterClientSwitchedEvent;
+    public event UnityAction<List<RoomInfo>> OnRoomListUpdateEvent;
     #endregion
 
     #region private « µÂ
@@ -101,7 +104,6 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="message"></param>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("1");
         OnJoinRandomFailedEvent?.Invoke(returnCode, message);
     }
 
@@ -158,6 +160,22 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         ChangePanel(Panel.Main);
         OnLeftLobbyEvent?.Invoke();
     }
+    /// <summary>
+    /// ∑Î ∏ÆΩ∫∆Æ æ˜µ•¿Ã∆Æ
+    /// </summary>
+    /// <param name="roomList"></param>
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        StartCoroutine(OnRoomListUpdateRoutine(roomList));
+    }
+    IEnumerator OnRoomListUpdateRoutine(List<RoomInfo> roomList)
+    {
+        yield return null;
+        OnRoomListUpdateEvent?.Invoke(roomList);
+        // ∑Œ∫Ò∆–≥Œ »£≠ÅΩ√ ¿Ã∫•∆Æ ±∏µ∂Ω√∞£¿ª ¿ß«— 1«¡∑π¿” ¥ ¥¬ ƒ⁄∑Á∆æ
+        // ¡®¿Â ∂« ƒ⁄∑Á∆æ¿Ãæﬂ. æ∆æ∆ ƒ⁄∑Á∆æ ≥™¿« Ω≈, ≥™¿« ∫˚.
+    }
+
     #endregion
 
     /// <summary>

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -25,5 +26,13 @@ public class LoadingBox :MonoBehaviour
             _loadingText.SetText("로딩 중...".GetText());
             yield return _delayTime.GetDelay();
         }
+    }
+
+    /// <summary>
+    /// 로딩 스톱
+    /// </summary>
+    private void Stop()
+    {
+        // TODO : 스톱기능을 어떻게 구현해야 하는가
     }
 }
