@@ -1,18 +1,22 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class VotePanel : MonoBehaviour
 {
+
     [SerializeField] VoteData _voteData;
 
-    [SerializeField] Image _characterImage; // 투표창에서 각 플레이어 캐릭터 이미지
+  // [SerializeField] GameObject _characterImage; // 투표창에서 각 플레이어 캐릭터 이미지
 
-    [SerializeField] Image _voteSignImage; // 투표한 플레이어 표시 이미지
+  //  [SerializeField] Image _voteSignImage; // 투표한 플레이어 표시 이미지
 
-    [SerializeField] Image _deadSignImage; // 죽은 상태 표시 이미지
+  //  [SerializeField] Image _deadSignImage; // 죽은 상태 표시 이미지
+
+    [SerializeField] GameObject _anonymPlayerImage; // 투표한 익명의 플레이어 이미지
 
     [SerializeField] TMP_Text _nickNameText; // 각 플레이어 닉네임
 
@@ -30,25 +34,14 @@ public class VotePanel : MonoBehaviour
 
     [SerializeField] Player _targetPlayer; // 선택한 플레이어 
 
+    private PlayerType _playerType; // Duck이 마피아
 
-    public void SetPlayerPanel(Player target)     // 각 플레이어 패널을 초기화하는 함수
+    public void SetPlayerPanel(Player player)     // 각 플레이어 패널을 초기화하는 함수
     {
-        _targetPlayer = target;
-
-        _nickNameText.text = target.NickName;
-
-
-        // 임포스터 캐릭터는 그 로컬플레이어에게만 표시
-        // if (localPlayer.IsImposter == true)
-        // {
-        //     _nickNameText.color = Color.red ;
-        // }
-        //
-
+         _nickNameText.text = player.NickName;
         //TODO : _characterImage = ""; // 캐릭터 이미지 불러오기
-
-        // 플레이어가 죽은 상태라면 그 플레이어 패널을 가리는 회색 패널 on
-
+        //TODO : 플레이어가 죽은 상태라면 그 플레이어 투표 버튼 비활성화
+        _targetPlayer = player;
     }
     private void Awake()
     {
@@ -60,14 +53,11 @@ public class VotePanel : MonoBehaviour
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
         _voteTimeCountSlider.value = _voteData.VoteTimeCount;
     }
+   
 
     private void Update()
     {
-        _voteData.ReportTimeCount -= (float)PhotonNetwork.Time;
-        if (_voteData.ReportTimeCount == 0)
-        {
-            _voteData.VoteTimeCount -= (float)PhotonNetwork.Time;
-        }
+        CountTime();
     }
 
     public void Vote(Player targetPlayer) // 플레이어 패널을 눌러 투표
@@ -76,11 +66,23 @@ public class VotePanel : MonoBehaviour
         _voteData.DidVote = true;
     }
 
-    public void OnClickSkip()
+    public void OnClickSkip() // 스킵 버튼 누를 시
     {
         _voteData.SkipCount++;
         _voteData.DidVote = true;
     }
 
+    public void CountTime()
+    {
+        _voteData.ReportTimeCount -= (float)Time.deltaTime;
+        Debug.Log(_voteData.ReportTimeCount);
 
+        if (_voteData.ReportTimeCount <= 0)
+        {
+
+            _reportTimeCountSlider.gameObject.SetActive(false);
+            _voteData.VoteTimeCount -= (float)PhotonNetwork.Time;
+            Debug.Log(_voteData.VoteTimeCount);
+        }
+    }
 }
