@@ -19,17 +19,30 @@ public class CameraController : MonoBehaviourPun
     private float threshold = 0.001f;
     private bool isOnMove = false;
 
+
+
+    
     // 가만히 있으면 줌 땡겨지게 
     // 그림자 ? 
     private void Start()
     {
         cam = Camera.main.transform;
         Camera.main.orthographicSize = camSize; // 카메라 사이즈 조정 
+
+       
     }
     private void LateUpdate()
-    {
+    {   
         FollowPlayer();
-        MoveCheck();
+        if (photonView.IsMine == true)
+        {
+            MoveCheck();
+            if (transform.GetComponent<PlayerController>().isGhost == true)
+            {
+                Camera.main.cullingMask = -1;
+            }
+
+        }
     }
     private void FollowPlayer()
     {
@@ -87,7 +100,7 @@ public class CameraController : MonoBehaviourPun
         {
             while (camSize <= camSizeMax)
             {
-                Debug.Log("줌아웃");
+                
                 yield return time;
                 camSize += 0.05f;
                 Camera.main.orthographicSize = camSize;
@@ -101,7 +114,7 @@ public class CameraController : MonoBehaviourPun
         {
             while (camSize >= camSizeMin) 
             {
-                Debug.Log("줌인");
+               
                 yield return time;
                 camSize -= 0.05f;
                 Camera.main.orthographicSize = camSize;

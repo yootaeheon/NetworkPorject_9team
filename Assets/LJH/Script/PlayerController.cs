@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon;
 using Photon.Pun;
-using UnityEngine.UIElements;
+
 public class PlayerController : MonoBehaviourPun
 {
     // 플레이어 타입 거위(시민) 오리(임포스터) 
     [SerializeField] PlayerType playerType;
-    [SerializeField] float moveSpeed;
+    [SerializeField] float moveSpeed;  // 이동속도 
+    [SerializeField] float Detectradius;  // 탐색 범위
+
+
+
+    [SerializeField] GameObject IdleBody;
+    [SerializeField] GameObject Ghost;
+    [SerializeField] GameObject Corpse;
+
 
 
     [SerializeField] SpriteRenderer body;
-
+    [SerializeField] SpriteRenderer GhostRender;
+    [SerializeField] SpriteRenderer CorpRender;
     [SerializeField] Color[] colors;
-
     [SerializeField] Animator eyeAnim;
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
@@ -26,14 +34,20 @@ public class PlayerController : MonoBehaviourPun
     bool isOnMove = false;
 
 
+    public bool isGhost = false;
+
+
     private void Start()
-    {
+    {   
+       
         playerType = PlayerType.Goose;   // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
 
         count = PhotonNetwork.ViewCount - 1;  // 들어온 순서대로 색 지정 
         body.color = colors[count];
-        Debug.Log($"플레이어 넘버{count}");
-
+        GhostRender.color = colors[count]; 
+        CorpRender.color = colors[count];   
+      
+        
     }
     private void Update()
     {
@@ -41,16 +55,70 @@ public class PlayerController : MonoBehaviourPun
             return;
 
         Move();
-        MoveCheck(); 
+        MoveCheck();
+        FindNearObject();
     }
 
-
-    // 오버랩 스피어로 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
-
-    private void FindNearObject() 
+     // r 신고 , e 상호작용 , space 살인 
+    // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
+    // 신고가 되면 시체도 사라져야 함 
+    private void FindNearObject()
     {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(this.transform.position, Detectradius);
 
+        foreach (Collider2D col in colliders)
+        {
+            if (col.name == "Goosecorpse")
+            {
+
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    Debug.Log("신고함!");
+                    PhotonNetwork.Destroy(col.gameObject);
+                    // 투표 열리는 기능 추가 
+                }
+            }
+            else if (col.gameObject.layer == gameObject.layer)
+            {
+                if (col.gameObject != this.gameObject)
+                {
+                    if (playerType == PlayerType.Duck)
+                    {
+                        if (Input.GetKeyDown(KeyCode.Space))
+                        {
+
+                            Debug.Log("죽임!"); // 쿨타임 추가해야함 
+                           
+                            col.gameObject.GetComponent<PlayerController>().Die();
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
     }
+    public void Die() 
+    {
+        StartCoroutine(switchGhost());
+    }
+    IEnumerator switchGhost() 
+    {
+        
+        Debug.Log(photonView.ViewID);
+        Debug.Log(isGhost);
+
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel",false);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
+        yield return new WaitForSeconds(1f);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
+    }  
+     
+    
+
+
 
     private void Move()
     {
@@ -65,7 +133,7 @@ public class PlayerController : MonoBehaviourPun
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
 
         if (x < 0) // 왼쪽으로 이동 시
-        {   
+        {
             privDir = new Vector3(1, 1, 1);
             transform.localScale = privDir;
         }
@@ -76,18 +144,18 @@ public class PlayerController : MonoBehaviourPun
         }
         else  // 이전 방향을 유지하게 
         {
-            transform.localScale =privDir;  
+            transform.localScale = privDir;
         }
     }
 
-    private void MoveCheck() 
+    private void MoveCheck()
     {
-       
+
         float distance = Vector3.Distance(transform.position, privPos);
 
         if (distance > threshold)
         {
-            if (!isOnMove) 
+            if (!isOnMove)
             {
                 isOnMove = true;
                 eyeAnim.SetBool("Running", true);
@@ -107,5 +175,26 @@ public class PlayerController : MonoBehaviourPun
             }
         }
         privPos = transform.position;
+    }
+
+    [PunRPC]
+    private void RpcChildActive(string name,bool isActive) 
+    {
+       
+        if (name == "GooseIdel")
+        {
+            IdleBody.SetActive(isActive);
+        }
+        else if (name == "Goosecorpse")
+        {
+            Corpse.SetActive(isActive);
+            Corpse.transform.SetParent(null);
+        }
+        else if (name == "GoosePolter") 
+        {
+            isGhost = true;
+            Ghost.SetActive(isActive);
+
+        }
     }
 }
