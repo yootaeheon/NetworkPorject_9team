@@ -100,7 +100,7 @@ public class LobbyPanel : BaseUI
     /// </summary>
     private void Init()
     {
-       
+        _boxs[(int)Box.Lobby] = GetUI("LobbyBox");
     }
     /// <summary>
     /// 이벤트 구독

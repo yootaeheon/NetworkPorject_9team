@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MainPanel : BaseUI
@@ -25,6 +26,7 @@ public class MainPanel : BaseUI
     //JoinBox
     private TMP_InputField _joinNickNameInput => GetUI<TMP_InputField>("JoinNickNameInput");
     private TMP_InputField _joinRoomInput => GetUI<TMP_InputField>("JoinRoomInput");
+    private GameObject _joinInvisibleOnImage => GetUI("JoinInvisibleOnImage");
 
     // CreateRoomBox
     private TMP_InputField _createNickNameInput => GetUI<TMP_InputField>("CreateNickNameInput");
@@ -74,6 +76,7 @@ public class MainPanel : BaseUI
             ChangeNickName(nickName); // 닉네임 변경(포톤네트워크 닉네임 변경, 데이터베이스 닉네임 변경      
         }
 
+        ActivateLoadingBox(true);
         PhotonNetwork.JoinLobby(); // 로비 입장
     }
     /// <summary>
@@ -91,12 +94,18 @@ public class MainPanel : BaseUI
     {
         if(_joinRoomInput.contentType == TMP_InputField.ContentType.Password) 
         {
+            //보이기
             _joinRoomInput.contentType = TMP_InputField.ContentType.Standard;
+            _joinInvisibleOnImage.SetActive(false);
         }
         else
         {
+            //숨기기
             _joinRoomInput.contentType = TMP_InputField.ContentType.Password;
+            _joinInvisibleOnImage.SetActive(true);
         }
+        _joinRoomInput.Select();
+        EventSystem.current.SetSelectedGameObject(null);
         
     }
     /// <summary>
@@ -143,6 +152,7 @@ public class MainPanel : BaseUI
         options.MaxPlayers = maxPlayer;
         options.IsVisible = isVisible;
 
+        ActivateLoadingBox(true);
         PhotonNetwork.CreateRoom(roomCode, options);
     }
 
@@ -183,6 +193,7 @@ public class MainPanel : BaseUI
             ChangeNickName(nickName);
         }
 
+        ActivateLoadingBox(true);
         PhotonNetwork.JoinRandomRoom();
     }
     /// <summary>
@@ -210,6 +221,7 @@ public class MainPanel : BaseUI
     /// </summary>
     private void LogOut()
     {
+        ActivateLoadingBox(true);
         BackendManager.Auth.SignOut(); // 로그아웃
         PhotonNetwork.Disconnect(); // 서버 연결 끊기
     }
@@ -274,6 +286,8 @@ public class MainPanel : BaseUI
     {
         if (BackendManager.Instance == null)
             return;
+        if (BackendManager.User == null)
+            return;
         _mainNameText.SetText($"{BackendManager.User.FirstName} {BackendManager.User.SecondName} 님이 로그인했습니다".GetText());
         _mainNickNameText.SetText($"[{BackendManager.User.NickName}]".GetText());
     }
@@ -284,6 +298,8 @@ public class MainPanel : BaseUI
     {
         _joinNickNameInput.text =string.Empty;
         _joinRoomInput.text =string.Empty;
+        _joinRoomInput.contentType = TMP_InputField.ContentType.Standard;
+        _joinInvisibleOnImage.SetActive(false);
     }
 
     /// <summary>
