@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
     //테스트용 코드
 
     public static GameManager Instance { get; private set; }
-
+    [field:SerializeField] public bool MissionDelay { get; set; }
+ 
     [SerializeField] public Slider _sli;
 
     int total = 30;
@@ -36,8 +37,8 @@ public class GameManager : MonoBehaviour
     {
         
         score++;
-        Debug.Log((score / 30f) * 100f);
-        _sli.value = (score / 30f); 
+        Debug.Log((score / total) * 100f);
+        _sli.value = (float)(score / total); 
         
     }
 
