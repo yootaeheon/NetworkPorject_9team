@@ -76,10 +76,8 @@ public class MissionController : BaseMission
     /// 공용으로 사용할 팝업 종료 애니메이션 코루틴
     /// </summary>
     public void MissionCoroutine(float delay)
-    { 
-        _closeCo = CoroutineManager.Instance.GetCoroutine((CloseMission(delay)));
-        CoroutineManager.Instance.ManagerStartCoroutine(this, _closeCo);
-   
+    {
+        _closeCo = StartCoroutine(CloseMission(delay)); 
     }
 
     private IEnumerator CloseMission(float delay)

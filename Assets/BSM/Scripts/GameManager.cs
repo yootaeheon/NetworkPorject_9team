@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
     {
         
         score++;
-        Debug.Log((score / 30f) * 100f);
-        _sli.value = (score / 30f); 
+        Debug.Log((score / total) * 100f);
+        _sli.value = (float)(score / total); 
         
     }
 
