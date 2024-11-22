@@ -286,6 +286,7 @@ public class LoginPanel : BaseUI
                     if (success)
                     {
                         // 서버 연결
+                        ActivateLoadingBox(true);
                         GetUserDate();
                     }
                     else

@@ -101,6 +101,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="message"></param>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        Debug.Log("1");
         OnJoinRandomFailedEvent?.Invoke(returnCode, message);
     }
 
