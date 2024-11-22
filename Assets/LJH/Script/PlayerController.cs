@@ -6,7 +6,11 @@ using Photon.Pun;
 using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviourPun
 {
+    // 플레이어 타입 거위(시민) 오리(임포스터) 
+    [SerializeField] PlayerType playerType;
     [SerializeField] float moveSpeed;
+
+
     [SerializeField] SpriteRenderer body;
 
     [SerializeField] Color[] colors;
@@ -24,8 +28,9 @@ public class PlayerController : MonoBehaviourPun
 
     private void Start()
     {
-        count = PhotonNetwork.ViewCount - 1;
-       
+        playerType = PlayerType.Goose;   // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
+
+        count = PhotonNetwork.ViewCount - 1;  // 들어온 순서대로 색 지정 
         body.color = colors[count];
         Debug.Log($"플레이어 넘버{count}");
 
@@ -37,6 +42,14 @@ public class PlayerController : MonoBehaviourPun
 
         Move();
         MoveCheck(); 
+    }
+
+
+    // 오버랩 스피어로 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
+
+    private void FindNearObject() 
+    {
+
     }
 
     private void Move()
