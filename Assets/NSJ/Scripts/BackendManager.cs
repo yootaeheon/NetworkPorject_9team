@@ -20,6 +20,9 @@ public class BackendManager : MonoBehaviour
 
     private UserDate _user;
     public static UserDate User { get { return Instance._user; } set {Instance._user = value; } }
+
+    private Dictionary<string, object> _SettingDic = new Dictionary<string, object>();
+    public static Dictionary<string, object> SettingDic { get { return Instance._SettingDic; } }
     private void Awake()
     {
         InitSingleTon();

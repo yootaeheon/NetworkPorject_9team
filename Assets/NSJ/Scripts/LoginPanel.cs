@@ -9,34 +9,40 @@ using UnityEngine.UI;
 
 public class LoginPanel : BaseUI
 {
-    #region private 필드
+    [SerializeField] GameObject _loadingBox;
 
+    #region private 필드
     private Color _defaultInputColor => _loginEmailInput.placeholder.color; // InputField의 placeholder컬러의 기본값 지정
-    enum Box { Login, Find, FindSend,SignUp, SendSuccess, Error, ConfirmSend, Loading,Size }
+    enum Box { Login, Find, FindSend,SignUp, SendSuccess, Error, ConfirmSend,Size }
     private GameObject[] _boxs = new GameObject[(int)Box.Size];
     // 로그인 박스
-    private TMP_InputField _loginEmailInput;
-    private TMP_InputField _loginPasswordInput;
-    private GameObject _loginButton;
+    private TMP_InputField _loginEmailInput => GetUI<TMP_InputField>("LoginEmailInput");
+    private TMP_InputField _loginPasswordInput => GetUI<TMP_InputField>("LoginPasswordInput");
+    private GameObject _loginButton => GetUI("LoginButton");
 
     // 회원 가입
-    private TMP_InputField _signUpEmailInput;
-    private TMP_InputField _signUpNickNameInput;
-    private TMP_InputField _signUp1stNameInput;
-    private TMP_InputField _signUp2ndNameInput;
-    private TMP_InputField _signUpPasswordInput;
-    private TMP_InputField _signUpConfirmInput;
-    private GameObject _signUpButton;
+    private TMP_InputField _signUpEmailInput => GetUI<TMP_InputField>("SignUpEmailInput");
+    private TMP_InputField _signUpNickNameInput => GetUI<TMP_InputField>("SignUpNickNameInput");
+    private TMP_InputField _signUp1stNameInput => GetUI<TMP_InputField>("SignUp1stNameInput");
+    private TMP_InputField _signUp2ndNameInput => GetUI<TMP_InputField>("SignUp2ndNameInput");
+    private TMP_InputField _signUpPasswordInput => GetUI<TMP_InputField>("SignUpPasswordInput");
+    private TMP_InputField _signUpConfirmInput => GetUI<TMP_InputField>("SignUpConfirmInput");
+    private GameObject _signUpButton => GetUI("SignUpButton");
 
     // 비밀번호 찾기 
-    private TMP_InputField _findEmailInput;
-    private GameObject _findButton;
+    private TMP_InputField _findEmailInput => GetUI<TMP_InputField>("FindEmailInput");
+    private GameObject _findButton => GetUI("FindButton");
     #endregion
 
     private void Awake()
     {
         Bind(); // 바인딩
         Init(); // 초기 설정
+        
+    }
+
+    private void Start()
+    {
         SubscribeEvent(); // 이벤트 구독
     }
 
@@ -74,12 +80,14 @@ public class LoginPanel : BaseUI
             {
                 if (task.IsCanceled) 
                 {
+                    ChangeBox(Box.Error);
                     return;
                 } 
                 else if (task.IsFaulted)
                 {
                     // 에러 팝업 출력
                     ChangeBox(Box.Error);
+                    return;
                 }
                 else
                 {
@@ -98,8 +106,6 @@ public class LoginPanel : BaseUI
                         SendEmailVerify();
                     }
                 }
-                // 로딩화면 Off
-                ActivateLoadingBox(false);
             });
     }
 
@@ -110,19 +116,19 @@ public class LoginPanel : BaseUI
     {
         DatabaseReference userRef = BackendManager.Auth.CurrentUser.UserId.GetUserDataRef();
 
-        //로딩화면 On
-        ActivateLoadingBox(true);
         // 유저 데이터 획득 시도
         userRef.GetValueAsync()
             .ContinueWithOnMainThread(task =>
             {  
                 if (task.IsCanceled) 
                 {
+                    ChangeBox(Box.Error);
                     return;
                 }
                    
                 else if (task.IsFaulted)
                 {
+                    ChangeBox(Box.Error);
                     return;
                 }                 
                 else
@@ -130,12 +136,11 @@ public class LoginPanel : BaseUI
                     DataSnapshot snapshot = task.Result;
                     string json = snapshot.GetRawJsonValue();
                     // 백앤드 매니저 UserData에 받아온 유저 데이터 캐싱
-                    BackendManager.User = JsonUtility.FromJson<UserDate>(json);
+                    BackendManager.User = JsonUtility.FromJson<UserDate>(json); 
 
                     //서버 연결
                     ConnectedServer();
                 }
-                ActivateLoadingBox(false);
             });
     }
 
@@ -144,9 +149,6 @@ public class LoginPanel : BaseUI
     /// </summary>
     private void ConnectedServer()
     {
-        //로딩화면 On
-        ActivateLoadingBox(true);
-
         // 포톤 네트워크 플레이어 닉네임에 유저 닉네임 지정
         PhotonNetwork.LocalPlayer.NickName = BackendManager.User.NickName;
         PhotonNetwork.ConnectUsingSettings();
@@ -191,11 +193,12 @@ public class LoginPanel : BaseUI
         BackendManager.Auth.CreateUserWithEmailAndPasswordAsync(email, password).
             ContinueWithOnMainThread(task =>
             {
-                // 로딩화면 Off
-                ActivateLoadingBox(false);
 
                 if (task.IsCanceled)
+                {
+                    ChangeBox(Box.Error);
                     return;
+                }            
                 else if (task.IsFaulted)
                 {
                     // 에러팝업 
@@ -250,11 +253,15 @@ public class LoginPanel : BaseUI
             ContinueWithOnMainThread(task =>
             {
                 if (task.IsCanceled)
+                {
+                    ChangeBox(Box.Error);
                     return;
+                }
                 else if (task.IsFaulted)
                 {
                     // 에러 창 
                     ChangeBox(Box.Error);
+                    return;
                 }
             });
     }
@@ -279,7 +286,7 @@ public class LoginPanel : BaseUI
                     if (success)
                     {
                         // 서버 연결
-                        ConnectedServer();
+                        GetUserDate();
                     }
                     else
                     {
@@ -315,11 +322,12 @@ public class LoginPanel : BaseUI
         BackendManager.Auth.SendPasswordResetEmailAsync(email).
             ContinueWithOnMainThread(task =>
             {
-                // 로딩화면 Off
-                ActivateLoadingBox(false);
 
                 if (task.IsCanceled)
+                {
+                    ChangeBox(Box.Error);
                     return;
+                }                   
                 else if (task.IsFaulted)
                 {
                     ChangeBox(Box.Error);
@@ -351,6 +359,9 @@ public class LoginPanel : BaseUI
     /// </summary>
     private void ChangeBox(Box box)
     {
+        // UI박스 바뀔 때 로딩창도 사라짐
+        ActivateLoadingBox(false);
+
         if (box == Box.Error) // 에러창은 팝업방식으로
         {
             _boxs[(int)box].SetActive(true);
@@ -358,6 +369,7 @@ public class LoginPanel : BaseUI
             return;
         }
 
+        // TODO : 
         for (int i = 0; i < _boxs.Length; i++)
         {
             if (i == (int)box) // 선택한 박스 빼고 초기화
@@ -436,11 +448,11 @@ public class LoginPanel : BaseUI
     {
         if (isActive)
         {
-            GetUI("LoadingBox").SetActive(true);
+            _loadingBox.SetActive(true);
         }
         else
         {
-            GetUI("LoadingBox").SetActive(false);
+            _loadingBox.SetActive(false);
         }
     }
 
@@ -460,28 +472,6 @@ public class LoginPanel : BaseUI
         _boxs[(int)Box.SendSuccess] = GetUI("SendSuccessBox");
         _boxs[(int)Box.Error] = GetUI("ErrorBox");
         _boxs[(int)Box.ConfirmSend] = GetUI("ConfirmSendBox");
-        _boxs[(int)Box.Loading] = GetUI("LoadingBox");
-        #endregion
-
-        #region LoginBox
-        _loginEmailInput = GetUI<TMP_InputField>("LoginEmailInput");
-        _loginPasswordInput = GetUI<TMP_InputField>("LoginPasswordInput");
-        _loginButton = GetUI("LoginButton");
-        #endregion
-
-        #region SignUpBox
-        _signUpEmailInput = GetUI<TMP_InputField>("SignUpEmailInput");
-        _signUpNickNameInput = GetUI<TMP_InputField>("SignUpNickNameInput");
-        _signUp1stNameInput = GetUI<TMP_InputField>("SignUp1stNameInput");
-        _signUp2ndNameInput = GetUI<TMP_InputField>("SignUp2ndNameInput");
-        _signUpPasswordInput = GetUI<TMP_InputField>("SignUpPasswordInput");
-        _signUpConfirmInput = GetUI<TMP_InputField>("SignUpConfirmInput");
-        _signUpButton = GetUI("SignUpButton");
-        #endregion
-
-        #region FindBox
-        _findEmailInput = GetUI<TMP_InputField>("FindEmailInput");
-        _findButton = GetUI("FindButton");
         #endregion
     }
     /// <summary>
