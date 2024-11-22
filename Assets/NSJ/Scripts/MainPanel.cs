@@ -104,9 +104,6 @@ public class MainPanel : BaseUI
             _joinRoomInput.contentType = TMP_InputField.ContentType.Password;
             _joinInvisibleOnImage.SetActive(true);
         }
-        _joinRoomInput.Select();
-        EventSystem.current.SetSelectedGameObject(null);
-        
     }
     /// <summary>
     /// 방 코드로 입장
