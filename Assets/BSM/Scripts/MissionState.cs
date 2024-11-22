@@ -15,7 +15,7 @@ public class MissionState : MonoBehaviour
     [Tooltip
         ("[0] 미션 상호작용 사운드\n" +
         "[1] 미션 클리어 사운드\n" +
-        "[2] X 버튼 클릭 사운드",order =0)]
+        "[2] X 버튼 클릭 사운드")]
     [SerializeField] public List<AudioClip> _clips = new List<AudioClip>();
     [HideInInspector] public Animator _anim;
 

@@ -63,8 +63,7 @@ public class WaterPurifierMission : MonoBehaviour
     private void Update()
     {
         SelectCordObj();
-        FollowCableToCord();
-         
+        FollowCableToCord(); 
     }
  
     private void SelectCordObj()
@@ -122,7 +121,7 @@ public class WaterPurifierMission : MonoBehaviour
         //케이블에서 코드의 방향
         Vector3 dir = _cable.transform.position - _cord.position; 
 
-        //케이블이 코드를 바라보는 각
+        //케이블이 코드를 바라보는 각 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         
         //방향 크기에 케이블의 Width값을 뺀 거리 차이
