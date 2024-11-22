@@ -1,6 +1,6 @@
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -14,6 +14,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     public event UnityAction<DisconnectCause> OnDisconnectedEvent;
     public event UnityAction OnCreateRoomEvent;
     public event UnityAction OnJoinedRoomEvent;
+    public event UnityAction<short, string> OnJoinRandomFailedEvent;
     public event UnityAction OnLeftRoomEvent;
     public event UnityAction<Player> OnPlayerEnteredRoomEvent;
     public event UnityAction<Player> OnPlayerLeftRoomEvent;
@@ -37,8 +38,8 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     }
     [SerializeField] private PanelStruct _panelStruct;
     private GameObject _backGroundImage { get { return _panelStruct.BackGroundImage; } }
-    private GameObject _loginPanel { get {  return _panelStruct.LoginPanel; } }
-    private GameObject _mainPanel{ get { return _panelStruct.MainPanel; } }
+    private GameObject _loginPanel { get { return _panelStruct.LoginPanel; } }
+    private GameObject _mainPanel { get { return _panelStruct.MainPanel; } }
     private GameObject _lobbyPanel { get { return _panelStruct.LobbyPanel; } }
     private GameObject _roomPanel { get { return _panelStruct.RoomPanel; } }
 
@@ -49,8 +50,14 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     {
         InitSingleTon(); // 싱글톤
         Init(); // 초기 설정
-        SubscribesEvent();
+        
     }
+    private void Start()
+    {
+        SubscribesEvent();
+        ChangePanel(Panel.Login);
+    }
+
     #region 포톤 네트워크 콜백 함수
     /// <summary>
     /// 마스터 서버 연결시 콜백
@@ -86,6 +93,18 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         ChangePanel(Panel.Room);
         OnJoinedRoomEvent?.Invoke();
     }
+
+    /// <summary>
+    /// 랜덤매칭 입장 실패 시 콜백
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("1");
+        OnJoinRandomFailedEvent?.Invoke(returnCode, message);
+    }
+
     /// <summary>
     /// 방 퇴장 시 콜백
     /// </summary>
@@ -147,13 +166,16 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="panel"></param>
     private void ChangePanel(Panel panel)
     {
+
         for (int i = 0; i < _panels.Length; i++)
         {
             if (i == (int)panel) // 매개변수와 일치하는 패널이면 활성화
             {
+                if (_panels[i] == null)
+                    return;         
                 _panels[i].SetActive(true);
 
-                if(panel == Panel.Room) // 패널이 룸이면 뒷배경 비활성화
+                if (panel == Panel.Room) // 패널이 룸이면 뒷배경 비활성화
                 {
                     _backGroundImage.SetActive(false);
                 }

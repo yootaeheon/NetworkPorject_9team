@@ -1,3 +1,4 @@
+using Firebase.Database;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -132,5 +133,15 @@ public static partial class Util
         newColor = color;
         newColor.a = a;
         return newColor;
+    }
+
+    /// <summary>
+    /// UID 레퍼런스 위치 가져오기
+    /// </summary>
+    public static DatabaseReference GetUserDataRef(this string userId)
+    {
+        DatabaseReference root = BackendManager.DataBase.RootReference;
+        DatabaseReference userRef = root.Child("UserData").Child(userId);
+        return userRef;
     }
 }
