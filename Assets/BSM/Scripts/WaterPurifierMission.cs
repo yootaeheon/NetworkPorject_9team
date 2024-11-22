@@ -19,6 +19,7 @@ public class WaterPurifierMission : MonoBehaviour
     private Rect _cordStartPos;
     private RectTransform _cord;
     private Coroutine _plugCo;
+    private GameObject _cable;
 
     private void Awake()
     {
@@ -33,9 +34,10 @@ public class WaterPurifierMission : MonoBehaviour
  
         _linerenderer = _missionController.GetMissionObj<LineRenderer>("SocketObject");
         _cord = _missionController.GetMissionObj<RectTransform>("CordObject");
- 
+        _cable = _missionController.GetMissionObj("Cable"); 
         _cordStartPos = new Rect(-437, -321, 90, 120);
         _socketLocation = new Rect(-397, 127, 90, 120);
+        
     }
 
     private void Init()
@@ -45,8 +47,7 @@ public class WaterPurifierMission : MonoBehaviour
         _missionState.MissionName = "정수기 수리하기";
         
     }
-
-
+ 
     private void OnEnable()
     { 
         _missionState.ObjectCount = 1; 
@@ -62,7 +63,8 @@ public class WaterPurifierMission : MonoBehaviour
     private void Update()
     {
         SelectCordObj();
-        DrawLineRenderer();  
+        FollowCableToCord();
+         
     }
  
     private void SelectCordObj()
@@ -77,7 +79,7 @@ public class WaterPurifierMission : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
         {
             LocationOfSocket();
-             
+            
         } 
     }
      
@@ -93,10 +95,9 @@ public class WaterPurifierMission : MonoBehaviour
         //코드 포지션 값
         float cordX = (int)_cord.anchoredPosition.x;
         float cordY = (int)_cord.anchoredPosition.y;
-
+         
         if ((cordX > socketX1 && cordY > socketY1) && (cordX < socketX2 && cordY < socketY2))
-        {
-            
+        { 
             _cordAnimator.Play(_cordHash);
             _cord.anchoredPosition = _socketLocation.position;
             _missionState.ObjectCount--;
@@ -110,13 +111,29 @@ public class WaterPurifierMission : MonoBehaviour
 
     }
  
-     
-    private void DrawLineRenderer()
+    
+    /// <summary>
+    /// 코드를 따라 이동하는 케이블 기능
+    /// </summary>
+    private void FollowCableToCord()
     {
-        //라인 렌더러 위치 정수기 몸체 > 코드까지
-        //_linerenderer. 
-        //UI Linerender 그려줌
+        RectTransform width = _cable.GetComponent<RectTransform>();
 
+        //케이블에서 코드의 방향
+        Vector3 dir = _cable.transform.position - _cord.position; 
+
+        //케이블이 코드를 바라보는 각
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        
+        //방향 크기에 케이블의 Width값을 뺀 거리 차이
+        float correctionWidth = dir.magnitude - width.sizeDelta.x;
+        
+        //보정된 값으로 케이블 길이 재설정
+        width.sizeDelta = new Vector2(width.sizeDelta.x + correctionWidth, width.sizeDelta.y);
+         
+        //케이블의 각만큼 forward방향으로 회전
+        _cable.transform.rotation = Quaternion.AngleAxis(-angle, -Vector3.forward);
+         
     }
 
     private void IncreaseTotalScore()
