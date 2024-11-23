@@ -160,9 +160,17 @@ public class LobbyPanel : BaseUI
     {
         switch (box)
         {
+            case Box.Lobby:
+                ClearLobby(); 
+                break;
             default:
                 break;
         }
+    }
+
+    private void ClearLobby()
+    {
+        _lobbyStartButton.SetActive(false);
     }
 
     /// <summary>

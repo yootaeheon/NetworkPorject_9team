@@ -57,19 +57,32 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void GameReady()
     {
-        Player myPlayer = PhotonNetwork.LocalPlayer;
-        if (myPlayer.GetReady() == false)
+        if (PhotonNetwork.LocalPlayer.GetReady() == false)
         {
-            myPlayer.SetReady(true);
-            _roomReadyButtonText.SetText("준비 완료".GetText());
+            OnReady();
         }
         else
         {
-            myPlayer.SetReady(false);
-            _roomReadyButtonText.SetText("준비".GetText());
+            OffReady();
         }
     }
 
+    /// <summary>
+    /// 레디 하기
+    /// </summary>
+    private void OnReady()
+    {
+        PhotonNetwork.LocalPlayer.SetReady(true);
+        _roomReadyButtonText.SetText("준비 완료".GetText());
+    }
+    /// <summary>
+    /// 레디 안하기
+    /// </summary>
+    private void OffReady()
+    {
+        PhotonNetwork.LocalPlayer.SetReady(false);
+        _roomReadyButtonText.SetText("준비".GetText());
+    }
     /// <summary>
     /// 플레이어 변화에 따른 룸 업데이트
     /// </summary>
@@ -77,14 +90,13 @@ public class RoomPanel : BaseUI
     {
         UpdatePlayerCount();
         SetStartAndReadyButton();
-        CheckAllReady();
     }
     /// <summary>
     /// 플레이어 카운트 업데이트
     /// </summary>
     private void UpdatePlayerCount()
     {
-        _roomPlayerCountText.SetText($"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
+        _roomPlayerCountText.SetText($"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}".GetText());
     }
 
     /// <summary>
@@ -224,14 +236,19 @@ public class RoomPanel : BaseUI
     {
         if (!PhotonNetwork.InRoom) return;
 
+        // 누구의 방 텍스트 설정
         _roomTitleText.SetText($"{PhotonNetwork.LocalPlayer.NickName}의 방".GetText());
 
+        // 방 코드 설정
         _roomCodeText.text = $"{PhotonNetwork.CurrentRoom.Name}";
         _roomCodeText.contentType = TMP_InputField.ContentType.Standard;
         _roomCodeActiveText.text = HIDETEXT;
 
-        _roomPlayerCountText.SetText($"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}".GetText());
-        _roomStartButton.SetActive(false);
+        // 플레이어 카운트 설정
+        UpdatePlayerCount();
+
+        // 플레이어 초기 레디 설정
+        OffReady();
     }
 
     /// <summary>
@@ -255,8 +272,6 @@ public class RoomPanel : BaseUI
     private void Init()
     {
         _boxs[(int)Box.Room] = GetUI("RoomBox");
-        PhotonNetwork.LocalPlayer.SetReady(false);
-        _roomReadyButtonText.SetText("준비".GetText());
     }
 
     // 이벤트 구독
