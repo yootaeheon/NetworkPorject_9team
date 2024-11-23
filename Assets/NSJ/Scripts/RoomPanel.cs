@@ -24,6 +24,7 @@ public class RoomPanel : BaseUI
     private TMP_Text _roomCodeActiveText => GetUI<TMP_Text>("RoomCodeActiveText");
     private GameObject _roomStartButton => GetUI("RoomStartButton");
     private TMP_Text _roomPlayerCountText => GetUI<TMP_Text>("RoomPlayerCountText");
+    private TMP_Text _roomReadyButtonText => GetUI<TMP_Text>("RoomReadyButtonText");
     #endregion
 
     private void Awake()
@@ -43,11 +44,40 @@ public class RoomPanel : BaseUI
     }
 
     /// <summary>
+    /// 게임 시작
+    /// </summary>
+    private void GameStart()
+    {
+        // TODO : 게임씬 전환
+        Debug.Log("게임 시작!");
+    }
+
+    /// <summary>
+    /// 게임 준비 버튼
+    /// </summary>
+    private void GameReady()
+    {
+        Player myPlayer = PhotonNetwork.LocalPlayer;
+        if (myPlayer.GetReady() == false)
+        {
+            myPlayer.SetReady(true);
+            _roomReadyButtonText.SetText("준비 완료".GetText());
+        }
+        else
+        {
+            myPlayer.SetReady(false);
+            _roomReadyButtonText.SetText("준비".GetText());
+        }
+    }
+
+    /// <summary>
     /// 플레이어 변화에 따른 룸 업데이트
     /// </summary>
     private void UpdateChangeRoom()
     {
         UpdatePlayerCount();
+        SetStartAndReadyButton();
+        CheckAllReady();
     }
     /// <summary>
     /// 플레이어 카운트 업데이트
@@ -55,6 +85,41 @@ public class RoomPanel : BaseUI
     private void UpdatePlayerCount()
     {
         _roomPlayerCountText.SetText($"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
+    }
+
+    /// <summary>
+    ///  플레이어 프로퍼티 변경에 따른 업데이트
+    /// </summary>
+    /// <param name="arg0"></param>
+    /// <param name="arg1"></param>
+    private void UpdatePlayerProperty(Player arg0, ExitGames.Client.Photon.Hashtable arg1)
+    {
+        Debug.Log("프로퍼티 변경");
+        CheckAllReady();
+    }
+
+    /// <summary>
+    /// 모두 레디 했는지 체크
+    /// </summary>
+    private void CheckAllReady()
+    {
+        if (PhotonNetwork.IsMasterClient == false)
+            return;
+        
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.IsMasterClient == true)
+                continue;
+            if (player.GetReady() == false)
+            {
+                GetUI("RoomStartButton").SetActive(false);
+                return;
+            }
+                
+        }
+        GetUI("RoomStartButton").SetActive(true);
+
+
     }
     /// <summary>
     /// 방 코드 복사
@@ -89,6 +154,17 @@ public class RoomPanel : BaseUI
         _roomCodeText.text = string.Empty;
         yield return null;
         _roomCodeText.text = temp;
+    }
+
+    /// <summary>
+    /// 마스터 클라이언트 바뀐것에 대한 콜백
+    /// </summary>
+    /// <param name="arg0"></param>
+    private void UpdateMasterClientSwitch(Player arg0)
+    {
+        SetStartAndReadyButton();
+        // TODO : 방장 바뀌었을 때 기능 추가
+        Debug.Log("방장 변경");
     }
 
     /// <summary>
@@ -179,16 +255,41 @@ public class RoomPanel : BaseUI
     private void Init()
     {
         _boxs[(int)Box.Room] = GetUI("RoomBox");
+        PhotonNetwork.LocalPlayer.SetReady(false);
+        _roomReadyButtonText.SetText("준비".GetText());
     }
 
     // 이벤트 구독
     private void SubscribesEvent()
     {
         PlayerNumbering.OnPlayerNumberingChanged += UpdateChangeRoom;
+        LobbyScene.Instance.OnMasterClientSwitchedEvent += UpdateMasterClientSwitch;
+        LobbyScene.Instance.OnPlayerPropertiesUpdateEvent += UpdatePlayerProperty;
 
         GetUI<Button>("RoomLeftButton").onClick.AddListener(LeftRoom);
         GetUI<Button>("RoomCodeActiveButton").onClick.AddListener(ToggleActiveRoomCode);
         GetUI<Button>("RoomCopyButton").onClick.AddListener(CopyRoomCode);
+        GetUI<Button>("RoomStartButton").onClick.AddListener(GameStart);
+        GetUI<Button>("RoomReadyButton").onClick.AddListener(GameReady);
+    }
+
+
+    /// <summary>
+    /// 시작버튼, 레디버튼 활성화/ 비활성화
+    /// </summary>
+    private void SetStartAndReadyButton()
+    {
+        // 마스터클라이언트는 시작버튼 활성화 레디버튼 비활성화
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GetUI("RoomStartButtonBox").SetActive(true);
+            GetUI("RoomReadyButtonBox").SetActive(false);
+        }
+        else
+        {
+            GetUI("RoomStartButtonBox").SetActive(false);
+            GetUI("RoomReadyButtonBox").SetActive(true);
+        }
     }
 
 }
