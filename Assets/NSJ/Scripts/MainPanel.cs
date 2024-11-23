@@ -1,12 +1,10 @@
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
 using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MainPanel : BaseUI
@@ -24,8 +22,8 @@ public class MainPanel : BaseUI
     private TMP_Text _mainNameText => GetUI<TMP_Text>("MainNameText");
     private TMP_Text _mainNickNameText => GetUI<TMP_Text>("MainNickNameText");
     //JoinBox
-    private TMP_InputField _joinNickNameInput => GetUI<TMP_InputField>("JoinNickNameInput");
     private TMP_InputField _joinRoomInput => GetUI<TMP_InputField>("JoinRoomInput");
+    private TMP_InputField _joinNickNameInput => GetUI<TMP_InputField>("JoinNickNameInput");
     private GameObject _joinInvisibleOnImage => GetUI("JoinInvisibleOnImage");
 
     // CreateRoomBox
@@ -92,19 +90,28 @@ public class MainPanel : BaseUI
     /// </summary>
     private void ChangeRoomCodeInvisible()
     {
-        if(_joinRoomInput.contentType == TMP_InputField.ContentType.Password) 
+        if (_joinRoomInput.contentType == TMP_InputField.ContentType.Password) //안보이는 상태
         {
-            //보이기
             _joinRoomInput.contentType = TMP_InputField.ContentType.Standard;
             _joinInvisibleOnImage.SetActive(false);
         }
         else
         {
-            //숨기기
             _joinRoomInput.contentType = TMP_InputField.ContentType.Password;
             _joinInvisibleOnImage.SetActive(true);
         }
+        StartCoroutine(ChangeRoomCodeInvisibleRoutine());
     }
+
+    IEnumerator ChangeRoomCodeInvisibleRoutine()
+    {
+        string temp = _joinRoomInput.text;
+        _joinRoomInput.text = string.Empty;
+        yield return null;
+        _joinRoomInput.text = temp;
+    }
+
+
     /// <summary>
     /// 방 코드로 입장
     /// </summary>
@@ -166,7 +173,7 @@ public class MainPanel : BaseUI
     /// </summary>
     private void UpdateIsVisible(float value)
     {
-        if(value == 1f) // 슬라이더 값 1은 비공개, 0은 공개
+        if (value == 1f) // 슬라이더 값 1은 비공개, 0은 공개
         {
             _createRoomOpenText.SetText("비공개".GetText());
         }
@@ -234,12 +241,12 @@ public class MainPanel : BaseUI
     {
         ActivateLoadingBox(false);
 
-        for (int i = 0; i < _boxs.Length; i++) 
+        for (int i = 0; i < _boxs.Length; i++)
         {
             if (_boxs[i] == null)
                 return;
 
-            if(i == (int)box) // 바꾸고자 하는 박스만 활성화
+            if (i == (int)box) // 바꾸고자 하는 박스만 활성화
             {
                 _boxs[i].SetActive(true);
                 ClearBox(box); // 초기화 작업도 진행
@@ -293,9 +300,8 @@ public class MainPanel : BaseUI
     /// </summary>
     private void ClearJoinBox()
     {
-        _joinNickNameInput.text =string.Empty;
-        _joinRoomInput.text =string.Empty;
-        _joinRoomInput.contentType = TMP_InputField.ContentType.Standard;
+        _joinNickNameInput.text = string.Empty;
+        _joinRoomInput.text = string.Empty;
         _joinInvisibleOnImage.SetActive(false);
     }
 
@@ -304,12 +310,14 @@ public class MainPanel : BaseUI
     /// </summary>
     private void ClearCreateRoomBox()
     {
-        _createNickNameInput.text =string.Empty;
+        _createNickNameInput.text = string.Empty;
         _createPlayerCountSlider.value = (int)((_createPlayerCountSlider.maxValue + _createPlayerCountSlider.minValue) / 2); // 절반 수치만큼
         _createRoomOpenSlider.value = 1f; // 기본 비공개 방
         _createPrivacyCheck.SetActive(false);
     }
-
+    /// <summary>
+    /// 빠른 시작 초기화
+    /// </summary>
     private void ClearQuickBox()
     {
         _quickNickNameInput.text = string.Empty;
@@ -364,7 +372,7 @@ public class MainPanel : BaseUI
     /// </summary>
     private void SubscribesEvent()
     {
-        
+
 
         #region MainBox
 

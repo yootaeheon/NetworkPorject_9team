@@ -2548,7 +2548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &203127435
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10937,7 +10937,7 @@ MonoBehaviour:
       m_Calls: []
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
-  m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
+  m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.78431374}
   m_Text: 
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
@@ -12706,7 +12706,7 @@ RectTransform:
   m_Children:
   - {fileID: 1218531617}
   m_Father: {fileID: 1240907939}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -3}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -16491,7 +16491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1240907939
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16508,8 +16508,8 @@ RectTransform:
   - {fileID: 2029708496}
   - {fileID: 1975949841}
   - {fileID: 882864427}
-  - {fileID: 1275962234}
   - {fileID: 1000669661}
+  - {fileID: 1275962234}
   - {fileID: 697181851}
   - {fileID: 1594203719}
   m_Father: {fileID: 2139998641}
@@ -17389,7 +17389,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -17403,7 +17403,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1344134231}
   m_TextViewport: {fileID: 41896521}
   m_TextComponent: {fileID: 1565841533}
@@ -17449,11 +17449,11 @@ MonoBehaviour:
       m_Calls: []
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
-  m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
+  m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0}
   m_Text: A1gd
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
-  m_ReadOnly: 0
+  m_ReadOnly: 1
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
   m_OnFocusSelectAll: 1
@@ -20478,7 +20478,7 @@ GameObject:
   - component: {fileID: 1597370568}
   - component: {fileID: 1597370567}
   m_Layer: 5
-  m_Name: Text
+  m_Name: JoinRoomInputText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20499,10 +20499,10 @@ RectTransform:
   m_Father: {fileID: 354946718}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 3.2999954}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1597370567
 MonoBehaviour:
@@ -24363,7 +24363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1918367609
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27300,7 +27300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2117930421
 RectTransform:
   m_ObjectHideFlags: 0
@@ -28138,7 +28138,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5507349882350913924, guid: fb902a522d1ba1348a485cb1b67bc539, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5507349882350913924, guid: fb902a522d1ba1348a485cb1b67bc539, type: 3}
       propertyPath: m_AnchorMax.x
@@ -28219,6 +28219,10 @@ PrefabInstance:
     - target: {fileID: 5507349882460501894, guid: fb902a522d1ba1348a485cb1b67bc539, type: 3}
       propertyPath: m_Name
       value: JoinInvisibleOnImage
+      objectReference: {fileID: 0}
+    - target: {fileID: 5507349882460501894, guid: fb902a522d1ba1348a485cb1b67bc539, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb902a522d1ba1348a485cb1b67bc539, type: 3}

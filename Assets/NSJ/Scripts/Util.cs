@@ -144,4 +144,13 @@ public static partial class Util
         DatabaseReference userRef = root.Child("UserData").Child(userId);
         return userRef;
     }
+
+    /// <summary>
+    /// 문자 클립보드 복사
+    /// </summary>
+    /// <param name="text"></param>
+    public static void CopyText(this string text)
+    {
+        GUIUtility.systemCopyBuffer = text;
+    }
 }

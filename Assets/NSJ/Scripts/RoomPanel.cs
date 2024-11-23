@@ -56,7 +56,13 @@ public class RoomPanel : BaseUI
     {
         _roomPlayerCountText.SetText($"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
     }
-
+    /// <summary>
+    /// 방 코드 복사
+    /// </summary>
+    private void CopyRoomCode()
+    {
+        _roomCodeText.text.CopyText();
+    }
     /// <summary>
     /// 방코드 숨기기/ 보이기
     /// </summary>
@@ -74,8 +80,15 @@ public class RoomPanel : BaseUI
             _roomCodeText.contentType = TMP_InputField.ContentType.Password;
             _roomCodeActiveText.SetText(SHOWTEXT);
         }
-        _roomCodeText.Select();
-        EventSystem.current.SetSelectedGameObject(null);
+        StartCoroutine(ToggleActiveRoomCodeRoutine());
+    }
+
+    IEnumerator ToggleActiveRoomCodeRoutine()
+    {
+        string temp = _roomCodeText.text;
+        _roomCodeText.text = string.Empty;
+        yield return null;
+        _roomCodeText.text = temp;
     }
 
     /// <summary>
@@ -175,6 +188,7 @@ public class RoomPanel : BaseUI
 
         GetUI<Button>("RoomLeftButton").onClick.AddListener(LeftRoom);
         GetUI<Button>("RoomCodeActiveButton").onClick.AddListener(ToggleActiveRoomCode);
+        GetUI<Button>("RoomCopyButton").onClick.AddListener(CopyRoomCode);
     }
 
 }
