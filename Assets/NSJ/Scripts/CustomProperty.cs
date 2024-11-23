@@ -53,7 +53,7 @@ public static class CustomRoomProperty
     /// </summary>
     /// <param name="room"></param>
     /// <param name="isPrivacy"></param>
-    public static void SetPrivacy(Room room, bool isPrivacy)
+    public static void SetPrivacy(this Room room, bool isPrivacy)
     {
         _customProperty.Clear();
         _customProperty.Add(PRIVACY, isPrivacy);
@@ -65,7 +65,7 @@ public static class CustomRoomProperty
     /// </summary>
     /// <param name="room"></param>
     /// <returns></returns>
-    public static bool GetPrivacy(Room room) 
+    public static bool GetPrivacy(this Room room) 
     {
         PhotonHashtable customProperty = room.CustomProperties;
         if (customProperty.ContainsKey(PRIVACY)) 
@@ -73,5 +73,17 @@ public static class CustomRoomProperty
             return (bool)customProperty[PRIVACY];
         }
         return false;
+    }
+
+    /// <summary>
+    /// 방 공개 여부 프로퍼티 세팅
+    /// </summary>
+    /// <param name="room"></param>
+    /// <param name="isPrivacy"></param>
+    public static void SetPrivacy(this RoomOptions roomOptions, bool isPrivacy)
+    {
+        _customProperty.Clear();
+        _customProperty.Add(PRIVACY, isPrivacy);
+        roomOptions.CustomRoomProperties = _customProperty;
     }
 }

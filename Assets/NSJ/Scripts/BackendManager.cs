@@ -28,6 +28,7 @@ public class BackendManager : MonoBehaviour
         InitSingleTon();
         CheckDependency();
     }
+
     /// <summary>
     /// 호환성 체크
     /// </summary>

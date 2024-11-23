@@ -66,7 +66,7 @@ public class RoomPanel : BaseUI
             OffReady();
         }
     }
-
+    #region Ready
     /// <summary>
     /// 레디 하기
     /// </summary>
@@ -83,6 +83,8 @@ public class RoomPanel : BaseUI
         PhotonNetwork.LocalPlayer.SetReady(false);
         _roomReadyButtonText.SetText("준비".GetText());
     }
+    #endregion
+
     /// <summary>
     /// 플레이어 변화에 따른 룸 업데이트
     /// </summary>
@@ -97,6 +99,24 @@ public class RoomPanel : BaseUI
     private void UpdatePlayerCount()
     {
         _roomPlayerCountText.SetText($"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}".GetText());
+    }
+
+    /// <summary>
+    /// 시작버튼, 레디버튼 활성화/ 비활성화
+    /// </summary>
+    private void SetStartAndReadyButton()
+    {
+        // 마스터클라이언트는 시작버튼 활성화 레디버튼 비활성화
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GetUI("RoomStartButtonBox").SetActive(true);
+            GetUI("RoomReadyButtonBox").SetActive(false);
+        }
+        else
+        {
+            GetUI("RoomStartButtonBox").SetActive(false);
+            GetUI("RoomReadyButtonBox").SetActive(true);
+        }
     }
 
     /// <summary>
@@ -234,7 +254,17 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void ClearRoomBox()
     {
-        if (!PhotonNetwork.InRoom) return;
+        if (PhotonNetwork.InRoom == false) return;
+
+        if(PhotonNetwork.CurrentRoom.GetPrivacy() == true) // 방이 프라이버시 모드인 경우
+        {
+            PhotonNetwork.LocalPlayer.NickName = $"새 {PhotonNetwork.LocalPlayer.ActorNumber}"; // 닉네임을 새 N 으로 변경
+        }
+        else
+        {
+            PhotonNetwork.LocalPlayer.NickName = BackendManager.User.NickName; // 닉네임을 저장된 유저닉네임으로 변경
+        }
+
 
         // 누구의 방 텍스트 설정
         _roomTitleText.SetText($"{PhotonNetwork.LocalPlayer.NickName}의 방".GetText());
@@ -289,22 +319,6 @@ public class RoomPanel : BaseUI
     }
 
 
-    /// <summary>
-    /// 시작버튼, 레디버튼 활성화/ 비활성화
-    /// </summary>
-    private void SetStartAndReadyButton()
-    {
-        // 마스터클라이언트는 시작버튼 활성화 레디버튼 비활성화
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GetUI("RoomStartButtonBox").SetActive(true);
-            GetUI("RoomReadyButtonBox").SetActive(false);
-        }
-        else
-        {
-            GetUI("RoomStartButtonBox").SetActive(false);
-            GetUI("RoomReadyButtonBox").SetActive(true);
-        }
-    }
+
 
 }

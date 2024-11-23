@@ -155,6 +155,7 @@ public class MainPanel : BaseUI
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = maxPlayer;
         options.IsVisible = isVisible;
+        options.SetPrivacy(_createPrivacyCheck.activeSelf);
 
         ActivateLoadingBox(true);
         PhotonNetwork.CreateRoom(roomCode, options);
@@ -180,6 +181,23 @@ public class MainPanel : BaseUI
         else
         {
             _createRoomOpenText.SetText("공개".GetText());
+        }
+    }
+
+    /// <summary>
+    /// 프라이버시 모드
+    /// </summary>
+    private void UpdatePrivacyMode()
+    {
+        if(_createPrivacyCheck.activeSelf == false)
+        {
+            // 프라이버시 모드 활성화
+            _createPrivacyCheck.SetActive(true);
+        }
+        else
+        {
+            // 비활성화
+            _createPrivacyCheck.SetActive(false);
         }
     }
 
@@ -213,6 +231,7 @@ public class MainPanel : BaseUI
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = maxPlayer;
         options.IsVisible = isVisible;
+        options.SetPrivacy(true); // 빠른시작 방이니까 프라이버시 모드
 
         PhotonNetwork.CreateRoom(roomCode, options);
     }
@@ -405,6 +424,7 @@ public class MainPanel : BaseUI
         _createRoomOpenSlider.onValueChanged.AddListener(UpdateIsVisible);
         GetUI<Button>("CreateBackButton").onClick.AddListener(() => ChangeBox(Box.Join));
         GetUI<Button>("CreateRoomButton").onClick.AddListener(CreateRoom);
+        GetUI<Button>("CreatePrivacyButton").onClick.AddListener(UpdatePrivacyMode);
 
         #endregion
 
@@ -428,7 +448,6 @@ public class MainPanel : BaseUI
         BackendManager.SettingDic.Clear();
         BackendManager.SettingDic.Add(UserDate.NICKNAME, nickName);
         BackendManager.Auth.CurrentUser.UserId.GetUserDataRef().UpdateChildrenAsync(BackendManager.SettingDic);
-        PhotonNetwork.LocalPlayer.NickName = nickName; // 포톤 네트워크 닉네임 변경
     }
 
     /// <summary>

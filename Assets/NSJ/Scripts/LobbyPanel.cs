@@ -70,7 +70,6 @@ public class LobbyPanel : BaseUI
             // 사라졌거나, 비공개거나, 열린방이 아닐때 (못들어가는 방)
             if (room.RemovedFromList || room.IsVisible == false || room.IsOpen == false)
             {
-                Debug.Log(room.Name);
                 // 해당방이 등록되지 않은 방이었을 때
                 if (_roomDic.ContainsKey(room.Name) == false)
                     continue;
