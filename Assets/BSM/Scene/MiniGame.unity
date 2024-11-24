@@ -305,7 +305,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 1085458301}
   m_HandleRect: {fileID: 0}
@@ -1710,6 +1710,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1584576151}
   m_CullTransparentMesh: 1
+--- !u!1 &1722111202 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919890625367936905, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+  m_PrefabInstance: {fileID: 919890624111419617}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1722111206
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722111202}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: caf78a5e409f0294690f41e7fcf618af, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!111 &1722111210
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722111202}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 12f3a232312ab7d4d9498642635bfae0, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1808749059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,6 +1961,46 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919890624327756684, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890624327756684, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890624327756685, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_Name
+      value: LeverColor
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890624327756687, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_Color.b
+      value: 0.109803915
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890624327756687, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.1272374
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890624327756687, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890625367936905, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890625373928543, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -0.0010184199
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890625373928543, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.0005187988
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890625480956562, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_Name
+      value: LeverSlider
+      objectReference: {fileID: 0}
+    - target: {fileID: 919890625480956564, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}
+      propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919890625480956564, guid: 584498953a583d649a76c239e5b2dfd8, type: 3}

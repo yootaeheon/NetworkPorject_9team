@@ -1,6 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Timeline;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 
@@ -12,46 +16,134 @@ public class ReactorChargingMission : MonoBehaviour
     private MissionController _missionController;
     private MissionState _missionState;
 
+    private Animation _animation;
     private Animator _chargeAnim;
+    private Slider _energySlider;
+    private Image _leverColor;
+
+    private bool IsPress;
+    private int reverseHash; 
+    private int pressHash; 
+    private float _animLength;
+    private float _elapsedTime;
 
 
     private void Awake() => Init();
+    private void Start()
+    {
+        _energySlider = _missionController.GetMissionObj<Slider>("LeverSlider");
+        _chargeAnim = _missionController.GetMissionObj<Animator>("Lever");
+        _leverColor = _missionController.GetMissionObj<Image>("LeverColor");
+
+        _animation = _missionController.GetMissionObj<Animation>("Lever");
+        _animLength = _animation.clip.length; 
+        
+        reverseHash = Animator.StringToHash("Reverse");
+        pressHash = Animator.StringToHash("Press");
+
+    }
 
     private void Init()
     {
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
         _missionState.MissionName = "원자로 중심부 충전하기";
+
+
     }
 
     private void OnEnable()
     {
-        _missionState.ObjectCount = 5;
+        _missionState.ObjectCount = 1;
+        IsPress = false;
+        
+
     }
 
-    
-    //Input 받아오고,
-    //클릭하고 있는 상태
-        //Animation True 전달
-        //내려가는 애니메이션 재생
-    //마우스 뗀 상태
-        //False 전달
-        //올라오는 애니메이션 재생
 
-    //레버가 다 내려갔는지? > 누르고 있는 시간을 체크해서 검사    
 
-        //레버 상태 = True 
-        //게이지 상승
+    private void Update()
+    {
+        _missionController.PlayerInput(); 
+        LeverPress();
+        ChargeEnergy();
 
-    //게이지 색 > Color.G 증가
-        //Color.G > 1 ? 
-            //Color.R 증가
-        
+    }
+ 
 
-    //Slider Value >= 1 ?
-        //mission clear
-        
+    private void LeverPress()
+    {
+        if (!_missionState.IsDetect) return;
+ 
+        if (Input.GetMouseButton(0))
+        {
+            _chargeAnim.SetFloat(reverseHash, 1);
+            _chargeAnim.SetBool(pressHash, true);
+            //_chargeAnim.Play("LeverUp");
 
+            _elapsedTime += Time.deltaTime;
+            
+            if (_elapsedTime > _animLength)
+                IsPress = true;
+
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            _chargeAnim.SetFloat(reverseHash, -1f);
+            _chargeAnim.SetBool(pressHash, false);
+            //_chargeAnim.Play("LeverUp");
+
+
+            _elapsedTime = 0;
+            IsPress = false;
+        }
+
+    }
+
+    private void ChargeEnergy()
+    {
+        _energySlider.value += IsPress ? Time.deltaTime*0.1f : (-Time.deltaTime *0.4f);
+        ChargeColorChange();
+    }
+
+    private void ChargeColorChange()
+    { 
+        float colorG = _leverColor.color.g;
+        float colorR = _leverColor.color.r;
+ 
+        if (IsPress)
+        {
+            if (colorG <= 1f)
+            {
+                colorG += Time.deltaTime * (_energySlider.value * 0.3f);
+            }
+            else
+            {
+                if(colorR >= 0.5f)
+                {
+                    colorR += -(Time.deltaTime * 0.3f);
+                } 
+            } 
+        }
+        else
+        {
+            if(colorR < 1f)
+            {
+                colorR += Time.deltaTime * 0.3f;
+            }
+            else
+            {
+                if(colorG >= 0.12f)
+                {
+                    colorG += -(Time.deltaTime * (_energySlider.value *6.5f));
+                } 
+            }
+
+        } 
+        _leverColor.color = new Color(colorR, colorG, _leverColor.color.b);
+
+    } 
+ 
     private void IncreaseTotalScore()
     {
         //Player의 타입을 받아 올 수 있으면 좋음
