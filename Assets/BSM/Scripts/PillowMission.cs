@@ -8,9 +8,13 @@ public class PillowMission : MonoBehaviour
     private MissionController _missionController;
 
 
+    private Animator _animator;
+    private int _pillowHash;
+    private int _idleHash;
+
     private void Awake()
     {
-
+        Init();
     }
 
 
@@ -21,6 +25,45 @@ public class PillowMission : MonoBehaviour
         _missionState.MissionName = "베개속 두드려 펴기";
     }
 
+    private void Start()
+    {
+        _animator = _missionController.GetMissionObj<Animator>("Pillow");
+        _pillowHash = Animator.StringToHash("Pillow");
+        _idleHash = Animator.StringToHash("PillowIdle"); 
+    }
+
+    private void OnEnable()
+    {
+        _missionState.ObjectCount = 15;
+    }
+
+    private void Update()
+    {
+        _missionController.PlayerInput();
+        ShakingPillow();
+    }
+
+    /// <summary>
+    /// 베개 클릭 기능
+    /// </summary>
+    private void ShakingPillow()
+    {
+        if (!_missionState.IsDetect) return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            _animator.Play(_pillowHash);
+            SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+            _missionState.ObjectCount--;
+            MissionClear();
+        }
+        else if(Input.GetMouseButtonUp(0))
+        {
+            //베개 모션 재생 후 대기 상태로
+            _animator.Play(_idleHash);
+        }
+
+    }
 
 
 
