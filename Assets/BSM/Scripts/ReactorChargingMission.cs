@@ -16,15 +16,14 @@ public class ReactorChargingMission : MonoBehaviour
     private MissionController _missionController;
     private MissionState _missionState;
 
-    private Animation _animation;
+
     private Animator _chargeAnim;
     private Slider _energySlider;
     private Image _leverColor;
 
     private bool IsPress;
     private int reverseHash;
-    private int pressHash;
-    private float _animLength;
+    private int pressHash; 
     private float _elapsedTime;
     private float _notPressTime;
     private bool _checkPress;
@@ -40,9 +39,6 @@ public class ReactorChargingMission : MonoBehaviour
         _energySlider = _missionController.GetMissionObj<Slider>("LeverSlider");
         _chargeAnim = _missionController.GetMissionObj<Animator>("Lever");
         _leverColor = _missionController.GetMissionObj<Image>("LeverColor");
-
-        _animation = _missionController.GetMissionObj<Animation>("Lever");
-        _animLength = _animation.clip.length;
 
         reverseHash = Animator.StringToHash("Reverse");
         pressHash = Animator.StringToHash("Press");
@@ -63,6 +59,7 @@ public class ReactorChargingMission : MonoBehaviour
 
     private void OnEnable()
     {
+        _elapsedTime = 0;
         _missionState.ObjectCount = 1;
         IsPress = false;
     }
@@ -70,17 +67,35 @@ public class ReactorChargingMission : MonoBehaviour
     private void OnDisable()
     {
         _energySlider.value = 0;
-        _leverColor.color = new Color(_r, _g, _b);
-        _chargeAnim.Rebind();
+        _leverColor.color = new Color(_r, _g, _b); 
     }
 
 
-
+    private Coroutine _beepCo;
     private void Update()
     {
         _missionController.PlayerInput();
         LeverPress();
-        ChargeEnergy(); 
+        ChargeEnergy();
+
+
+
+        if (IsPress)
+        {
+            if(_beepCo == null)
+            {
+                _beepCo = StartCoroutine(BeepCoroutine());
+            }
+           
+        }
+        else
+        {
+            if (_beepCo != null)
+            {
+                StopCoroutine(_beepCo);
+                _beepCo = null;
+            }
+        } 
     }
 
 
@@ -113,32 +128,29 @@ public class ReactorChargingMission : MonoBehaviour
             _checkPress = true;
             _chargeAnim.SetFloat(reverseHash, 1);
             _chargeAnim.SetBool(pressHash, true);
-
+             
             _elapsedTime += Time.deltaTime;
 
-            if (_elapsedTime > _animLength)
+            if (_elapsedTime > 1.5f)
                 IsPress = true;
-
 
             if (_energySlider.value >= 1f)
             {
+                Debug.Log("미션 클리어");
                 _missionState.ObjectCount--;
                 MissionClear();
             }
-
 
         }
         else if (Input.GetMouseButtonUp(0))
         {
             _chargeAnim.SetFloat(reverseHash, -1f);
             _chargeAnim.SetBool(pressHash, false);
-
-
+             
             _elapsedTime = 0;
             IsPress = false;
             _checkPress = false;
-        }
-
+        } 
     }
 
     /// <summary>
@@ -216,6 +228,22 @@ public class ReactorChargingMission : MonoBehaviour
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }
+    }
+
+
+
+    /// <summary>
+    /// 1초마다 사운드 재생
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator BeepCoroutine()
+    {
+
+        while (true)
+        {
+            SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+            yield return Util.GetDelay(1f); 
+        } 
     }
 
 

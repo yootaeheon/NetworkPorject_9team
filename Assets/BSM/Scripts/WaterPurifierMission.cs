@@ -138,7 +138,7 @@ public class WaterPurifierMission : MonoBehaviour
     private void IncreaseTotalScore()
     {
         //Player의 타입을 받아 올 수 있으면 좋음
-        PlayerType type = PlayerType.Duck;
+        PlayerType type = PlayerType.Goose;
 
         if (type.Equals(PlayerType.Goose))
         {
