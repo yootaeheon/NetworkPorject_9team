@@ -22,10 +22,16 @@ public class ReactorChargingMission : MonoBehaviour
     private Image _leverColor;
 
     private bool IsPress;
-    private int reverseHash; 
-    private int pressHash; 
+    private int reverseHash;
+    private int pressHash;
     private float _animLength;
     private float _elapsedTime;
+    private float _notPressTime;
+    private bool _checkPress;
+
+    private float _r;
+    private float _g;
+    private float _b;
 
 
     private void Awake() => Init();
@@ -36,11 +42,14 @@ public class ReactorChargingMission : MonoBehaviour
         _leverColor = _missionController.GetMissionObj<Image>("LeverColor");
 
         _animation = _missionController.GetMissionObj<Animation>("Lever");
-        _animLength = _animation.clip.length; 
-        
+        _animLength = _animation.clip.length;
+
         reverseHash = Animator.StringToHash("Reverse");
         pressHash = Animator.StringToHash("Press");
 
+        _r = _leverColor.color.r;
+        _g = _leverColor.color.g;
+        _b = _leverColor.color.b;
     }
 
     private void Init()
@@ -56,61 +65,100 @@ public class ReactorChargingMission : MonoBehaviour
     {
         _missionState.ObjectCount = 1;
         IsPress = false;
-        
+    }
 
+    private void OnDisable()
+    {
+        _energySlider.value = 0;
+        _leverColor.color = new Color(_r, _g, _b);
+        _chargeAnim.Rebind();
     }
 
 
 
     private void Update()
     {
-        _missionController.PlayerInput(); 
+        _missionController.PlayerInput();
         LeverPress();
-        ChargeEnergy();
-
+        ChargeEnergy(); 
     }
- 
 
+
+    /// <summary>
+    /// 레버 누르고 있는 상태에 따라 애니메이션 재생/되감기 진행
+    /// </summary>
     private void LeverPress()
     {
         if (!_missionState.IsDetect) return;
- 
+
+        //레버를 누르고 있는 상태 확인
+        //2초 이상 누르고 있지 않은 상태이면 애니메이션 Rebind
+        if (!_checkPress)
+        {
+            _notPressTime += Time.deltaTime;
+
+            if (_notPressTime > 2f && _energySlider.value == 0f)
+            {
+                _chargeAnim.Rebind();
+                _notPressTime = 0;
+            }
+        }
+        else
+        {
+            _notPressTime = 0;
+        } 
+
         if (Input.GetMouseButton(0))
         {
+            _checkPress = true;
             _chargeAnim.SetFloat(reverseHash, 1);
             _chargeAnim.SetBool(pressHash, true);
-            //_chargeAnim.Play("LeverUp");
 
             _elapsedTime += Time.deltaTime;
-            
+
             if (_elapsedTime > _animLength)
                 IsPress = true;
+
+
+            if (_energySlider.value >= 1f)
+            {
+                _missionState.ObjectCount--;
+                MissionClear();
+            }
+
 
         }
         else if (Input.GetMouseButtonUp(0))
         {
             _chargeAnim.SetFloat(reverseHash, -1f);
             _chargeAnim.SetBool(pressHash, false);
-            //_chargeAnim.Play("LeverUp");
 
 
             _elapsedTime = 0;
             IsPress = false;
+            _checkPress = false;
         }
 
     }
 
+    /// <summary>
+    /// 누르고 있는 상태에 따라 슬라이더 값 변경
+    /// </summary>
     private void ChargeEnergy()
     {
-        _energySlider.value += IsPress ? Time.deltaTime*0.1f : (-Time.deltaTime *0.4f);
+        _energySlider.value += IsPress ? Time.deltaTime * 0.1f : (-Time.deltaTime * 0.4f);
         ChargeColorChange();
     }
 
+    /// <summary>
+    /// 누르고 있는 시간 비례하여 슬라이더 컬러 값 변경
+    /// </summary>
     private void ChargeColorChange()
-    { 
+    {
+        //현재 컬러의 R,G 값
         float colorG = _leverColor.color.g;
         float colorR = _leverColor.color.r;
- 
+
         if (IsPress)
         {
             if (colorG <= 1f)
@@ -119,35 +167,35 @@ public class ReactorChargingMission : MonoBehaviour
             }
             else
             {
-                if(colorR >= 0.5f)
+                if (colorR >= 0.5f)
                 {
                     colorR += -(Time.deltaTime * 0.3f);
-                } 
-            } 
+                }
+            }
         }
         else
         {
-            if(colorR < 1f)
+            if (colorR < 1f)
             {
                 colorR += Time.deltaTime * 0.3f;
             }
             else
             {
-                if(colorG >= 0.12f)
+                if (colorG >= 0.12f)
                 {
-                    colorG += -(Time.deltaTime * (_energySlider.value *6.5f));
-                } 
+                    colorG += -(Time.deltaTime * (_energySlider.value * 6.5f));
+                }
             }
 
-        } 
+        }
         _leverColor.color = new Color(colorR, colorG, _leverColor.color.b);
 
-    } 
- 
+    }
+
     private void IncreaseTotalScore()
     {
         //Player의 타입을 받아 올 수 있으면 좋음
-        PlayerType type = PlayerType.Duck;
+        PlayerType type = PlayerType.Goose;
 
         if (type.Equals(PlayerType.Goose))
         {
