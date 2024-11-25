@@ -109,7 +109,7 @@ namespace UnityStandardAssets.CrossPlatformInput
         }
 
 
-        // -- Button handling --
+        // -- ButtonType handling --
         public static bool GetButton(string name)
         {
             return activeInput.GetButton(name);

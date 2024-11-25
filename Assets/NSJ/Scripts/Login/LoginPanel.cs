@@ -48,8 +48,33 @@ public class LoginPanel : BaseUI
 
     private void OnEnable()
     {
+        if (LobbyScene.IsLoginCancel == true) // 로딩 캔슬값 초기화, 동시에 UI 변경 금지
+        {
+            LobbyScene.IsLoginCancel = false;
+            return;
+        }
+
         ChangeBox(Box.Login);
     }
+
+    private void OnDisable()
+    {
+        if (LobbyScene.IsLoginCancel == true) // 로딩 캔슬시
+        {
+            CancelLogin();
+        }
+    }
+
+    /// <summary>
+    ///  로그인 캔슬
+    /// </summary>
+    private void CancelLogin()
+    {
+        LobbyScene.ActivateLoadingBox(true);
+        BackendManager.Auth.SignOut(); // 로그아웃
+        PhotonNetwork.Disconnect(); // 서버 연결 끊기
+    }
+
     #region 로그인
     /// <summary>
     /// 로그인 버튼 활성화
@@ -73,7 +98,7 @@ public class LoginPanel : BaseUI
         string password = _loginPasswordInput.text;
 
         //로딩화면 On
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         // 로그인 시도
         BackendManager.Auth.SignInWithEmailAndPasswordAsync(email, password).
             ContinueWithOnMainThread(task =>
@@ -189,7 +214,7 @@ public class LoginPanel : BaseUI
             SetErrorInput(_signUpConfirmInput);
         }
         //로딩화면 On
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         BackendManager.Auth.CreateUserWithEmailAndPasswordAsync(email, password).
             ContinueWithOnMainThread(task =>
             {
@@ -286,7 +311,7 @@ public class LoginPanel : BaseUI
                     if (success)
                     {
                         // 서버 연결
-                        ActivateLoadingBox(true);
+                        LobbyScene.ActivateLoadingBox(true);
                         GetUserDate();
                     }
                     else
@@ -319,7 +344,7 @@ public class LoginPanel : BaseUI
         string email = _findEmailInput.text; // 이메일 캐싱
 
         // 로딩화면 On
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         BackendManager.Auth.SendPasswordResetEmailAsync(email).
             ContinueWithOnMainThread(task =>
             {
@@ -361,7 +386,7 @@ public class LoginPanel : BaseUI
     private void ChangeBox(Box box)
     {
         // UI박스 바뀔 때 로딩창도 사라짐
-        ActivateLoadingBox(false);
+        LobbyScene.ActivateLoadingBox(false);
 
         if (box == Box.Error) // 에러창은 팝업방식으로
         {
@@ -440,21 +465,6 @@ public class LoginPanel : BaseUI
         _findEmailInput.text = string.Empty;
         _findEmailInput.placeholder.color = _defaultInputColor;
         _findButton.SetActive(false);
-    }
-
-    /// <summary>
-    /// 로딩 화면 활성화 / 비활성화
-    /// </summary>
-    private void ActivateLoadingBox(bool isActive)
-    {
-        if (isActive)
-        {
-            _loadingBox.SetActive(true);
-        }
-        else
-        {
-            _loadingBox.SetActive(false);
-        }
     }
 
     #endregion

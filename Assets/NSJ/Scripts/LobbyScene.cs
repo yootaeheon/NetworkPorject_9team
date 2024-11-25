@@ -1,6 +1,7 @@
 using Photon.Pun;
-using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -8,6 +9,11 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class LobbyScene : MonoBehaviourPunCallbacks
 {
     public static LobbyScene Instance;
+    public static GameObject Loading { get { return Instance._popUp.Loading; } }
+    public static GameObject Option { get { return Instance._popUp.Option; } }
+  
+    public static bool IsLoginCancel { get { return  Instance._isLoginCancel; } set { Instance._isLoginCancel = value; } }
+    public static bool IsJoinRoomCancel { get { return Instance._isJoinRoomCancel; } set { Instance._isJoinRoomCancel = value; } }
 
     #region ¿Ã∫•∆Æ
     public event UnityAction OnConnectedEvent;
@@ -22,10 +28,11 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     public event UnityAction OnJoinedLobbyEvent;
     public event UnityAction OnLeftLobbyEvent;
     public event UnityAction<Player> OnMasterClientSwitchedEvent;
-    #endregion
+    public event UnityAction<List<RoomInfo>> OnRoomListUpdateEvent;
+    #endregion 
 
     #region private « µÂ
-    enum Panel { Login, Main, Lobby, Room, Size }
+    public enum Panel { Login, Main, Lobby, Room, Loading, Option, Size }
 
     [System.Serializable]
     struct PanelStruct
@@ -35,22 +42,39 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         public GameObject MainPanel;
         public GameObject LobbyPanel;
         public GameObject RoomPanel;
+        public GameObject LoadingPanel;
+        public GameObject OptionPanel;
     }
     [SerializeField] private PanelStruct _panelStruct;
-    private GameObject _backGroundImage { get { return _panelStruct.BackGroundImage; } }
-    private GameObject _loginPanel { get { return _panelStruct.LoginPanel; } }
-    private GameObject _mainPanel { get { return _panelStruct.MainPanel; } }
-    private GameObject _lobbyPanel { get { return _panelStruct.LobbyPanel; } }
-    private GameObject _roomPanel { get { return _panelStruct.RoomPanel; } }
+    private static GameObject s_backGroundImage { get { return Instance._panelStruct.BackGroundImage; } }
+    private static GameObject s_loginPanel { get { return Instance._panelStruct.LoginPanel; } }
+    private static GameObject s_mainPanel { get { return Instance._panelStruct.MainPanel; } }
+    private static GameObject s_lobbyPanel { get { return Instance._panelStruct.LobbyPanel; } }
+    private static GameObject s_roomPanel { get { return Instance._panelStruct.RoomPanel; } }
+    private static GameObject s_loadingPanel { get { return Instance._panelStruct.LoadingPanel;} }
+    private static GameObject s_optionPanel { get { return Instance._panelStruct.OptionPanel;} }
 
     private GameObject[] _panels = new GameObject[(int)Panel.Size];
+    private GameObject _curPanel;
+    private static GameObject s_curPanel { get { return Instance._curPanel; } }
+
+    [System.Serializable]
+    struct PopUpUI
+    {
+        public GameObject Loading;
+        public GameObject Option;
+    }
+    [SerializeField] PopUpUI _popUp;
+
+    private bool _isLoginCancel;
+    private bool _isJoinRoomCancel;
     #endregion
 
     private void Awake()
     {
         InitSingleTon(); // ΩÃ±€≈Ê
         Init(); // √ ±‚ º≥¡§
-        
+
     }
     private void Start()
     {
@@ -101,7 +125,6 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="message"></param>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("1");
         OnJoinRandomFailedEvent?.Invoke(returnCode, message);
     }
 
@@ -158,7 +181,41 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         ChangePanel(Panel.Main);
         OnLeftLobbyEvent?.Invoke();
     }
+    /// <summary>
+    /// ∑Î ∏ÆΩ∫∆Æ æ˜µ•¿Ã∆Æ
+    /// </summary>
+    /// <param name="roomList"></param>
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        StartCoroutine(OnRoomListUpdateRoutine(roomList));
+    }
+    IEnumerator OnRoomListUpdateRoutine(List<RoomInfo> roomList)
+    {
+        yield return null;
+        OnRoomListUpdateEvent?.Invoke(roomList);
+        // ∑Œ∫Ò∆–≥Œ »£≠ÅΩ√ ¿Ã∫•∆Æ ±∏µ∂Ω√∞£¿ª ¿ß«— 1«¡∑π¿” ¥ ¥¬ ƒ⁄∑Á∆æ
+        // ¡®¿Â ∂« ƒ⁄∑Á∆æ¿Ãæﬂ. æ∆æ∆ ƒ⁄∑Á∆æ ≥™¿« Ω≈, ≥™¿« ∫˚.
+    }
+
+
     #endregion
+
+    /// <summary>
+    /// ∑Œµ˘ »≠∏È »∞º∫»≠ / ∫Ò»∞º∫»≠
+    /// </summary>
+    public static void ActivateLoadingBox(bool isActive)
+    { 
+        Loading.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// ø…º« √¢ »∞º∫»≠ / ∫Ò»∞º∫»≠
+    /// </summary>
+    /// <param name="isActive"></param>
+    public static void ActivateOptionBox(bool isActive)
+    {
+        Option.SetActive(isActive);
+    }
 
     /// <summary>
     /// ∆–≥Œ ±≥√º
@@ -172,16 +229,16 @@ public class LobbyScene : MonoBehaviourPunCallbacks
             if (i == (int)panel) // ∏≈∞≥∫ØºˆøÕ ¿œƒ°«œ¥¬ ∆–≥Œ¿Ã∏È »∞º∫»≠
             {
                 if (_panels[i] == null)
-                    return;         
+                    return;
                 _panels[i].SetActive(true);
-
+                _curPanel = _panels[i];
                 if (panel == Panel.Room) // ∆–≥Œ¿Ã ∑Î¿Ã∏È µﬁπË∞Ê ∫Ò»∞º∫»≠
                 {
-                    _backGroundImage.SetActive(false);
+                    s_backGroundImage.SetActive(false);
                 }
                 else
                 {
-                    _backGroundImage.SetActive(true);
+                    s_backGroundImage.SetActive(true);
                 }
             }
             else // æ∆¥œ∏È ∫Ò»∞º∫»≠
@@ -190,6 +247,22 @@ public class LobbyScene : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    /// <summary>
+    /// ∑Œµ˘ ƒµΩΩ ºº∆√
+    /// </summary>
+   public static void SetIsLoadingCancel()
+    {
+        if(s_curPanel == s_loginPanel)
+        {
+            IsLoginCancel = true;
+        }
+        else if(s_curPanel == s_mainPanel)
+        {
+            IsJoinRoomCancel = true;
+        }
+    }
+
 
 
     #region √ ±‚ º≥¡§
@@ -214,10 +287,15 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// </summary>
     private void Init()
     {
-        _panels[(int)Panel.Login] = _loginPanel;
-        _panels[(int)Panel.Main] = _mainPanel;
-        _panels[(int)Panel.Lobby] = _lobbyPanel;
-        _panels[(int)Panel.Room] = _roomPanel;
+        _panels[(int)Panel.Login] = s_loginPanel;
+        _panels[(int)Panel.Main] = s_mainPanel;
+        _panels[(int)Panel.Lobby] = s_lobbyPanel;
+        _panels[(int)Panel.Room] = s_roomPanel;
+        _panels[(int)Panel.Loading] = s_loadingPanel;
+        _panels[(int)Panel.Option] = s_optionPanel;
+
+        ActivateLoadingBox(false);
+        ActivateOptionBox(false);
     }
 
     /// <summary>

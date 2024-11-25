@@ -603,7 +603,7 @@ GameObject:
   - component: {fileID: 3784552143012372855}
   - component: {fileID: 3784552143012372854}
   m_Layer: 5
-  m_Name: SelectRoomIndex
+  m_Name: SelectRoomEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -680,7 +680,7 @@ GameObject:
   - component: {fileID: 3784552143063099622}
   - component: {fileID: 3784552143063099641}
   m_Layer: 5
-  m_Name: RooomMapBox
+  m_Name: RoomMapBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
