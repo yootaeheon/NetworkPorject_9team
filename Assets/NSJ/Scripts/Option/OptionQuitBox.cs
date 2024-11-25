@@ -26,13 +26,13 @@ public class OptionQuitBox : BaseUI
 
     private void OnEnable()
     {
-        InitUIInPanel();
+        ClearQuitBox();
     }
 
     /// <summary>
     /// 패널에 따른 UI 변화
     /// </summary>
-    private void InitUIInPanel()
+    private void ClearQuitBox()
     {
         // 방에 있을때는 메인 메뉴 버튼이 나오도록
         if (PhotonNetwork.InRoom)
@@ -92,7 +92,6 @@ public class OptionQuitBox : BaseUI
         // 방떠나기
         PhotonNetwork.LeaveRoom();     
     }
-
 
     private void Init()
     {

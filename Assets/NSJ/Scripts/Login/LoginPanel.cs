@@ -48,7 +48,7 @@ public class LoginPanel : BaseUI
 
     private void OnEnable()
     {
-        if(LobbyScene.IsLoginCancel == true) // 로딩 캔슬값 초기화, 동시에 UI 변경 금지
+        if (LobbyScene.IsLoginCancel == true) // 로딩 캔슬값 초기화, 동시에 UI 변경 금지
         {
             LobbyScene.IsLoginCancel = false;
             return;

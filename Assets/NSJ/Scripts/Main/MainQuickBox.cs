@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class MainQuickBox : BaseUI
 {
-
     private TMP_InputField _quickNickNameInput => GetUI<TMP_InputField>("QuickNickNameInput");
     private GameObject _quickColorBox => GetUI("QuickColorBox");
     private void Awake()

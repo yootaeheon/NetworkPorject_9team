@@ -32,7 +32,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     #endregion 
 
     #region private 필드
-    public enum Panel { Login, Main, Lobby, Room, Size }
+    public enum Panel { Login, Main, Lobby, Room, Loading, Option, Size }
 
     [System.Serializable]
     struct PanelStruct
@@ -42,6 +42,8 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         public GameObject MainPanel;
         public GameObject LobbyPanel;
         public GameObject RoomPanel;
+        public GameObject LoadingPanel;
+        public GameObject OptionPanel;
     }
     [SerializeField] private PanelStruct _panelStruct;
     private static GameObject s_backGroundImage { get { return Instance._panelStruct.BackGroundImage; } }
@@ -49,6 +51,8 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     private static GameObject s_mainPanel { get { return Instance._panelStruct.MainPanel; } }
     private static GameObject s_lobbyPanel { get { return Instance._panelStruct.LobbyPanel; } }
     private static GameObject s_roomPanel { get { return Instance._panelStruct.RoomPanel; } }
+    private static GameObject s_loadingPanel { get { return Instance._panelStruct.LoadingPanel;} }
+    private static GameObject s_optionPanel { get { return Instance._panelStruct.OptionPanel;} }
 
     private GameObject[] _panels = new GameObject[(int)Panel.Size];
     private GameObject _curPanel;
@@ -200,7 +204,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// 로딩 화면 활성화 / 비활성화
     /// </summary>
     public static void ActivateLoadingBox(bool isActive)
-    {
+    { 
         Loading.SetActive(isActive);
     }
 
@@ -287,6 +291,8 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         _panels[(int)Panel.Main] = s_mainPanel;
         _panels[(int)Panel.Lobby] = s_lobbyPanel;
         _panels[(int)Panel.Room] = s_roomPanel;
+        _panels[(int)Panel.Loading] = s_loadingPanel;
+        _panels[(int)Panel.Option] = s_optionPanel;
 
         ActivateLoadingBox(false);
         ActivateOptionBox(false);
