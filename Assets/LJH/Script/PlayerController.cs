@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -22,12 +23,12 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] SpriteRenderer body;
     [SerializeField] SpriteRenderer GhostRender;
     [SerializeField] SpriteRenderer CorpRender;
-    [SerializeField] Color[] colors;
+
     [SerializeField] Animator eyeAnim;
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
 
-    private int count;
+
 
     private Vector3 privPos;
     private Vector3 privDir;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviourPun
     public bool isGhost = false;
 
 
+    Coroutine coroutine;
     private void Start()
     {
 
@@ -55,6 +57,7 @@ public class PlayerController : MonoBehaviourPun
     }
     private void Update()
     {
+
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
 
@@ -69,35 +72,23 @@ public class PlayerController : MonoBehaviourPun
     private void FindNearObject()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(this.transform.position, Detectradius);
-
+        Collider2D nearCol = null;
+        float minDistance = 1000f;
         foreach (Collider2D col in colliders)
         {
-            if (col.tag == "Test")
+            if (col.transform.position != this.transform.position) // 자신 아니고 
             {
-
-                if (Input.GetKeyDown(KeyCode.R))
+                if (col.gameObject.layer != 9) // 유령 아니고 
                 {
-                    Debug.Log("신고함!");
-                    
-                    // 투표 열리는 기능 추가 
-                     
-                    col.gameObject.GetComponent<ReportingObject>().Reporting(); //신고 
-                }
-            }
-            else if (col.gameObject.layer == gameObject.layer)
-            {
-                if (col.gameObject != this.gameObject)
-                {
-                    if (playerType == PlayerType.Duck)
+                    if (col != null)
                     {
-                        if (Input.GetKeyDown(KeyCode.Space))
+                        float distance = Vector2.Distance(this.transform.position, col.transform.position);
+                        if (distance < minDistance)
                         {
-
-                            Debug.Log("죽임!"); // 쿨타임 추가해야함 
-
-                            col.gameObject.GetComponent<PlayerController>().Die();
+                            minDistance = distance;  // 가장 가까운 물체 찾기()
+                            nearCol = col;
+                           
                         }
-
                     }
 
                 }
@@ -105,12 +96,80 @@ public class PlayerController : MonoBehaviourPun
             }
 
         }
+        if (nearCol.tag == "Test")
+        {
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Debug.Log("신고함!");
+
+                // 투표 열리는 기능 추가 해야함 
+
+                nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제
+
+            }
+        }
+        else if (nearCol.gameObject.layer == gameObject.layer)
+        {
+            //Killing(col);
+            coroutine = StartCoroutine(Kill(nearCol));
+        }
+        else if (nearCol.gameObject.layer == 8)  // 미션 
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                coroutine = StartCoroutine(PlayMission());
+            }
+        }
+        else if (nearCol.gameObject.layer == 10) // 사보타지(임포스터만 가능 )
+        {
+            if (playerType == PlayerType.Duck)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    coroutine = StartCoroutine(PlaySabotage());
+                }
+            }
+        }
     }
-    public void Killing()
+    IEnumerator Kill(Collider2D col)
     {
-        // 
+
+        if (col.gameObject != this.gameObject)
+        {
+            if (playerType == PlayerType.Duck)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+
+                    Debug.Log("죽임!"); // 쿨타임 추가해야함 
+
+                    col.gameObject.GetComponent<PlayerController>().Die();
+                }
+
+            }
+
+        }
+        yield return new WaitForSeconds(1f);
+
     }
-    
+    IEnumerator PlayMission()
+    {
+
+        Debug.Log("미션!");
+
+        yield return new WaitForSeconds(1f);
+
+    }
+    IEnumerator PlaySabotage()
+    {
+
+        Debug.Log("사보타지!");
+
+        yield return new WaitForSeconds(1f);
+
+    }
+
 
 
     public void Die()
@@ -129,12 +188,23 @@ public class PlayerController : MonoBehaviourPun
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
     }
 
-
-
-
-
+   
     private void Move()
     {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 5f,8);
+        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
+        if (hit.collider != null)
+        {          
+                print(hit.transform.name);
+        }
+        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.right, 5f, 10);
+        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
+        if (hit1.collider != null)
+        {
+            print(hit1.transform.name);
+        }
+
+
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -144,6 +214,7 @@ public class PlayerController : MonoBehaviourPun
             return;
 
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+
 
         if (x < 0) // 왼쪽으로 이동 시
         {
@@ -160,6 +231,7 @@ public class PlayerController : MonoBehaviourPun
             transform.localScale = privDir;
         }
     }
+
 
     private void MoveCheck()
     {
