@@ -69,6 +69,9 @@ public class PlayerController : MonoBehaviourPun
     // r 신고 , e 상호작용 , space 살인 
     // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
     // 신고가 되면 시체도 사라져야 함 
+
+    private Collider2D privNearCol= null;
+    private Color privColor;
     private void FindNearObject()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(this.transform.position, Detectradius);
@@ -85,9 +88,10 @@ public class PlayerController : MonoBehaviourPun
                         float distance = Vector2.Distance(this.transform.position, col.transform.position);
                         if (distance < minDistance)
                         {
-                            minDistance = distance;  // 가장 가까운 물체 찾기()
+                            minDistance = distance;  // 가장 가까운 물체 찾기
                             nearCol = col;
                            
+                            
                         }
                     }
 
@@ -96,6 +100,32 @@ public class PlayerController : MonoBehaviourPun
             }
 
         }
+        if (nearCol != privNearCol)
+        {
+            // 이전에 하이라이트된 물체의 색상을 복구
+            if (privNearCol != null)
+            {
+                SpriteRenderer prevRenderer = privNearCol.GetComponent<SpriteRenderer>();
+                if (prevRenderer != null)
+                    prevRenderer.color = privColor;
+            }
+
+            // 새로 하이라이트된 물체의 색상을 변경
+            if (nearCol != null)
+            {
+                SpriteRenderer renderer = nearCol.GetComponent<SpriteRenderer>();
+                if (renderer != null)
+                {
+                    privColor = renderer.color; // 현재 색상 저장
+                    renderer.color = new Color(1f, 1f, 1f, 0.5f); // 하이라이트 색상
+                }
+            }
+
+            // 현재 가장 가까운 물체를 이전 물체로 저장
+            privNearCol = nearCol;
+        }
+
+
         if (nearCol.tag == "Test")
         {
 
@@ -191,20 +221,6 @@ public class PlayerController : MonoBehaviourPun
    
     private void Move()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 5f,8);
-        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
-        if (hit.collider != null)
-        {          
-                print(hit.transform.name);
-        }
-        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.right, 5f, 10);
-        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
-        if (hit1.collider != null)
-        {
-            print(hit1.transform.name);
-        }
-
-
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
