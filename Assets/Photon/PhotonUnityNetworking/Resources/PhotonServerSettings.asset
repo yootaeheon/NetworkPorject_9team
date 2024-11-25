@@ -51,10 +51,11 @@ MonoBehaviour:
   - RpcTest
   - RpcChildActive
   - RpcsetLayer
-  - RpcSetColors
-  - DestroyObject
-  - RpcDestroyObject
-  - RpcUnActive
+  - SetParentRPC
+  - VotePanelClickedRPC
+  - SpawnPlayerPanelRPC
+  - VotePlayerRPC
+
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
