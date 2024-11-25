@@ -5,9 +5,36 @@ using UnityEngine;
 
 public class ReportingObject : MonoBehaviourPun
 {
-    public void DeleteObject() 
-    {
 
-       Destroy(gameObject);
+    public void Reporting()
+    {
+        Debug.Log("시체 찾는중");
+        GameObject[] Corpse = GameObject.FindGameObjectsWithTag("Test");
+
+        for (int i = 0; i < Corpse.Length; i++)
+        {   
+            PhotonView targetView = Corpse[i].GetComponent<PhotonView>();
+            if (targetView.IsMine == true)
+            {
+                
+                targetView.RPC("RpcUnActive", RpcTarget.All);
+            }
+            else if (targetView.IsMine == false) 
+            {
+                targetView.TransferOwnership(PhotonNetwork.LocalPlayer);
+                
+                targetView.RPC("RpcUnActive", RpcTarget.All);
+            }
+            
+            
+            
+        }
+        
+    }
+
+    [PunRPC]
+    private void RpcUnActive()
+    {
+       gameObject.SetActive(false);
     }
 }

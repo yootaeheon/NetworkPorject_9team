@@ -26,14 +26,14 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] Animator eyeAnim;
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
+
     private int count;
 
     private Vector3 privPos;
     private Vector3 privDir;
     [SerializeField] float threshold = 0.001f;
+
     bool isOnMove = false;
-
-
     public bool isGhost = false;
 
 
@@ -43,10 +43,10 @@ public class PlayerController : MonoBehaviourPun
         // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
-        playerType = PlayerType.Goose;
+        playerType = PlayerType.Duck;
 
 
-        // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯 
+        // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯   
         Color randomColor = new Color(Random.value, Random.value, Random.value, 1f);
         photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
 
@@ -72,14 +72,16 @@ public class PlayerController : MonoBehaviourPun
 
         foreach (Collider2D col in colliders)
         {
-            if (col.name == "Goosecorpse")
+            if (col.tag == "Test")
             {
 
                 if (Input.GetKeyDown(KeyCode.R))
                 {
                     Debug.Log("신고함!");
-                    // 시체 삭제
+                    
                     // 투표 열리는 기능 추가 
+                     
+                    col.gameObject.GetComponent<ReportingObject>().Reporting(); //신고 
                 }
             }
             else if (col.gameObject.layer == gameObject.layer)
@@ -106,12 +108,9 @@ public class PlayerController : MonoBehaviourPun
     }
     public void Killing()
     {
-        // t
+        // 
     }
-    public void Reporting()
-    {
-        //  PhotonNetwork.Destroy(col.gameObject); 신고되서 투표 뜨는것과는 별개로 사라지는거는 시체에 따로 붙여야 할듯
-    }
+    
 
 
     public void Die()
