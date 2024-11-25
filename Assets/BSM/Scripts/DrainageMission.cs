@@ -125,14 +125,13 @@ public class DrainageMission : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// 클릭한 오브젝트 동작 기능
+    /// </summary>
     private void CleaningHole()
     {
         if (!_missionState.IsDetect) return;
-
-
-
-
+         
         if (Input.GetMouseButtonDown(0))
         {
             //오브젝트를 선택하지 않은 상태에서만 오브젝트 선택
@@ -190,7 +189,10 @@ public class DrainageMission : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 오브젝트 제거 동작 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator AnimationCoroutine()
     {
         _animator.Play(_commonHash);
