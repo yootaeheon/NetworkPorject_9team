@@ -122,7 +122,6 @@ public class RoomPanel : BaseUI
     /// <param name="arg1"></param>
     private void UpdatePlayerProperty(Player arg0, ExitGames.Client.Photon.Hashtable arg1)
     {
-        Debug.Log("프로퍼티 변경");
         CheckAllReady();
     }
 
@@ -192,7 +191,6 @@ public class RoomPanel : BaseUI
     {
         SetStartAndReadyButton();
         // TODO : 방장 바뀌었을 때 기능 추가
-        Debug.Log("방장 변경");
     }
 
     /// <summary>
