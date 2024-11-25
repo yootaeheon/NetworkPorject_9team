@@ -38,16 +38,20 @@ public class PlayerController : MonoBehaviourPun
 
 
     private void Start()
-    {   
-       
-        playerType = PlayerType.Goose;   // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
+    {
 
-        count = PhotonNetwork.ViewCount - 1;  // 들어온 순서대로 색 지정 
-        body.color = colors[count];
-        GhostRender.color = colors[count]; 
-        CorpRender.color = colors[count];   
-      
-        
+        // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
+        if (photonView.IsMine == false)  // 소유권자 구분
+            return;
+        playerType = PlayerType.Goose;
+
+
+        // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯 
+        Color randomColor = new Color(Random.value, Random.value, Random.value, 1f);
+        photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
+
+
+
     }
     private void Update()
     {
@@ -59,7 +63,7 @@ public class PlayerController : MonoBehaviourPun
         FindNearObject();
     }
 
-     // r 신고 , e 상호작용 , space 살인 
+    // r 신고 , e 상호작용 , space 살인 
     // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
     // 신고가 되면 시체도 사라져야 함 
     private void FindNearObject()
@@ -74,7 +78,7 @@ public class PlayerController : MonoBehaviourPun
                 if (Input.GetKeyDown(KeyCode.R))
                 {
                     Debug.Log("신고함!");
-                    PhotonNetwork.Destroy(col.gameObject);
+                    // 시체 삭제
                     // 투표 열리는 기능 추가 
                 }
             }
@@ -88,7 +92,7 @@ public class PlayerController : MonoBehaviourPun
                         {
 
                             Debug.Log("죽임!"); // 쿨타임 추가해야함 
-                           
+
                             col.gameObject.GetComponent<PlayerController>().Die();
                         }
 
@@ -100,23 +104,33 @@ public class PlayerController : MonoBehaviourPun
 
         }
     }
-    public void Die() 
+    public void Killing()
+    {
+        // t
+    }
+    public void Reporting()
+    {
+        //  PhotonNetwork.Destroy(col.gameObject); 신고되서 투표 뜨는것과는 별개로 사라지는거는 시체에 따로 붙여야 할듯
+    }
+
+
+    public void Die()
     {
         StartCoroutine(switchGhost());
     }
-    IEnumerator switchGhost() 
+    IEnumerator switchGhost()
     {
-        
+
         Debug.Log(photonView.ViewID);
         Debug.Log(isGhost);
 
-        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel",false);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false);
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
         yield return new WaitForSeconds(1f);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
-    }  
-     
-    
+    }
+
+
 
 
 
@@ -178,9 +192,9 @@ public class PlayerController : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RpcChildActive(string name,bool isActive) 
+    private void RpcChildActive(string name, bool isActive)
     {
-       
+
         if (name == "GooseIdel")
         {
             IdleBody.SetActive(isActive);
@@ -190,11 +204,21 @@ public class PlayerController : MonoBehaviourPun
             Corpse.SetActive(isActive);
             Corpse.transform.SetParent(null);
         }
-        else if (name == "GoosePolter") 
+        else if (name == "GoosePolter")
         {
             isGhost = true;
             Ghost.SetActive(isActive);
 
         }
+    }
+
+    [PunRPC]
+
+    private void RpcSetColors(float r, float g, float b)
+    {
+        Color color = new Color(r, g, b);
+        body.color = color;
+        GhostRender.color = color;
+        CorpRender.color = color;
     }
 }
