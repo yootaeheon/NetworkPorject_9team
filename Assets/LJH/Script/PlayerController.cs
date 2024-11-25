@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -22,35 +23,41 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] SpriteRenderer body;
     [SerializeField] SpriteRenderer GhostRender;
     [SerializeField] SpriteRenderer CorpRender;
-    [SerializeField] Color[] colors;
+
     [SerializeField] Animator eyeAnim;
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
-    private int count;
+
+
 
     private Vector3 privPos;
     private Vector3 privDir;
     [SerializeField] float threshold = 0.001f;
+
     bool isOnMove = false;
-
-
     public bool isGhost = false;
 
 
+    Coroutine coroutine;
     private void Start()
-    {   
-       
-        playerType = PlayerType.Goose;   // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
+    {
 
-        count = PhotonNetwork.ViewCount - 1;  // 들어온 순서대로 색 지정 
-        body.color = colors[count];
-        GhostRender.color = colors[count]; 
-        CorpRender.color = colors[count];   
-      
-        
+        // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
+        if (photonView.IsMine == false)  // 소유권자 구분
+            return;
+        playerType = PlayerType.Duck;
+
+
+        // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯   
+        Color randomColor = new Color(Random.value, Random.value, Random.value, 1f);
+        photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
+
+
+
     }
     private void Update()
     {
+
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
 
@@ -59,39 +66,29 @@ public class PlayerController : MonoBehaviourPun
         FindNearObject();
     }
 
-     // r 신고 , e 상호작용 , space 살인 
+    // r 신고 , e 상호작용 , space 살인 
     // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
     // 신고가 되면 시체도 사라져야 함 
     private void FindNearObject()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(this.transform.position, Detectradius);
-
+        Collider2D nearCol = null;
+        float minDistance = 1000f;
         foreach (Collider2D col in colliders)
         {
-            if (col.name == "Goosecorpse")
+            if (col.transform.position != this.transform.position) // 자신 아니고 
             {
-
-                if (Input.GetKeyDown(KeyCode.R))
+                if (col.gameObject.layer != 9) // 유령 아니고 
                 {
-                    Debug.Log("신고함!");
-                    PhotonNetwork.Destroy(col.gameObject);
-                    // 투표 열리는 기능 추가 
-                }
-            }
-            else if (col.gameObject.layer == gameObject.layer)
-            {
-                if (col.gameObject != this.gameObject)
-                {
-                    if (playerType == PlayerType.Duck)
+                    if (col != null)
                     {
-                        if (Input.GetKeyDown(KeyCode.Space))
+                        float distance = Vector2.Distance(this.transform.position, col.transform.position);
+                        if (distance < minDistance)
                         {
-
-                            Debug.Log("죽임!"); // 쿨타임 추가해야함 
+                            minDistance = distance;  // 가장 가까운 물체 찾기()
+                            nearCol = col;
                            
-                            col.gameObject.GetComponent<PlayerController>().Die();
                         }
-
                     }
 
                 }
@@ -99,29 +96,115 @@ public class PlayerController : MonoBehaviourPun
             }
 
         }
+        if (nearCol.tag == "Test")
+        {
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Debug.Log("신고함!");
+
+                // 투표 열리는 기능 추가 해야함 
+
+                nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제
+
+            }
+        }
+        else if (nearCol.gameObject.layer == gameObject.layer)
+        {
+            //Killing(col);
+            coroutine = StartCoroutine(Kill(nearCol));
+        }
+        else if (nearCol.gameObject.layer == 8)  // 미션 
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                coroutine = StartCoroutine(PlayMission());
+            }
+        }
+        else if (nearCol.gameObject.layer == 10) // 사보타지(임포스터만 가능 )
+        {
+            if (playerType == PlayerType.Duck)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    coroutine = StartCoroutine(PlaySabotage());
+                }
+            }
+        }
     }
-    public void Die() 
+    IEnumerator Kill(Collider2D col)
+    {
+
+        if (col.gameObject != this.gameObject)
+        {
+            if (playerType == PlayerType.Duck)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+
+                    Debug.Log("죽임!"); // 쿨타임 추가해야함 
+
+                    col.gameObject.GetComponent<PlayerController>().Die();
+                }
+
+            }
+
+        }
+        yield return new WaitForSeconds(1f);
+
+    }
+    IEnumerator PlayMission()
+    {
+
+        Debug.Log("미션!");
+
+        yield return new WaitForSeconds(1f);
+
+    }
+    IEnumerator PlaySabotage()
+    {
+
+        Debug.Log("사보타지!");
+
+        yield return new WaitForSeconds(1f);
+
+    }
+
+
+
+    public void Die()
     {
         StartCoroutine(switchGhost());
     }
-    IEnumerator switchGhost() 
+    IEnumerator switchGhost()
     {
-        
+
         Debug.Log(photonView.ViewID);
         Debug.Log(isGhost);
 
-        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel",false);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false);
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
         yield return new WaitForSeconds(1f);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
-    }  
-     
-    
+    }
 
-
-
+   
     private void Move()
     {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 5f,8);
+        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
+        if (hit.collider != null)
+        {          
+                print(hit.transform.name);
+        }
+        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.right, 5f, 10);
+        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
+        if (hit1.collider != null)
+        {
+            print(hit1.transform.name);
+        }
+
+
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -131,6 +214,7 @@ public class PlayerController : MonoBehaviourPun
             return;
 
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
+
 
         if (x < 0) // 왼쪽으로 이동 시
         {
@@ -147,6 +231,7 @@ public class PlayerController : MonoBehaviourPun
             transform.localScale = privDir;
         }
     }
+
 
     private void MoveCheck()
     {
@@ -178,9 +263,9 @@ public class PlayerController : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RpcChildActive(string name,bool isActive) 
+    private void RpcChildActive(string name, bool isActive)
     {
-       
+
         if (name == "GooseIdel")
         {
             IdleBody.SetActive(isActive);
@@ -190,11 +275,21 @@ public class PlayerController : MonoBehaviourPun
             Corpse.SetActive(isActive);
             Corpse.transform.SetParent(null);
         }
-        else if (name == "GoosePolter") 
+        else if (name == "GoosePolter")
         {
             isGhost = true;
             Ghost.SetActive(isActive);
 
         }
+    }
+
+    [PunRPC]
+
+    private void RpcSetColors(float r, float g, float b)
+    {
+        Color color = new Color(r, g, b);
+        body.color = color;
+        GhostRender.color = color;
+        CorpRender.color = color;
     }
 }

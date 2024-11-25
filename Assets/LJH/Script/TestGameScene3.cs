@@ -16,6 +16,13 @@ public class TestGameScene3 : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
 
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            PlayerSpawn();
+        }
+    }
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions();
