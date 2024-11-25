@@ -1,12 +1,9 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class RoomPanel : BaseUI
@@ -136,7 +133,7 @@ public class RoomPanel : BaseUI
     {
         if (PhotonNetwork.IsMasterClient == false)
             return;
-        
+
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             if (player.IsMasterClient == true)
@@ -146,7 +143,7 @@ public class RoomPanel : BaseUI
                 GetUI("RoomStartButton").SetActive(false);
                 return;
             }
-                
+
         }
         GetUI("RoomStartButton").SetActive(true);
 
@@ -203,7 +200,7 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void LeftRoom()
     {
-       LobbyScene.ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         PhotonNetwork.LeaveRoom();
     }
 
@@ -242,7 +239,7 @@ public class RoomPanel : BaseUI
         switch (box)
         {
             case Box.Room:
-                ClearRoomBox(); 
+                ClearRoomBox();
                 break;
             default:
                 break;
@@ -255,7 +252,7 @@ public class RoomPanel : BaseUI
     {
         if (PhotonNetwork.InRoom == false) return;
 
-        if(PhotonNetwork.CurrentRoom.GetPrivacy() == true) // 방이 프라이버시 모드인 경우
+        if (PhotonNetwork.CurrentRoom.GetPrivacy() == true) // 방이 프라이버시 모드인 경우
         {
             PhotonNetwork.LocalPlayer.NickName = $"새 {PhotonNetwork.LocalPlayer.ActorNumber}"; // 닉네임을 새 N 으로 변경
         }
@@ -301,7 +298,7 @@ public class RoomPanel : BaseUI
         GetUI<Button>("RoomCopyButton").onClick.AddListener(CopyRoomCode);
         GetUI<Button>("RoomStartButton").onClick.AddListener(GameStart);
         GetUI<Button>("RoomReadyButton").onClick.AddListener(GameReady);
-        GetUI<Button>("SettingButton").onClick.AddListener(()=>LobbyScene.ActivateOptionBox(true));
+        GetUI<Button>("SettingButton").onClick.AddListener(() => LobbyScene.ActivateOptionBox(true));
     }
 
 

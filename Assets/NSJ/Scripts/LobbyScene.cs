@@ -11,12 +11,9 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     public static LobbyScene Instance;
     public static GameObject Loading { get { return Instance._popUp.Loading; } }
     public static GameObject Option { get { return Instance._popUp.Option; } }
-    
-    /// <summary>
-    /// 로딩 취소 여부
-    /// </summary>
-    private bool _isLoadingCancel; 
-    public static bool IsLoadingCancel { get { return Instance._isLoadingCancel; } set { Instance._isLoadingCancel = value; } }
+  
+    public static bool IsLoginCancel { get { return  Instance._isLoginCancel; } set { Instance._isLoginCancel = value; } }
+    public static bool IsJoinRoomCancel { get { return Instance._isJoinRoomCancel; } set { Instance._isJoinRoomCancel = value; } }
 
     #region 이벤트
     public event UnityAction OnConnectedEvent;
@@ -32,10 +29,10 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     public event UnityAction OnLeftLobbyEvent;
     public event UnityAction<Player> OnMasterClientSwitchedEvent;
     public event UnityAction<List<RoomInfo>> OnRoomListUpdateEvent;
-    #endregion
+    #endregion 
 
     #region private 필드
-    enum Panel { Login, Main, Lobby, Room, Size }
+    public enum Panel { Login, Main, Lobby, Room, Size }
 
     [System.Serializable]
     struct PanelStruct
@@ -47,13 +44,15 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         public GameObject RoomPanel;
     }
     [SerializeField] private PanelStruct _panelStruct;
-    private GameObject _backGroundImage { get { return _panelStruct.BackGroundImage; } }
-    private GameObject _loginPanel { get { return _panelStruct.LoginPanel; } }
-    private GameObject _mainPanel { get { return _panelStruct.MainPanel; } }
-    private GameObject _lobbyPanel { get { return _panelStruct.LobbyPanel; } }
-    private GameObject _roomPanel { get { return _panelStruct.RoomPanel; } }
+    private static GameObject s_backGroundImage { get { return Instance._panelStruct.BackGroundImage; } }
+    private static GameObject s_loginPanel { get { return Instance._panelStruct.LoginPanel; } }
+    private static GameObject s_mainPanel { get { return Instance._panelStruct.MainPanel; } }
+    private static GameObject s_lobbyPanel { get { return Instance._panelStruct.LobbyPanel; } }
+    private static GameObject s_roomPanel { get { return Instance._panelStruct.RoomPanel; } }
 
     private GameObject[] _panels = new GameObject[(int)Panel.Size];
+    private GameObject _curPanel;
+    private static GameObject s_curPanel { get { return Instance._curPanel; } }
 
     [System.Serializable]
     struct PopUpUI
@@ -63,6 +62,8 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     }
     [SerializeField] PopUpUI _popUp;
 
+    private bool _isLoginCancel;
+    private bool _isJoinRoomCancel;
     #endregion
 
     private void Awake()
@@ -226,14 +227,14 @@ public class LobbyScene : MonoBehaviourPunCallbacks
                 if (_panels[i] == null)
                     return;
                 _panels[i].SetActive(true);
-
+                _curPanel = _panels[i];
                 if (panel == Panel.Room) // 패널이 룸이면 뒷배경 비활성화
                 {
-                    _backGroundImage.SetActive(false);
+                    s_backGroundImage.SetActive(false);
                 }
                 else
                 {
-                    _backGroundImage.SetActive(true);
+                    s_backGroundImage.SetActive(true);
                 }
             }
             else // 아니면 비활성화
@@ -243,7 +244,20 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         }
     }
 
-
+    /// <summary>
+    /// 로딩 캔슬 세팅
+    /// </summary>
+   public static void SetIsLoadingCancel()
+    {
+        if(s_curPanel == s_loginPanel)
+        {
+            IsLoginCancel = true;
+        }
+        else if(s_curPanel == s_mainPanel)
+        {
+            IsJoinRoomCancel = true;
+        }
+    }
 
 
 
@@ -269,10 +283,10 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// </summary>
     private void Init()
     {
-        _panels[(int)Panel.Login] = _loginPanel;
-        _panels[(int)Panel.Main] = _mainPanel;
-        _panels[(int)Panel.Lobby] = _lobbyPanel;
-        _panels[(int)Panel.Room] = _roomPanel;
+        _panels[(int)Panel.Login] = s_loginPanel;
+        _panels[(int)Panel.Main] = s_mainPanel;
+        _panels[(int)Panel.Lobby] = s_lobbyPanel;
+        _panels[(int)Panel.Room] = s_roomPanel;
 
         ActivateLoadingBox(false);
         ActivateOptionBox(false);

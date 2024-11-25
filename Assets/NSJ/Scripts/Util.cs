@@ -1,13 +1,14 @@
 using Firebase.Database;
 using Photon.Pun;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using UnityEngine;
 
 public static partial class Util
 {
+
     private static StringBuilder _sb = new StringBuilder();
 
     private static Dictionary<float, WaitForSeconds> _delayDic = new Dictionary<float, WaitForSeconds>();
@@ -152,5 +153,43 @@ public static partial class Util
     public static void CopyText(this string text)
     {
         GUIUtility.systemCopyBuffer = text;
+    }
+
+    /// <summary>
+    /// 닉네임 변경
+    /// </summary>
+    /// <param name="nickName"></param>
+    public static void ChangeNickName(this string nickName)
+    {
+        BackendManager.User.NickName = nickName; // 유저 정보에 닉네임 변경
+        // 닉네임 데이터 베이스에 일부 쓰기 저장
+        BackendManager.SettingDic.Clear();
+        BackendManager.SettingDic.Add(UserDate.NICKNAME, nickName);
+        BackendManager.Auth.CurrentUser.UserId.GetUserDataRef().UpdateChildrenAsync(BackendManager.SettingDic);
+    }
+
+    /// <summary>
+    /// 랜덤 방 코드 얻기
+    /// </summary>
+    /// <param name="length"></param>
+    /// <returns></returns>
+    public static string GetRandomRoomCode(int length)
+    {
+        _sb.Clear();
+        for (int i = 0; i < length; i++)
+        {
+            int numberOrAlphabet = UnityEngine.Random.Range(0, 2);
+            if (numberOrAlphabet == 0) // 숫자형
+            {
+                int numberASKII = UnityEngine.Random.Range(48, 58); // 아스키코드 48~57번까지(0~9)
+                _sb.Append((char)numberASKII);
+            }
+            else // 문자형
+            {
+                int alphabetASKII = UnityEngine.Random.Range(65, 91); // 아스키코드 65~91번까지 (A~Z)
+                _sb.Append((char)alphabetASKII);
+            }
+        }
+        return _sb.ToString();
     }
 }

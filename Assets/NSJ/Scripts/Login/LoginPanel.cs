@@ -48,8 +48,33 @@ public class LoginPanel : BaseUI
 
     private void OnEnable()
     {
+        if(LobbyScene.IsLoginCancel == true) // 로딩 캔슬값 초기화, 동시에 UI 변경 금지
+        {
+            LobbyScene.IsLoginCancel = false;
+            return;
+        }
+
         ChangeBox(Box.Login);
     }
+
+    private void OnDisable()
+    {
+        if (LobbyScene.IsLoginCancel == true) // 로딩 캔슬시
+        {
+            CancelLogin();
+        }
+    }
+
+    /// <summary>
+    ///  로그인 캔슬
+    /// </summary>
+    private void CancelLogin()
+    {
+        LobbyScene.ActivateLoadingBox(true);
+        BackendManager.Auth.SignOut(); // 로그아웃
+        PhotonNetwork.Disconnect(); // 서버 연결 끊기
+    }
+
     #region 로그인
     /// <summary>
     /// 로그인 버튼 활성화
