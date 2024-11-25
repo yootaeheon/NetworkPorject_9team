@@ -6,7 +6,31 @@ using UnityEngine;
 
 public class MissionObj : MonoBehaviour
 {
-    public DraingeObjType type;
+    private MissionState _missionState;
 
+    public DraingeObjType type;
+    private bool isComplete;
+    public bool IsComplete
+    {
+        get
+        {
+            return isComplete;
+        }
+        set
+        {
+            if (isComplete != value)
+            {
+                _missionState = transform.parent.GetComponent<MissionState>();
+                _missionState.ObjectCount--;
+                Debug.Log(_missionState.ObjectCount);
+                isComplete = value;
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        isComplete = false;
+    }
 
 }
