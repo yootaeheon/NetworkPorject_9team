@@ -450,7 +450,7 @@ namespace Photon.Chat.Demo
             // select first subscribed channel in alphabetical order
             if (this.chatClient.PublicChannels.Count > 0)
             {
-                var l = new List<string>(this.chatClient.PublicChannels.Keys);
+                var l = new panelList<string>(this.chatClient.PublicChannels.Keys);
                 l.Sort();
                 string selected = l[0];
                 if (this.channelToggles.ContainsKey(selected))

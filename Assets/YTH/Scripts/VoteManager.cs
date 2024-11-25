@@ -1,7 +1,5 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class VoteManager : MonoBehaviourPunCallbacks
@@ -10,46 +8,36 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     [SerializeField] VoteScenePlayerData _playerData;
 
-    public const string RoomName = "playerpaneltest";
+    [SerializeField] VotePanel _votePanel;
 
-    private List<GameObject> playerPanels = new List<GameObject>();
+    public int[] voteCounts;
 
-    private void Start()
+    public void OnClickPlayerPanel(int index) // 플레이어 패널을 눌러 투표
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
-    }
-    public override void OnConnectedToMaster()
-    {
-        RoomOptions options = new RoomOptions();
-        options.MaxPlayers = 8;
-        options.IsVisible = false;
-
-        PhotonNetwork.JoinOrCreateRoom(RoomName, options, TypedLobby.Default);
-    }
-
-    public override void OnJoinedRoom()
-    {
-        SpawnPanelWithSetParent();
-    }
-
-    public void SpawnPanelWithSetParent()
-    {
-        GameObject myPanel = PhotonNetwork.Instantiate("PlayerPanel", Vector2.zero, Quaternion.identity);
-
-        myPanel.transform.SetParent(_voteData.PlayerPanelParent, false);
-        
-        
-        //photonView.RPC("SetParentRPC", RpcTarget.All, myPanel, _voteData.PlayerPanelParent);
+        photonView.RPC("VotePanelClickedRPC", RpcTarget.All, index);
+      
     }
 
     [PunRPC]
-    public void SetParentRPC(GameObject panel, Transform parentTransform)
+    public void VotePanelClickedRPC(int index)
     {
-        panel.transform.SetParent(parentTransform, false);
+
+
+        voteCounts[index]++;
+        Debug.Log(index);
+
+
     }
+
+    public void OnClickSkip() // 스킵 버튼 누를 시
+    {
+        _voteData.SkipCount++;
+
+      // if (photonView.IsMine == false)
+      //     return;
+      // _playerData.DidVote = true;
+    }
+
 
 
 }

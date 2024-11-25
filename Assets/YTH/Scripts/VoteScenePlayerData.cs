@@ -1,9 +1,12 @@
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class VoteScenePlayerData : MonoBehaviourPun, IPunObservable
 {
+    [SerializeField] public Button voteButton;
+
     [SerializeField] private int _voteCount; // 득표 수
     public int VoteCount { get { return _voteCount; } set { _voteCount = value; } }
 
@@ -18,7 +21,6 @@ public class VoteScenePlayerData : MonoBehaviourPun, IPunObservable
 
     [SerializeField] private bool _isReporter; // 신고자인지 여부
     public bool IsReporter { get { return _isReporter; } set { _isReporter = value; } }
-
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

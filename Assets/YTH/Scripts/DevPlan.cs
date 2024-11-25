@@ -17,5 +17,5 @@ public class DevPlan : MonoBehaviour
 
 
 
-    // VoteData 분리할것
+    
 }
