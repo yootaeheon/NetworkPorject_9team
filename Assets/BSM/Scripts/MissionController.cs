@@ -82,6 +82,7 @@ public class MissionController : BaseMission
 
     private IEnumerator CloseMission(float delay)
     {
+        yield return Util.GetDelay(delay);
         _missionState.ClosePopAnim();
         yield return Util.GetDelay(delay);
         gameObject.SetActive(false);
