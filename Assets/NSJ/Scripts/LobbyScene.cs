@@ -1,5 +1,4 @@
 using Photon.Pun;
-using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +9,14 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class LobbyScene : MonoBehaviourPunCallbacks
 {
     public static LobbyScene Instance;
+    public static GameObject Loading { get { return Instance._popUp.Loading; } }
+    public static GameObject Option { get { return Instance._popUp.Option; } }
+    
+    /// <summary>
+    /// 로딩 취소 여부
+    /// </summary>
+    private bool _isLoadingCancel; 
+    public static bool IsLoadingCancel { get { return Instance._isLoadingCancel; } set { Instance._isLoadingCancel = value; } }
 
     #region 이벤트
     public event UnityAction OnConnectedEvent;
@@ -47,13 +54,22 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     private GameObject _roomPanel { get { return _panelStruct.RoomPanel; } }
 
     private GameObject[] _panels = new GameObject[(int)Panel.Size];
+
+    [System.Serializable]
+    struct PopUpUI
+    {
+        public GameObject Loading;
+        public GameObject Option;
+    }
+    [SerializeField] PopUpUI _popUp;
+
     #endregion
 
     private void Awake()
     {
         InitSingleTon(); // 싱글톤
         Init(); // 초기 설정
-        
+
     }
     private void Start()
     {
@@ -176,7 +192,25 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         // 젠장 또 코루틴이야. 아아 코루틴 나의 신, 나의 빛.
     }
 
+
     #endregion
+
+    /// <summary>
+    /// 로딩 화면 활성화 / 비활성화
+    /// </summary>
+    public static void ActivateLoadingBox(bool isActive)
+    {
+        Loading.SetActive(isActive);
+    }
+
+    /// <summary>
+    /// 옵션 창 활성화 / 비활성화
+    /// </summary>
+    /// <param name="isActive"></param>
+    public static void ActivateOptionBox(bool isActive)
+    {
+        Option.SetActive(isActive);
+    }
 
     /// <summary>
     /// 패널 교체
@@ -190,7 +224,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
             if (i == (int)panel) // 매개변수와 일치하는 패널이면 활성화
             {
                 if (_panels[i] == null)
-                    return;         
+                    return;
                 _panels[i].SetActive(true);
 
                 if (panel == Panel.Room) // 패널이 룸이면 뒷배경 비활성화
@@ -208,6 +242,9 @@ public class LobbyScene : MonoBehaviourPunCallbacks
             }
         }
     }
+
+
+
 
 
     #region 초기 설정
@@ -236,6 +273,9 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         _panels[(int)Panel.Main] = _mainPanel;
         _panels[(int)Panel.Lobby] = _lobbyPanel;
         _panels[(int)Panel.Room] = _roomPanel;
+
+        ActivateLoadingBox(false);
+        ActivateOptionBox(false);
     }
 
     /// <summary>

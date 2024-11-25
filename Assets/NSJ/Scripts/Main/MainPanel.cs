@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class MainPanel : BaseUI
 {
-    [SerializeField] GameObject _loadingBox;
     [SerializeField] int _minPlayer;
     [SerializeField] int _maxPlayer;
 
@@ -67,14 +66,14 @@ public class MainPanel : BaseUI
         string nickName = _joinNickNameInput.text; // 닉네임 캐싱
 
 
-        ActivateLoadingBox(true); // 로딩창 활성화
+        LobbyScene.ActivateLoadingBox(true); // 로딩창 활성화
 
         if (nickName != string.Empty) // 닉네임 변경점 있으면 닉네임 변경
         {
             ChangeNickName(nickName); // 닉네임 변경(포톤네트워크 닉네임 변경, 데이터베이스 닉네임 변경      
         }
 
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         PhotonNetwork.JoinLobby(); // 로비 입장
     }
     /// <summary>
@@ -123,7 +122,7 @@ public class MainPanel : BaseUI
 
         string nickName = _joinNickNameInput.text; // 닉네임 캐싱
 
-        ActivateLoadingBox(true); // 로딩창 활성화
+        LobbyScene.ActivateLoadingBox(true); // 로딩창 활성화
 
         if (nickName != string.Empty) // 닉네임 변경점 있으면 닉네임 변경
         {
@@ -157,7 +156,7 @@ public class MainPanel : BaseUI
         options.IsVisible = isVisible;
         options.SetPrivacy(_createPrivacyCheck.activeSelf);
 
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         PhotonNetwork.CreateRoom(roomCode, options);
     }
 
@@ -215,7 +214,7 @@ public class MainPanel : BaseUI
             ChangeNickName(nickName);
         }
 
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         PhotonNetwork.JoinRandomRoom();
     }
     /// <summary>
@@ -244,7 +243,7 @@ public class MainPanel : BaseUI
     /// </summary>
     private void LogOut()
     {
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         BackendManager.Auth.SignOut(); // 로그아웃
         PhotonNetwork.Disconnect(); // 서버 연결 끊기
     }
@@ -258,7 +257,7 @@ public class MainPanel : BaseUI
     /// </summary>
     private void ChangeBox(Box box)
     {
-        ActivateLoadingBox(false);
+        LobbyScene.ActivateLoadingBox(false);
 
         for (int i = 0; i < _boxs.Length; i++)
         {
@@ -344,22 +343,6 @@ public class MainPanel : BaseUI
     }
 
 
-    /// <summary>
-    /// 로딩 화면 활성화 / 비활성화
-    /// </summary>
-    private void ActivateLoadingBox(bool isActive)
-    {
-        if (isActive)
-        {
-            _loadingBox.SetActive(true);
-        }
-        else
-        {
-            _loadingBox.SetActive(false);
-        }
-    }
-
-
     #endregion
 
 
@@ -434,6 +417,8 @@ public class MainPanel : BaseUI
         GetUI<Button>("QuickColorButton").onClick.AddListener(() => { _quickColorBox.SetActive(!_quickColorBox.activeSelf); });
         GetUI<Button>("QuickStartButton").onClick.AddListener(StartRandomMatch);
         #endregion
+
+        GetUI<Button>("SettingButton").onClick.AddListener(() => LobbyScene.ActivateOptionBox(true));
     }
     #endregion
 

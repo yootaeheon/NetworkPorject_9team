@@ -11,7 +11,6 @@ using UnityEngine.UI;
 
 public class RoomPanel : BaseUI
 {
-    [SerializeField] GameObject _loadingBox;
 
     #region private 필드
     private const string SHOWTEXT = "보이기";
@@ -204,7 +203,7 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void LeftRoom()
     {
-        ActivateLoadingBox(true);
+       LobbyScene.ActivateLoadingBox(true);
         PhotonNetwork.LeaveRoom();
     }
 
@@ -215,7 +214,7 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void ChangeBox(Box box)
     {
-        ActivateLoadingBox(false);
+        LobbyScene.ActivateLoadingBox(false);
 
         for (int i = 0; i < _boxs.Length; i++)
         {
@@ -281,20 +280,6 @@ public class RoomPanel : BaseUI
         OffReady();
     }
 
-    /// <summary>
-    /// 로딩 화면 활성화 / 비활성화
-    /// </summary>
-    private void ActivateLoadingBox(bool isActive)
-    {
-        if (isActive)
-        {
-            _loadingBox.SetActive(true);
-        }
-        else
-        {
-            _loadingBox.SetActive(false);
-        }
-    }
 
     #endregion
 
@@ -316,6 +301,7 @@ public class RoomPanel : BaseUI
         GetUI<Button>("RoomCopyButton").onClick.AddListener(CopyRoomCode);
         GetUI<Button>("RoomStartButton").onClick.AddListener(GameStart);
         GetUI<Button>("RoomReadyButton").onClick.AddListener(GameReady);
+        GetUI<Button>("SettingButton").onClick.AddListener(()=>LobbyScene.ActivateOptionBox(true));
     }
 
 

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class LobbyPanel : BaseUI
 {
-    [SerializeField] GameObject _loadingBox;
     [SerializeField] RoomEntry _roomEntryPrefab;
 
     private RoomInfo _selectingRoomInfo;
@@ -100,7 +99,7 @@ public class LobbyPanel : BaseUI
     private void JoinRoom()
     {
         ClearRoomEntry();
-        ActivateLoadingBox(true);
+        LobbyScene.ActivateLoadingBox(true);
         PhotonNetwork.JoinRoom(_selectingRoomInfo.Name);
     }
 
@@ -132,7 +131,7 @@ public class LobbyPanel : BaseUI
     /// </summary>
     private void ChangeBox(Box box)
     {
-        ActivateLoadingBox(false);
+        LobbyScene.ActivateLoadingBox(false);
 
         for (int i = 0; i < _boxs.Length; i++)
         {
@@ -172,21 +171,6 @@ public class LobbyPanel : BaseUI
         _lobbyStartButton.SetActive(false);
     }
 
-    /// <summary>
-    /// 로딩 화면 활성화 / 비활성화
-    /// </summary>
-    private void ActivateLoadingBox(bool isActive)
-    {
-        if (isActive)
-        {
-            _loadingBox.SetActive(true);
-        }
-        else
-        {
-            _loadingBox.SetActive(false);
-        }
-    }
-
     #endregion
 
     /// <summary>
@@ -205,7 +189,7 @@ public class LobbyPanel : BaseUI
         LobbyScene.Instance.OnLeftLobbyEvent += ClearRoomEntry;
         GetUI<Button>("LobbyBackButton").onClick.AddListener(LeftLobby);
         GetUI<Button>("LobbyStartButton").onClick.AddListener(JoinRoom);
-        Debug.Log(GetUI<Button>("LobbyStartButton"));
+        GetUI<Button>("SettingButton").onClick.AddListener(() => LobbyScene.ActivateOptionBox(true));
     }
 
 }

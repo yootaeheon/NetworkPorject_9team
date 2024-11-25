@@ -2,7 +2,7 @@
 // <copyright file="TextToggleIsOnTransition.cs" company="Exit Games GmbH">
 // </copyright>
 // <summary>
-//  Use this on Button texts to have some color transition on the text as well without corrupting button's behaviour.
+//  Use this on ButtonType texts to have some color transition on the text as well without corrupting button's behaviour.
 // </summary>
 // <author>developer@exitgames.com</author>
 // --------------------------------------------------------------------------------------------------------------------
