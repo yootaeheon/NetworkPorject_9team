@@ -34,12 +34,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void TEST()
-    {
-        
+    { 
         score++;
         Debug.Log((score / total) * 100f);
-        _sli.value = (float)(score / total); 
-        
+        _sli.value = (float)(score / total);  
     }
 
 }
