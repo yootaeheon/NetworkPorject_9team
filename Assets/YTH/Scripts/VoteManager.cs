@@ -10,23 +10,19 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     [SerializeField] VotePanel _votePanel;
 
-    public int[] voteCounts;
+    public int[] voteCounts; // 각 플레이어의 득표수를 배열로 저장
 
     public void OnClickPlayerPanel(int index) // 플레이어 패널을 눌러 투표
     {
-        photonView.RPC("VotePanelClickedRPC", RpcTarget.All, index);
-      
+        photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
+        //_playerData.DidVote =true;
     }
 
     [PunRPC]
-    public void VotePanelClickedRPC(int index)
+    public void VotePlayerRPC (int index)
     {
-
-
         voteCounts[index]++;
         Debug.Log(index);
-
-
     }
 
     public void OnClickSkip() // 스킵 버튼 누를 시

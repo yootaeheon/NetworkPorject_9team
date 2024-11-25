@@ -40,8 +40,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject _playerPanel; // 각 플레이어 패널
 
-    [SerializeField] Button _voteButton; // 각 플레이어 패널을 누를 시 투표 되는 버튼
-
     [SerializeField] Button _skipButton;
 
     [SerializeField] Slider _reportTimeCountSlider; // 신고자만 말할 수 있는 시간 카운트
@@ -90,15 +88,13 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        SpawnPanelWithSetParent();
+        SpawnPlayerPanel();
         SetPlayerPanel(PhotonNetwork.LocalPlayer); // 모든 플레이어를 업데이트하게 수정하기
         foreach (Player player in PhotonNetwork.PlayerList) // 수정 필요
         {
             GetComponent<VoteScenePlayerData>();
         }
-
-       
-
+             
        // _playerData.IsDead = false;
        // _playerData.IsReporter = false;
        // _playerData.DidVote = false;
@@ -114,17 +110,13 @@ public class VotePanel : MonoBehaviourPunCallbacks
     }
 
     // 플레이어 패널 생성 함수
-    public void SpawnPanelWithSetParent()
+    public void SpawnPlayerPanel()
     {
-        GameObject myPanel = PhotonNetwork.Instantiate("PlayerPanel", Vector2.zero, Quaternion.identity);
-        //myPanel.transform.SetParent(_voteData.PlayerPanelParent, false);
-        Debug.Log($"{PhotonNetwork.LocalPlayer} 생성 완료");
-        photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber-1);
-       
+        photonView.RPC("SpawnPlayerPanelRPC", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber-1);
     }
 
     [PunRPC]
-    public void SetParentRPC(int index)
+    public void SpawnPlayerPanelRPC(int index)
     {
         panelList[index].SetActive(true);
         panelList[index].GetComponent<VoteScenePlayerData>().voteButton.onClick.AddListener(() => { _voteManager.OnClickPlayerPanel(index); });
