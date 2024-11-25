@@ -1,20 +1,23 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VotePanel : MonoBehaviour
+public class VotePanel : MonoBehaviourPunCallbacks
 {
+    [SerializeField] VoteSceneData _voteData;
 
-    [SerializeField] VoteData _voteData;
+    [SerializeField] VoteScenePlayerData _playerData;
 
-  // [SerializeField] GameObject _characterImage; // 투표창에서 각 플레이어 캐릭터 이미지
 
-  //  [SerializeField] Image _voteSignImage; // 투표한 플레이어 표시 이미지
+    // [SerializeField] GameObject _characterImage; // 투표창에서 각 플레이어 캐릭터 이미지
 
-  //  [SerializeField] Image _deadSignImage; // 죽은 상태 표시 이미지
+    //  [SerializeField] Image _voteSignImage; // 투표한 플레이어 표시 이미지
+
+    //  [SerializeField] Image _deadSignImage; // 죽은 상태 표시 이미지
 
     [SerializeField] GameObject _anonymPlayerImage; // 투표한 익명의 플레이어 이미지
 
@@ -43,9 +46,11 @@ public class VotePanel : MonoBehaviour
         //TODO : 플레이어가 죽은 상태라면 그 플레이어 투표 버튼 비활성화
         _targetPlayer = player;
     }
+
     private void Awake()
     {
         Init();
+        PhotonNetwork.PlayerList.InitCustomProperties();
     }
 
     private void Init()
@@ -60,16 +65,18 @@ public class VotePanel : MonoBehaviour
         CountTime();
     }
 
-    public void Vote(Player targetPlayer) // 플레이어 패널을 눌러 투표
+    public void OnClickPlayerPanel() // 플레이어 패널을 눌러 투표
     {
-        //TODO: 누른 플레이어 득표수 ++;
-        _voteData.DidVote = true;
+        PhotonNetwork.LocalPlayer.VotePlayer();
+        _playerData.DidVote = true;
     }
 
+    
     public void OnClickSkip() // 스킵 버튼 누를 시
     {
         _voteData.SkipCount++;
-        _voteData.DidVote = true;
+        _playerData.DidVote = true;
+       
     }
 
     public void CountTime()
@@ -85,4 +92,6 @@ public class VotePanel : MonoBehaviour
             Debug.Log(_voteData.VoteTimeCount);
         }
     }
+
+   
 }
