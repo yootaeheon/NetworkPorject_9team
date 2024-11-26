@@ -11,13 +11,15 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] PlayerType playerType;
     [SerializeField] float moveSpeed;  // 이동속도 
     [SerializeField] float Detectradius;  // 탐색 범위
+    [SerializeField] string playerName;
+    // [SerializeField] Color highLightColor;
 
-
+    [SerializeField] AudioSource audio;
 
     [SerializeField] GameObject IdleBody;
     [SerializeField] GameObject Ghost;
     [SerializeField] GameObject Corpse;
-
+    
 
 
     [SerializeField] SpriteRenderer body;
@@ -28,7 +30,7 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
 
-
+    
 
     private Vector3 privPos;
     private Vector3 privDir;
@@ -69,6 +71,9 @@ public class PlayerController : MonoBehaviourPun
     // r 신고 , e 상호작용 , space 살인 
     // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
     // 신고가 되면 시체도 사라져야 함 
+
+    private Collider2D privNearCol= null;
+    private Color privColor;
     private void FindNearObject()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(this.transform.position, Detectradius);
@@ -76,60 +81,150 @@ public class PlayerController : MonoBehaviourPun
         float minDistance = 1000f;
         foreach (Collider2D col in colliders)
         {
+           
             if (col.transform.position != this.transform.position) // 자신 아니고 
             {
-                if (col.gameObject.layer != 9) // 유령 아니고 
+                if (col.gameObject.layer != 9) // 유령 아니고 , 시체 플레이어는 밑의 코드로 못불러와서 짜피 안됨 
                 {
                     if (col != null)
                     {
                         float distance = Vector2.Distance(this.transform.position, col.transform.position);
                         if (distance < minDistance)
                         {
-                            minDistance = distance;  // 가장 가까운 물체 찾기()
+                            minDistance = distance;  // 가장 가까운 물체 찾기
                             nearCol = col;
                            
+                            
                         }
                     }
 
                 }
 
             }
+           
+
 
         }
-        if (nearCol.tag == "Test")
+
+
+        //if (nearCol != privNearCol)
+        //{
+        //    // 이전에 하이라이트된 물체의 색상을 복구
+        //    if (privNearCol != null)
+        //    {
+        //        SpriteRenderer prevRenderer = privNearCol.GetComponent<SpriteRenderer>();
+        //        if (prevRenderer != null)
+        //           // prevRenderer.color = privColor;    // 플레이어의 직
+        //            prevRenderer.enabled = false;
+        //    }
+
+        //    // 새로 하이라이트된 물체의 색상을 변경
+        //    if (nearCol != null)
+        //    {
+        //        SpriteRenderer renderer = nearCol.GetComponent<SpriteRenderer>();
+        //        if (renderer != null)
+        //        {
+        //           // privColor = renderer.color; // 현재 색상 저장
+        //           // renderer.color = highLightColor; // 하이라이트 색상
+        //            renderer.enabled = true;
+        //        }
+        //    }
+
+        //    // 현재 가장 가까운 물체를 이전 물체로 저장
+        //    privNearCol = nearCol;
+        //}
+
+        ObjectAction(nearCol);
+        if (nearCol != null)
         {
 
-            if (Input.GetKeyDown(KeyCode.R))
+
+            if (nearCol.tag == "Test") // 나중에 시체용 레이어 더해서 사용하기 
             {
-                Debug.Log("신고함!");
 
-                // 투표 열리는 기능 추가 해야함 
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    Debug.Log("신고함!");
 
-                nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제
+                    // 투표 열리는 기능 추가 해야함 
+
+                    nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제
+
+                }
+                else
+                {
+
+                }
 
             }
-        }
-        else if (nearCol.gameObject.layer == gameObject.layer)
-        {
-            //Killing(col);
-            coroutine = StartCoroutine(Kill(nearCol));
-        }
-        else if (nearCol.gameObject.layer == 8)  // 미션 
-        {
-            if (Input.GetKeyDown(KeyCode.E))
+            else if (nearCol.gameObject.layer == gameObject.layer)
             {
-                coroutine = StartCoroutine(PlayMission());
+
+                coroutine = StartCoroutine(Kill(nearCol));
             }
-        }
-        else if (nearCol.gameObject.layer == 10) // 사보타지(임포스터만 가능 )
-        {
-            if (playerType == PlayerType.Duck)
+            else if (nearCol.gameObject.layer == 8)  // 미션 
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    coroutine = StartCoroutine(PlaySabotage());
+                    coroutine = StartCoroutine(PlayMission());
                 }
             }
+            else if (nearCol.gameObject.layer == 10) // 사보타지(임포스터만 가능 ) , 미션 함수 가져올 때 인수로 본인 컬러 넘겨줘야함 
+            {
+                if (playerType == PlayerType.Duck)
+                {
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        coroutine = StartCoroutine(PlaySabotage());
+                    }
+                }
+            }
+        }
+        else 
+        {
+            Debug.Log("탐색중");
+        }
+       
+    }
+
+    private void ObjectAction(Collider2D nearCol) 
+    {
+        if (nearCol != privNearCol)
+        {
+            // 이전에 하이라이트된 물체의 색상을 복구
+            if (privNearCol != null)
+            {
+                SpriteRenderer prevRenderer = privNearCol.GetComponent<SpriteRenderer>();
+                if (prevRenderer != null)
+                    // prevRenderer.color = privColor;    // 플레이어의 직
+                    //if (playerType == PlayerType.Goose)
+                    //{
+                    //    prevRenderer.enabled = true;
+                    //}
+                    //else
+                        prevRenderer.enabled = false;
+            }
+
+            // 새로 하이라이트된 물체의 색상을 변경
+            if (nearCol != null)
+            {
+                SpriteRenderer renderer = nearCol.GetComponent<SpriteRenderer>();
+                if (renderer != null)
+                {
+                    // privColor = renderer.color; // 현재 색상 저장
+                    // renderer.color = highLightColor; // 하이라이트 색상
+                    //if (playerType == PlayerType.Goose)
+                    //{
+                    //    renderer.enabled = false;
+                    //}
+                    //else
+                        renderer.enabled = true;
+
+                }
+            }
+
+            // 현재 가장 가까운 물체를 이전 물체로 저장
+            privNearCol = nearCol;
         }
     }
     IEnumerator Kill(Collider2D col)
@@ -191,20 +286,6 @@ public class PlayerController : MonoBehaviourPun
    
     private void Move()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 5f,8);
-        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
-        if (hit.collider != null)
-        {          
-                print(hit.transform.name);
-        }
-        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, transform.right, 5f, 10);
-        Debug.DrawRay(transform.position, transform.right * 5f, Color.yellow);
-        if (hit1.collider != null)
-        {
-            print(hit1.transform.name);
-        }
-
-
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -220,11 +301,13 @@ public class PlayerController : MonoBehaviourPun
         {
             privDir = new Vector3(1, 1, 1);
             transform.localScale = privDir;
+            
         }
         else if (x > 0) // 오른쪽으로 이동 시
         {
             privDir = new Vector3(-1, 1, 1);
             transform.localScale = privDir;
+            
         }
         else  // 이전 방향을 유지하게 
         {
@@ -246,7 +329,8 @@ public class PlayerController : MonoBehaviourPun
                 eyeAnim.SetBool("Running", true);
                 bodyAnim.SetBool("Running", true);
                 feetAnim.SetBool("Running", true);
-
+                audio.Play();
+                
             }
         }
         else
@@ -257,6 +341,7 @@ public class PlayerController : MonoBehaviourPun
                 eyeAnim.SetBool("Running", false);
                 bodyAnim.SetBool("Running", false);
                 feetAnim.SetBool("Running", false);
+                audio.Stop();
             }
         }
         privPos = transform.position;
