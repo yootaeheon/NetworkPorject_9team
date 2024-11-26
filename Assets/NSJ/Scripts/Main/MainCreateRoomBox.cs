@@ -103,6 +103,7 @@ public class MainCreateRoomBox : BaseUI
         _createNickNameInput.text = string.Empty;
         _createPlayerCountSlider.value = (int)((_createPlayerCountSlider.maxValue + _createPlayerCountSlider.minValue) / 2); // 절반 수치만큼
         _createRoomOpenSlider.value = 1f; // 기본 비공개 방
+        UpdateIsVisible(1f);
         _createPrivacyCheck.SetActive(false);
     }
     private void Init()

@@ -14,9 +14,7 @@ public class BathroomMission : MonoBehaviour
     private GameObject _spray;
     private Animator _sprayAnim;
     private int _sprayHash;
-
-
-
+     
     private void Awake() => Init();
 
     private void Start()
@@ -63,7 +61,7 @@ public class BathroomMission : MonoBehaviour
     /// <summary>
     /// 감지한 오브젝트 제거 기능
     /// </summary>
-    private void RemoveTrain()
+    public void RemoveTrain()
     {
         //감지한 오브젝트가 없을 경우 리턴
         if (!_missionState.IsDetect) return;
@@ -98,7 +96,7 @@ public class BathroomMission : MonoBehaviour
     private void IncreaseTotalScore()
     {
         //Player의 타입을 받아 올 수 있으면 좋음
-        PlayerType type = PlayerType.Duck;
+        PlayerType type = PlayerType.Goose;
 
         if (type.Equals(PlayerType.Goose))
         {

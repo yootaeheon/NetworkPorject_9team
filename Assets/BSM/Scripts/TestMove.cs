@@ -10,6 +10,7 @@ public class TestMove : MonoBehaviour
     
 
     private Rigidbody2D _rb;
+    private Color color;
 
     private void Start()
     {
@@ -18,12 +19,29 @@ public class TestMove : MonoBehaviour
      
     private void Update()
     {
- 
-        if (Input.GetKeyDown(KeyCode.E))
+        Debug.DrawRay(transform.position, transform.right * 20f, Color.red);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 3f);
+
+        if(hit.collider != null)
         {
-            //미션 활성화
-            _tempMission.gameObject.SetActive(true);
+
+            if(hit.collider.gameObject.name == "TempMissionObject")
+            {
+                ActiveMission mission = hit.collider.GetComponent<ActiveMission>();
+                 
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    color = new Color(0.5f, 1, 1, 1);
+                    Debug.Log(color);
+                    //미션 활성화
+                    mission.GetMission();
+                    mission.GetColor(color);
+                }
+
+            }
         }
+         
 
         PlayerInput();
 
