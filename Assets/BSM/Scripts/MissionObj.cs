@@ -22,7 +22,6 @@ public class MissionObj : MonoBehaviour
             {
                 _missionState = transform.parent.GetComponent<MissionState>();
                 _missionState.ObjectCount--;
-                Debug.Log(_missionState.ObjectCount);
                 isComplete = value;
             }
         }
