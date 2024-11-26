@@ -10,6 +10,9 @@ public class WireConnectionMission : MonoBehaviour
     private MissionState _missionState;
 
     private List<GameObject> _wireList;
+    private List<GameObject> _endPointList;
+    private Dictionary<GameObject, Color> _colorDict;
+
     private GameObject _startPos;
     private RectTransform _wire;
       
@@ -29,6 +32,8 @@ public class WireConnectionMission : MonoBehaviour
     {
         _missionState.ObjectCount = 4;
         _wireList = new List<GameObject>(_missionState.ObjectCount);
+        _endPointList = new List<GameObject>(_missionState.ObjectCount);
+        _colorDict = new Dictionary<GameObject, Color>();
     }
 
     private void OnDisable()
@@ -38,6 +43,13 @@ public class WireConnectionMission : MonoBehaviour
         {
             RectTransform rect = ele.GetComponent<RectTransform>();
             rect.sizeDelta = new Vector2(0, 20); 
+        } 
+
+        foreach(GameObject ele in _endPointList)
+        {
+            ele.GetComponent<Image>().color = _colorDict[ele];
+            
+            ele.transform.GetChild(0).GetComponent<Image>().color = _colorDict[ele]; 
         } 
     }
      
@@ -75,26 +87,7 @@ public class WireConnectionMission : MonoBehaviour
                 _wireList.Add(_wire.gameObject);
             }
 
-
-            //wire위치 - 마우스 위치
-            float wireWidth = Vector2.Distance(_wire.transform.position, _missionState.MousePos);
-
-            //Wire 길이
-            _wire.sizeDelta = new Vector2(wireWidth, 20);
-
-            //Wire 방향
-            float x = _missionState.MousePos.x;
-            float y = _missionState.MousePos.y;
-
-            //마우스 위치 - wire 위치
-            Vector3 dir = new Vector3(x, y, 0) - _wire.transform.position;
-
-            //Wire 회전각
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-            //Wire 회전
-            _wire.transform.rotation = Quaternion.AngleAxis(-angle, -Vector3.forward);
-
+            MouseTrackingWire(_wire); 
         }
 
         else if (Input.GetMouseButtonUp(0))
@@ -104,10 +97,38 @@ public class WireConnectionMission : MonoBehaviour
         }
     }
 
+    
+    /// <summary>
+    /// 전선 마우스 위치 트래킹 기능
+    /// </summary>
+    /// <param name="wire"></param>
+    private void MouseTrackingWire(RectTransform wire)
+    {
+        //wire위치 - 마우스 위치
+        float wireWidth = Vector2.Distance(_wire.transform.position, _missionState.MousePos);
+
+        //Wire 길이
+        _wire.sizeDelta = new Vector2(wireWidth, 20);
+
+        //Wire 방향
+        float x = _missionState.MousePos.x;
+        float y = _missionState.MousePos.y;
+
+        //마우스 위치 - wire 위치
+        Vector3 dir = new Vector3(x, y, 0) - _wire.transform.position;
+
+        //Wire 회전각
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        //Wire 회전
+        _wire.transform.rotation = Quaternion.AngleAxis(-angle, -Vector3.forward);
+    }
+
+
     /// <summary>
     /// 색깔 비교 기능
     /// </summary>
-    public void CompareColor()
+    private void CompareColor()
     {
         Image endPointImage = _missionController._searchObj.GetComponent<Image>();
         Color endPointColor = endPointImage.color;
@@ -118,10 +139,22 @@ public class WireConnectionMission : MonoBehaviour
             float endR = endPointColor.r;
             float endG = endPointColor.g;
             float endB = endPointColor.b;
-
+ 
             endPointImage.color = new Color(endR, endG, endB, 1);
             Image childGlow = endPointImage.transform.GetChild(0).GetComponent<Image>();
             childGlow.color = new Color(endR,endG,endB,1);
+
+            //리스트에 오브젝트가 없을 경우 추가
+            if (!_endPointList.Contains(endPointImage.gameObject))
+            {
+                _endPointList.Add(endPointImage.gameObject);
+
+                //추가된 오브젝트의 키가 없을 경우 추가
+                if (!_colorDict.ContainsKey(endPointImage.gameObject))
+                {
+                    _colorDict[endPointImage.gameObject] = new Color(endR, endG, endB, 0.37f);
+                } 
+            }
 
             SoundManager.Instance.SFXPlay(_missionState._clips[0]);
             _missionState.ObjectCount--;
