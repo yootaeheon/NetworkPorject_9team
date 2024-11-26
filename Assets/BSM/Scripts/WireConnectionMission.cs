@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class WireConnectionMission : MonoBehaviour
-{ 
+{
     private MissionController _missionController;
     private MissionState _missionState;
 
@@ -30,7 +30,7 @@ public class WireConnectionMission : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     //좌측 전선 클릭 시 마우스 좌표로 전선 이동
@@ -63,7 +63,7 @@ public class WireConnectionMission : MonoBehaviour
     /// 전선 연결 기능 동작
     /// </summary>
     private void WireConnection()
-    { 
+    {
         if (!_missionState.IsDetect) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -73,6 +73,7 @@ public class WireConnectionMission : MonoBehaviour
         }
         else if (Input.GetMouseButton(0))
         {
+            //자식이 없거나 마우스 위치가 좌측에 있을 경우 Return
             if (_startPos.transform.childCount == 0 || _missionState.MousePos.x < 670f)
             {
                 return;
@@ -81,16 +82,34 @@ public class WireConnectionMission : MonoBehaviour
             //시작 위치 오브젝트의 자식 오브젝트 > wire 이미지 
             _wire = _startPos.transform.GetChild(0).GetComponent<RectTransform>();
 
-            //670?
-            float distance = Vector2.Distance(_wire.transform.position, _missionState.MousePos);
+            //wire위치 - 마우스 위치
+            float wireWidth = Vector2.Distance(_wire.transform.position, _missionState.MousePos);
 
-            _wire.sizeDelta = new Vector2(distance, 20);
-             
+            //Wire 길이
+            _wire.sizeDelta = new Vector2(wireWidth, 20);
+
+            //Wire 방향
+            float x = _missionState.MousePos.x;
+            float y = _missionState.MousePos.y;
+
+            //마우스 위치 - wire 위치
+            Vector3 dir = new Vector3(x, y, 0) - _wire.transform.position;
+
+            //Wire 회전각
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+            //Wire 회전
+            _wire.transform.rotation = Quaternion.AngleAxis(-angle, -Vector3.forward);
+
         }
 
         else if (Input.GetMouseButtonUp(0))
         {
+            //뗐을 때 도착 위치가 아니면 줄어듬
+            //도착지 오브젝트의 Color로 판단?  
             _wire.sizeDelta = new Vector2(0, 20);
+
+            //도착 위치이면 길이/위치 고정
         }
     }
 
