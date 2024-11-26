@@ -9,11 +9,10 @@ public class WireConnectionMission : MonoBehaviour
     private MissionController _missionController;
     private MissionState _missionState;
 
+    private List<GameObject> _wireList;
     private GameObject _startPos;
     private RectTransform _wire;
-
-    private bool IsConnected;
-
+      
     private void Awake()
     {
         Init();
@@ -29,38 +28,24 @@ public class WireConnectionMission : MonoBehaviour
     private void OnEnable()
     {
         _missionState.ObjectCount = 4;
+        _wireList = new List<GameObject>(_missionState.ObjectCount);
     }
 
-    private void Start()
+    private void OnDisable()
     {
-
+        //미션 팝업 창 종료 시 기존 전선 사이즈 원상복구
+        foreach(GameObject ele in _wireList)
+        {
+            RectTransform rect = ele.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(0, 20); 
+        } 
     }
-
-    //좌측 전선 클릭 시 마우스 좌표로 전선 이동
-    //다른 색깔과 연결 시 연결 안됨
-
-
-    //IF 같은 색깔과 연결
-    //배선은 프리팹으로 생성?
-    //전선 연결
-    //미션 카운트 --
-    //우측 전선 알파값 1
-    //전선 고정
-    //전선 연결 사운드 재생
-
-    //ELSE
-    //전선 연결 안됨
-    //전선 다시 줄어듬
-
-
+     
     private void Update()
     {
         _missionController.PlayerInput();
         WireConnection();
-    }
-
-    //길이 : 마우스 좌표 - Wire 좌표 > Width
-    //회전각 : 마우스 좌표에 따라 회전?
+    } 
 
     /// <summary>
     /// 전선 연결 기능 동작
@@ -84,6 +69,12 @@ public class WireConnectionMission : MonoBehaviour
 
             //시작 위치 오브젝트의 자식 오브젝트 > wire 이미지 
             _wire = _startPos.transform.GetChild(0).GetComponent<RectTransform>();
+
+            if (!_wireList.Contains(_wire.gameObject))
+            {
+                _wireList.Add(_wire.gameObject);
+            }
+
 
             //wire위치 - 마우스 위치
             float wireWidth = Vector2.Distance(_wire.transform.position, _missionState.MousePos);
@@ -109,6 +100,7 @@ public class WireConnectionMission : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
         {
             CompareColor();
+            MissionClear();
         }
     }
 
@@ -131,7 +123,8 @@ public class WireConnectionMission : MonoBehaviour
             Image childGlow = endPointImage.transform.GetChild(0).GetComponent<Image>();
             childGlow.color = new Color(endR,endG,endB,1);
 
-
+            SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+            _missionState.ObjectCount--;
         }
         else
         {
