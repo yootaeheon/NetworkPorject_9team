@@ -82,6 +82,9 @@ public class WaterPurifierMission : MonoBehaviour
         } 
     }
      
+    /// <summary>
+    /// 콘센트 위치 확인 기능
+    /// </summary>
     private void LocationOfSocket()
     { 
         //상,하 | 좌,우 여유 좌표 값 

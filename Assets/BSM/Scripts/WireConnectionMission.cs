@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WireConnectionMission : MonoBehaviour
-{
-
+{ 
     private MissionController _missionController;
     private MissionState _missionState;
 
+    private GameObject _startPos;
+    private RectTransform _wire;
 
     private void Awake()
     {
@@ -54,10 +56,42 @@ public class WireConnectionMission : MonoBehaviour
         WireConnection();
     }
 
+    //길이 : 마우스 좌표 - Wire 좌표 > Width
+    //회전각 : 마우스 좌표에 따라 회전?
+
+    /// <summary>
+    /// 전선 연결 기능 동작
+    /// </summary>
     private void WireConnection()
-    {
+    { 
+        if (!_missionState.IsDetect) return;
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            //전선 시작 위치
+            _startPos = _missionController._searchObj.transform.parent.GetChild(0).gameObject;
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            if (_startPos.transform.childCount == 0 || _missionState.MousePos.x < 670f)
+            {
+                return;
+            }
 
+            //시작 위치 오브젝트의 자식 오브젝트 > wire 이미지 
+            _wire = _startPos.transform.GetChild(0).GetComponent<RectTransform>();
+
+            //670?
+            float distance = Vector2.Distance(_wire.transform.position, _missionState.MousePos);
+
+            _wire.sizeDelta = new Vector2(distance, 20);
+             
+        }
+
+        else if (Input.GetMouseButtonUp(0))
+        {
+            _wire.sizeDelta = new Vector2(0, 20);
+        }
     }
 
 
