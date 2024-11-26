@@ -20,7 +20,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] VoteScenePlayerData[] playerData;
 
-    //[SerializeField] public static Button[] _voteButtons; // 투표하기 위한 버튼들
+    [SerializeField] public static Button[] _voteButtons; // 투표하기 위한 버튼들
 
     #region UI Property
     [Header("UI")]

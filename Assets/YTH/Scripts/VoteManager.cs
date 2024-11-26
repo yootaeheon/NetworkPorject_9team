@@ -20,10 +20,10 @@ public class VoteManager : MonoBehaviourPunCallbacks
     public void Vote(int index) // 플레이어 패널을 눌러 투표
     {
         photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
-        foreach (var button in VotePanel._voteButtons)
-        {
-            button.interactable = false;
-        }
+       // foreach (var button in VotePanel._voteButtons)
+       // {
+       //     button.interactable = false;
+       // }
     }
 
     [PunRPC]
@@ -37,10 +37,10 @@ public class VoteManager : MonoBehaviourPunCallbacks
     public void OnClickSkip() // 스킵 버튼 누를 시
     {
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
-        foreach (var button in VotePanel._voteButtons)
-        {
-            button.interactable = false;
-        }
+       // foreach (var button in VotePanel._voteButtons)
+       // {
+       //     button.interactable = false;
+       // }
     }
 
     [PunRPC]
