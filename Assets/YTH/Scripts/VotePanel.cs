@@ -2,7 +2,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Android;
 using UnityEngine.UI;
 
 public class VotePanel : MonoBehaviourPunCallbacks
@@ -20,6 +19,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
     [SerializeField] GameObject[] _SkipanonymImage; // 스킵 수 만큼 익명 이미지 생성
 
     [SerializeField] VoteScenePlayerData[] playerData;
+
+    //[SerializeField] public static Button[] _voteButtons; // 투표하기 위한 버튼들
 
     #region UI Property
     [Header("UI")]
@@ -64,11 +65,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
     private void Update()
     {
         CountTime();
-        // _voteButton.interactable = _voteData.ReportTimeCount <= 0;  위치 수정할것
-        // _skipButton.interactable = _voteData.ReportTimeCount <= 0;
-        //
-        // _voteButton.interactable = _voteData.VoteTimeCount <= 0;
-        // _skipButton.interactable = _voteData.VoteTimeCount <= 0;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -108,8 +104,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     // 플레이어 패널 생성 함수
     public void SpawnPlayerPanel()
-    {   //ActorNumber 1 부터 시작 
-        // 인덱스 번호로 매개변수를 받기 위해서 -1
+    {   
         photonView.RPC("SpawnPlayerPanelRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber - 1);
     }
 
@@ -156,19 +151,31 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     public void CountTime()
     {
+        foreach (Button button in _voteButtons)
+        {
+            button.interactable = false;
+        }
+
         _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime 수정 필요 시 수정
-        //Debug.Log(_voteData.ReportTimeCount);
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
         if (_voteData.ReportTimeCount <= 0)
         {
+            foreach (Button button in _voteButtons)
+            {
+                button.interactable = true;
+            }
+
             _reportTimeCountSlider.gameObject.SetActive(false); // 추후 수정할 것
             _voteData.VoteTimeCount -= (float)Time.deltaTime;
             _voteTimeCountSlider.value = _voteData.VoteTimeCount;
-            //Debug.Log(_voteData.VoteTimeCount);
 
             if (_voteData.VoteTimeCount <= 0)
             {
-              //  SpawnAnonymImage();
+                foreach (Button button in _voteButtons)
+                {
+                    button.interactable = false;
+                }
+                //  SpawnAnonymImage();
                 SpawnSkipAnonymImage();
                 _voteManager.GetVoteResult();
             }

@@ -2967,6 +2967,19 @@ MonoBehaviour:
   - {fileID: 636307905}
   - {fileID: 1054231954}
   - {fileID: 747739039}
+  _voteButtons:
+  - {fileID: 203272682}
+  - {fileID: 1070349511}
+  - {fileID: 2114097602}
+  - {fileID: 156348679}
+  - {fileID: 1206953180}
+  - {fileID: 1122004458}
+  - {fileID: 227493244}
+  - {fileID: 20576965}
+  - {fileID: 565478460}
+  - {fileID: 636307900}
+  - {fileID: 1054231949}
+  - {fileID: 747739034}
   _nickNameText: {fileID: 0}
   _votePanel: {fileID: 1051037622}
   _playerPanel: {fileID: 2119301252}
@@ -3037,8 +3050,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skipCount: 0
-  _reportTimeCount: 5
-  _voteTimeCount: 5
+  _reportTimeCount: 10
+  _voteTimeCount: 10
 --- !u!1001 &1054231947
 PrefabInstance:
   m_ObjectHideFlags: 0

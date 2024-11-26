@@ -4,6 +4,7 @@ using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class VoteManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] VoteSceneData _voteData;
@@ -19,10 +20,10 @@ public class VoteManager : MonoBehaviourPunCallbacks
     public void Vote(int index) // 플레이어 패널을 눌러 투표
     {
         photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
-
-      // if (PhotonNetwork.IsMasterClient == false)
-      //     return;
-      
+        foreach (var button in VotePanel._voteButtons)
+        {
+            button.interactable = false;
+        }
     }
 
     [PunRPC]
@@ -30,23 +31,23 @@ public class VoteManager : MonoBehaviourPunCallbacks
     {
         _voteCounts[index]++;
         Debug.Log($"{index}번 플레이어 득표수 {_voteCounts[index]} ");
-        _playerData[PhotonNetwork.LocalPlayer.ActorNumber - 1].DidVote = true;
     }
 
     // IsDead == false 일때만 스킵 가능하게 조건 추가
     public void OnClickSkip() // 스킵 버튼 누를 시
     {
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
+        foreach (var button in VotePanel._voteButtons)
+        {
+            button.interactable = false;
+        }
     }
 
     [PunRPC]
     public void OnClickSkipRPC()
     {
         _voteData.SkipCount++;
-
-        if (PhotonNetwork.IsMasterClient == false)
-            return;
-        _playerData[PhotonNetwork.LocalPlayer.ActorNumber - 1].DidVote = true;
+        Debug.Log($" 스킵 수 : {_voteData.SkipCount}");
     }
 
     // 투표 종료 후 집계 기능
