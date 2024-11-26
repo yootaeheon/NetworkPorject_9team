@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ public class WireConnectionMission : MonoBehaviour
 
     private GameObject _startPos;
     private RectTransform _wire;
+
+    private bool IsConnected;
 
     private void Awake()
     {
@@ -105,14 +108,36 @@ public class WireConnectionMission : MonoBehaviour
 
         else if (Input.GetMouseButtonUp(0))
         {
-            //뗐을 때 도착 위치가 아니면 줄어듬
-            //도착지 오브젝트의 Color로 판단?  
-            _wire.sizeDelta = new Vector2(0, 20);
-
-            //도착 위치이면 길이/위치 고정
+            CompareColor();
         }
     }
 
+    /// <summary>
+    /// 색깔 비교 기능
+    /// </summary>
+    public void CompareColor()
+    {
+        Image endPointImage = _missionController._searchObj.GetComponent<Image>();
+        Color endPointColor = endPointImage.color;
+
+        //도착지와 Wire의 색 비교
+        if (endPointColor.CompareRGB(_wire.GetComponent<Image>().color))
+        {
+            float endR = endPointColor.r;
+            float endG = endPointColor.g;
+            float endB = endPointColor.b;
+
+            endPointImage.color = new Color(endR, endG, endB, 1);
+            Image childGlow = endPointImage.transform.GetChild(0).GetComponent<Image>();
+            childGlow.color = new Color(endR,endG,endB,1);
+
+
+        }
+        else
+        {
+            _wire.sizeDelta = new Vector2(0, 20);
+        }
+    }
 
     private void IncreaseTotalScore()
     {
