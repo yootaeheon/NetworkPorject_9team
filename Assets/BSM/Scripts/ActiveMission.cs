@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveMission : BaseMission
+public class ActiveMission : MonoBehaviour
 {
     [SerializeField] private GameObject _missionPrefab;
     [SerializeField] private GameObject _missionCanvas;
