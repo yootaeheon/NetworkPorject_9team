@@ -19,30 +19,19 @@ public class VoteSceneData : MonoBehaviourPun, IPunObservable
     [SerializeField] public float _voteTimeCount; // 투표 가능 시간
     public float VoteTimeCount { get { return _voteTimeCount; } set { _voteTimeCount = value; } }
 
-
-    [SerializeField] private Transform _playerPanelParent; // 플레이어 패널 생성 시 부모 오브젝트
-    public Transform PlayerPanelParent { get { return _playerPanelParent; } set { _playerPanelParent = value; } }   
-
-
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
-           
             stream.SendNext(SkipCount);
             stream.SendNext(ReportTimeCount);
             stream.SendNext(VoteTimeCount);
-           
-            stream.SendNext(PlayerPanelParent);
         }
         else if (stream.IsReading)
         {
-          
             SkipCount = (int)stream.ReceiveNext();
-            ReportTimeCount = (int)stream.ReceiveNext();
-            VoteTimeCount = (int)stream.ReceiveNext();
-          
-            PlayerPanelParent = (Transform)stream.ReceiveNext();
+            ReportTimeCount = (float)stream.ReceiveNext();
+            VoteTimeCount = (float)stream.ReceiveNext();
         }
     }
 }
