@@ -13,6 +13,9 @@ public class MissionState : MonoBehaviour
 
     public PlayerType MyPlayerType { get; set; }
 
+    //오리의 컬러 값
+    public static Color PlayerColor { get; set; }
+
     [Header("미션 브금 리스트")]
     [Tooltip
         ("[0] 미션 상호작용 사운드\n" +

@@ -10,6 +10,7 @@ public class TestMove : MonoBehaviour
     
 
     private Rigidbody2D _rb;
+    private Color color;
 
     private void Start()
     {
@@ -24,17 +25,18 @@ public class TestMove : MonoBehaviour
 
         if(hit.collider != null)
         {
-            Debug.Log(hit.collider.name);
 
             if(hit.collider.gameObject.name == "TempMissionObject")
             {
                 ActiveMission mission = hit.collider.GetComponent<ActiveMission>();
-                
-                
+                 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    color = new Color(0.5f, 1, 1, 1);
+                    Debug.Log(color);
                     //미션 활성화
                     mission.GetMission();
+                    mission.GetColor(color);
                 }
 
             }
