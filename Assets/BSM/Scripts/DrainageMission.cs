@@ -128,7 +128,7 @@ public class DrainageMission : MonoBehaviour
     /// <summary>
     /// 클릭한 오브젝트 동작 기능
     /// </summary>
-    private void CleaningHole()
+    public void CleaningHole()
     {
         if (!_missionState.IsDetect) return;
          

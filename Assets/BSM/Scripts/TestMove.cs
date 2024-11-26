@@ -18,12 +18,28 @@ public class TestMove : MonoBehaviour
      
     private void Update()
     {
- 
-        if (Input.GetKeyDown(KeyCode.E))
+        Debug.DrawRay(transform.position, transform.right * 20f, Color.red);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.right, 3f);
+
+        if(hit.collider != null)
         {
-            //미션 활성화
-            _tempMission.gameObject.SetActive(true);
+            Debug.Log(hit.collider.name);
+
+            if(hit.collider.gameObject.name == "TempMissionObject")
+            {
+                ActiveMission mission = hit.collider.GetComponent<ActiveMission>();
+                
+                
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    //미션 활성화
+                    mission.GetMission();
+                }
+
+            }
         }
+         
 
         PlayerInput();
 
