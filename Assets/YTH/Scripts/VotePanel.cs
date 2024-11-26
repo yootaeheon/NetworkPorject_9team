@@ -94,17 +94,16 @@ public class VotePanel : MonoBehaviourPunCallbacks
             GetComponent<VoteScenePlayerData>();
         }
 
-        // _playerData.IsDead = false;
-        // _playerData.IsReporter = false;
-        // _playerData.DidVote = false;
+        // 투표 씬 입장 때마다 모든 플레이어 _playerData.DidVote == false 해주기
     }
 
     // 각 플레이어 패널을 세팅하는 함수
     public void SetPlayerPanel(Player player)
     {
-        // _nickNameText.text = player.NickName;
+        // _nickNameText.text = player.NickName; // 닉네임 불러오기
         //TODO : _characterImage = ""; // 캐릭터 이미지 불러오기
-        //TODO : 플레이어가 죽은 상태라면 그 플레이어 투표 버튼 비활성화
+        //TODO : 죽은 캐릭터에 사망 표시 띄워놓기
+        //TODO : 플레이어가 죽은 상태라면 그 플레이어 투표 버튼 비활성화 // button.interatable == false
     }
 
     // 플레이어 패널 생성 함수
@@ -159,11 +158,12 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime 수정 필요 시 수정
         //Debug.Log(_voteData.ReportTimeCount);
-
+        _reportTimeCountSlider.value = _voteData.ReportTimeCount;
         if (_voteData.ReportTimeCount <= 0)
         {
             _reportTimeCountSlider.gameObject.SetActive(false); // 추후 수정할 것
             _voteData.VoteTimeCount -= (float)Time.deltaTime;
+            _voteTimeCountSlider.value = _voteData.VoteTimeCount;
             //Debug.Log(_voteData.VoteTimeCount);
 
             if (_voteData.VoteTimeCount <= 0)

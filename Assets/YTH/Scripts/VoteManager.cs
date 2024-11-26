@@ -20,9 +20,9 @@ public class VoteManager : MonoBehaviourPunCallbacks
     {
         photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
 
-        if (photonView.IsMine == false)
-            return;
-        _playerData[PhotonNetwork.LocalPlayer.ActorNumber - 1].DidVote = true;
+      // if (PhotonNetwork.IsMasterClient == false)
+      //     return;
+      
     }
 
     [PunRPC]
@@ -30,6 +30,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
     {
         _voteCounts[index]++;
         Debug.Log($"{index}번 플레이어 득표수 {_voteCounts[index]} ");
+        _playerData[PhotonNetwork.LocalPlayer.ActorNumber - 1].DidVote = true;
     }
 
     // IsDead == false 일때만 스킵 가능하게 조건 추가
@@ -43,7 +44,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
     {
         _voteData.SkipCount++;
 
-        if (photonView.IsMine == false)
+        if (PhotonNetwork.IsMasterClient == false)
             return;
         _playerData[PhotonNetwork.LocalPlayer.ActorNumber - 1].DidVote = true;
     }
