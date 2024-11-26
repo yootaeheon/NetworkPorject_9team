@@ -35,8 +35,7 @@ public class TestMove : MonoBehaviour
                     color = new Color(0.5f, 1, 1, 1);
                     Debug.Log(color);
                     //미션 활성화
-                    mission.GetMission();
-                    mission.GetColor(color);
+                    mission.GetMission(color); 
                 }
 
             }

@@ -17,14 +17,9 @@ public class ActiveMission : MonoBehaviour
     }
 
   
-    public void GetMission()
+    public void GetMission(Color color)
     {
         _missionPrefab.SetActive(true);
-    }
-
-    public void GetColor(Color color)
-    {
         MissionState.PlayerColor = color;
-    }
-
+    } 
 }
