@@ -327,7 +327,7 @@ namespace ExitGames.Demos.DemoPunVoice
             }
             else
             {
-                // panelList Elements and Delete buttons
+                // _panelList Elements and Delete buttons
                 for (int i = 0; i < list.arraySize; ++i)
                 {
                     EditorGUILayout.BeginHorizontal();
