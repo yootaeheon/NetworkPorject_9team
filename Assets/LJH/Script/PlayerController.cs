@@ -7,14 +7,14 @@ using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviourPun
 {
-    // ÇÃ·¹ÀÌ¾î Å¸ÀÔ °ÅÀ§(½Ã¹Î) ¿À¸®(ÀÓÆ÷½ºÅÍ) 
-    [SerializeField] PlayerType playerType;
-    [SerializeField] float moveSpeed;  // ÀÌµ¿¼Óµµ 
-    [SerializeField] float Detectradius;  // Å½»ö ¹üÀ§
-    [SerializeField] string playerName;
+    // í”Œë ˆì´ì–´ íƒ€ì… ê±°ìœ„(ì‹œë¯¼) ì˜¤ë¦¬(ì„í¬ìŠ¤í„°) 
+    [SerializeField] public PlayerType playerType;
+    [SerializeField] float moveSpeed;  // ì´ë™ì†ë„ 
+    [SerializeField] float Detectradius;  // íƒìƒ‰ ë²”ìœ„
+    //[SerializeField] string playerName;
     // [SerializeField] Color highLightColor;
 
-    [SerializeField] AudioSource audio;
+    [SerializeField] AudioSource audioSource;
 
     [SerializeField] GameObject IdleBody;
     [SerializeField] GameObject Ghost;
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviourPun
     private Vector3 privPos;
     private Vector3 privDir;
     [SerializeField] float threshold = 0.001f;
-
+    private Color randomColor; 
     bool isOnMove = false;
     public bool isGhost = false;
 
@@ -44,14 +44,14 @@ public class PlayerController : MonoBehaviourPun
     private void Start()
     {
 
-        // ·£´ıÀ¸·Î ¿ªÇÒ ÁöÁ¤ÇÏ´Â ±â´ÉÀÌ ÇÊ¿ä (´ë±â½Ç ÀÔÀå¿¡´Â ÇÊ¿ä¾ø°í °ÔÀÓ ÀÔÀå½Ã ÇÊ¿ä)
-        if (photonView.IsMine == false)  // ¼ÒÀ¯±ÇÀÚ ±¸ºĞ
+        // ëœë¤ìœ¼ë¡œ ì—­í•  ì§€ì •í•˜ëŠ” ê¸°ëŠ¥ì´ í•„ìš” (ëŒ€ê¸°ì‹¤ ì…ì¥ì—ëŠ” í•„ìš”ì—†ê³  ê²Œì„ ì…ì¥ì‹œ í•„ìš”)
+        if (photonView.IsMine == false)  // ì†Œìœ ê¶Œì êµ¬ë¶„
             return;
         playerType = PlayerType.Duck;
 
 
-        // ·£´ı »ö ¼³Á¤ , ÃßÈÄ¿¡ »ö ÁöÁ¤ ±â´ÉÀ» ³ÖÀ¸¸é ·£´ı ´ë½Å ÁöÁ¤ ¼ıÀÚ¸¦ º¸³»¸é µÉµí   
-        Color randomColor = new Color(Random.value, Random.value, Random.value, 1f);
+        // ëœë¤ ìƒ‰ ì„¤ì • , ì¶”í›„ì— ìƒ‰ ì§€ì • ê¸°ëŠ¥ì„ ë„£ìœ¼ë©´ ëœë¤ ëŒ€ì‹  ì§€ì • ìˆ«ìë¥¼ ë³´ë‚´ë©´ ë ë“¯   
+        randomColor = new Color(Random.value, Random.value, Random.value, 1f);
         photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
 
 
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviourPun
     private void Update()
     {
 
-        if (photonView.IsMine == false)  // ¼ÒÀ¯±ÇÀÚ ±¸ºĞ
+        if (photonView.IsMine == false)  // ì†Œìœ ê¶Œì êµ¬ë¶„
             return;
 
         Move();
@@ -68,9 +68,9 @@ public class PlayerController : MonoBehaviourPun
         FindNearObject();
     }
 
-    // r ½Å°í , e »óÈ£ÀÛ¿ë , space »ìÀÎ 
-    // ÁÖº¯ ¿ÀºêÁ§Æ® Å½»ö(¹Ì´Ï°ÔÀÓ , »çº¸Å¸Áö , ½ÃÃ¼ , ±ä±ŞÈ¸ÀÇ , ´Ù¸¥ ÇÃ·¹ÀÌ¾î) Å½»öµÈ ¿ÀºêÁ§Æ®¿¡ µû¶ó ´Ù¸¥ Çàµ¿ÀÌ °¡´ÉÇÏ°Ô
-    // ½Å°í°¡ µÇ¸é ½ÃÃ¼µµ »ç¶óÁ®¾ß ÇÔ 
+    // r ì‹ ê³  , e ìƒí˜¸ì‘ìš© , space ì‚´ì¸ 
+    // ì£¼ë³€ ì˜¤ë¸Œì íŠ¸ íƒìƒ‰(ë¯¸ë‹ˆê²Œì„ , ì‚¬ë³´íƒ€ì§€ , ì‹œì²´ , ê¸´ê¸‰íšŒì˜ , ë‹¤ë¥¸ í”Œë ˆì´ì–´) íƒìƒ‰ëœ ì˜¤ë¸Œì íŠ¸ì— ë”°ë¼ ë‹¤ë¥¸ í–‰ë™ì´ ê°€ëŠ¥í•˜ê²Œ
+    // ì‹ ê³ ê°€ ë˜ë©´ ì‹œì²´ë„ ì‚¬ë¼ì ¸ì•¼ í•¨ 
 
     private Collider2D privNearCol= null;
     private Color privColor;
@@ -82,149 +82,132 @@ public class PlayerController : MonoBehaviourPun
         foreach (Collider2D col in colliders)
         {
            
-            if (col.transform.position != this.transform.position) // ÀÚ½Å ¾Æ´Ï°í 
+            if (col.transform.position != this.transform.position) // ìì‹  ì•„ë‹ˆê³  
             {
-                if (col.gameObject.layer != 9) // À¯·É ¾Æ´Ï°í , ½ÃÃ¼ ÇÃ·¹ÀÌ¾î´Â ¹ØÀÇ ÄÚµå·Î ¸øºÒ·¯¿Í¼­ Â¥ÇÇ ¾ÈµÊ 
+                if (col.gameObject.layer != 9) // ìœ ë ¹ ì•„ë‹ˆê³  , ì‹œì²´ í”Œë ˆì´ì–´ëŠ” ë°‘ì˜ ì½”ë“œë¡œ ëª»ë¶ˆëŸ¬ì™€ì„œ ì§œí”¼ ì•ˆë¨ 
                 {
                     if (col != null)
                     {
                         float distance = Vector2.Distance(this.transform.position, col.transform.position);
                         if (distance < minDistance)
                         {
-                            minDistance = distance;  // °¡Àå °¡±î¿î ¹°Ã¼ Ã£±â
-                            nearCol = col;
-                           
+                            minDistance = distance;  // ê°€ì¥ ê°€ê¹Œìš´ ë¬¼ì²´ ì°¾ê¸°
+                            if(playerType == PlayerType.Goose) 
+                            {
+                                if (col.gameObject.layer == 10) 
+                                {
+                                    nearCol = null;
+                                }
+                                else
+                                    nearCol = col;
+                            }
+                            else
+                                nearCol = col;
+                            
                             
                         }
                     }
+                }
+            }
+        }
+          
+        if (isGhost == false) 
+        {
+            ObjectHighLight(nearCol);// ì„ íƒëœ ì˜¤ë¸Œì íŠ¸ ê°•ì¡° ë° ì„ íƒ
+            PlayerAction(nearCol);// ì„ íƒ ì˜¤ë¸Œì íŠ¸ì— ëŒ€í•œ í–‰ë™ 
+        }
+             
+    } 
+
+    private void ObjectHighLight(Collider2D nearCol) 
+    {
+        if (nearCol != privNearCol)
+        {
+            
+            if (privNearCol != null)
+            {
+                SpriteRenderer prevRenderer = privNearCol.GetComponent<SpriteRenderer>();
+                if (prevRenderer != null)
+                    // prevRenderer.color = privColor;    
+                    //if (playerType == PlayerType.Goose)
+                    //{
+                    //    prevRenderer.enabled = true;
+                    //}
+                    //else
+                    prevRenderer.enabled = false;
+            }
+
+            
+            if (nearCol != null)
+            {
+                SpriteRenderer renderer = nearCol.GetComponent<SpriteRenderer>();
+                if (renderer != null)
+                {
+                    // privColor = renderer.color; // í˜„ì¬ ìƒ‰ìƒ ì €ì¥
+                    // renderer.color = highLightColor; // í•˜ì´ë¼ì´íŠ¸ ìƒ‰ìƒ
+                    //if (playerType == PlayerType.Goose)
+                    //{
+                    //    renderer.enabled = false;
+                    //}
+                    //else
+                    renderer.enabled = true;
 
                 }
-
             }
-           
 
-
+            // í˜„ì¬ ê°€ì¥ ê°€ê¹Œìš´ ë¬¼ì²´ë¥¼ ì´ì „ ë¬¼ì²´ë¡œ ì €ì¥
+            privNearCol = nearCol;
         }
+    }
 
-
-        //if (nearCol != privNearCol)
-        //{
-        //    // ÀÌÀü¿¡ ÇÏÀÌ¶óÀÌÆ®µÈ ¹°Ã¼ÀÇ »ö»óÀ» º¹±¸
-        //    if (privNearCol != null)
-        //    {
-        //        SpriteRenderer prevRenderer = privNearCol.GetComponent<SpriteRenderer>();
-        //        if (prevRenderer != null)
-        //           // prevRenderer.color = privColor;    // ÇÃ·¹ÀÌ¾îÀÇ Á÷
-        //            prevRenderer.enabled = false;
-        //    }
-
-        //    // »õ·Î ÇÏÀÌ¶óÀÌÆ®µÈ ¹°Ã¼ÀÇ »ö»óÀ» º¯°æ
-        //    if (nearCol != null)
-        //    {
-        //        SpriteRenderer renderer = nearCol.GetComponent<SpriteRenderer>();
-        //        if (renderer != null)
-        //        {
-        //           // privColor = renderer.color; // ÇöÀç »ö»ó ÀúÀå
-        //           // renderer.color = highLightColor; // ÇÏÀÌ¶óÀÌÆ® »ö»ó
-        //            renderer.enabled = true;
-        //        }
-        //    }
-
-        //    // ÇöÀç °¡Àå °¡±î¿î ¹°Ã¼¸¦ ÀÌÀü ¹°Ã¼·Î ÀúÀå
-        //    privNearCol = nearCol;
-        //}
-
-        ObjectAction(nearCol);
+    private void PlayerAction(Collider2D nearCol) 
+    {
         if (nearCol != null)
         {
 
 
-            if (nearCol.tag == "Test") // ³ªÁß¿¡ ½ÃÃ¼¿ë ·¹ÀÌ¾î ´õÇØ¼­ »ç¿ëÇÏ±â 
+            if (nearCol.tag == "Test") // ë‚˜ì¤‘ì— ì‹œì²´ìš© ë ˆì´ì–´ ë”í•´ì„œ ì‚¬ìš©í•˜ê¸° 
             {
 
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    Debug.Log("½Å°íÇÔ!");
+                    Debug.Log("ì‹ ê³ í•¨!");
 
-                    // ÅõÇ¥ ¿­¸®´Â ±â´É Ãß°¡ ÇØ¾ßÇÔ 
+                    // íˆ¬í‘œ ì—´ë¦¬ëŠ” ê¸°ëŠ¥ ì¶”ê°€ í•´ì•¼í•¨ 
 
-                    nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //½Å°í½Ã ½ÃÃ¼ »èÁ¦
-
-                }
-                else
-                {
+                    nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //ì‹ ê³ ì‹œ ì‹œì²´ ì‚­ì œ, ì”¬ ì¬ì§„ì…ì´ë©´ í•„ìš”ì—†ì„ì§€ë„ 
 
                 }
-
             }
             else if (nearCol.gameObject.layer == gameObject.layer)
             {
 
                 coroutine = StartCoroutine(Kill(nearCol));
             }
-            else if (nearCol.gameObject.layer == 8)  // ¹Ì¼Ç 
+            else if (nearCol.gameObject.layer == 8)  // ë¯¸ì…˜ 
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     coroutine = StartCoroutine(PlayMission());
+                   // nearCol.gameObject.GetComponent<MissionController>();// randomColorë¥¼ ì¸ìˆ˜ë¡œ ë¯¸ì…˜  í•¨ìˆ˜ ì‹¤í–‰ì‹œí‚¤ëŠ”ê±° ë¶™ì—¬ì•¼ í•¨ 
+
                 }
             }
-            else if (nearCol.gameObject.layer == 10) // »çº¸Å¸Áö(ÀÓÆ÷½ºÅÍ¸¸ °¡´É ) , ¹Ì¼Ç ÇÔ¼ö °¡Á®¿Ã ¶§ ÀÎ¼ö·Î º»ÀÎ ÄÃ·¯ ³Ñ°ÜÁà¾ßÇÔ 
+            else if (nearCol.gameObject.layer == 10) // ì‚¬ë³´íƒ€ì§€(ì„í¬ìŠ¤í„°ë§Œ ê°€ëŠ¥ ) , ë¯¸ì…˜ í•¨ìˆ˜ ê°€ì ¸ì˜¬ ë•Œ ì¸ìˆ˜ë¡œ ë³¸ì¸ ì»¬ëŸ¬ ë„˜ê²¨ì¤˜ì•¼í•¨ 
             {
                 if (playerType == PlayerType.Duck)
                 {
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         coroutine = StartCoroutine(PlaySabotage());
+                        //nearCol.gameObject.GetComponent<SabotageMission>();// randomColorë¥¼ ì¸ìˆ˜ë¡œ ë¯¸ì…˜  ì‚¬ë³´íƒ€ì§€ ì‹¤í–‰ì‹œí‚¤ëŠ”ê±° ë¶™ì—¬ì•¼ í•¨ 
                     }
                 }
             }
         }
-        else 
+        else
         {
-            Debug.Log("Å½»öÁß");
-        }
-       
-    }
-
-    private void ObjectAction(Collider2D nearCol) 
-    {
-        if (nearCol != privNearCol)
-        {
-            // ÀÌÀü¿¡ ÇÏÀÌ¶óÀÌÆ®µÈ ¹°Ã¼ÀÇ »ö»óÀ» º¹±¸
-            if (privNearCol != null)
-            {
-                SpriteRenderer prevRenderer = privNearCol.GetComponent<SpriteRenderer>();
-                if (prevRenderer != null)
-                    // prevRenderer.color = privColor;    // ÇÃ·¹ÀÌ¾îÀÇ Á÷
-                    //if (playerType == PlayerType.Goose)
-                    //{
-                    //    prevRenderer.enabled = true;
-                    //}
-                    //else
-                        prevRenderer.enabled = false;
-            }
-
-            // »õ·Î ÇÏÀÌ¶óÀÌÆ®µÈ ¹°Ã¼ÀÇ »ö»óÀ» º¯°æ
-            if (nearCol != null)
-            {
-                SpriteRenderer renderer = nearCol.GetComponent<SpriteRenderer>();
-                if (renderer != null)
-                {
-                    // privColor = renderer.color; // ÇöÀç »ö»ó ÀúÀå
-                    // renderer.color = highLightColor; // ÇÏÀÌ¶óÀÌÆ® »ö»ó
-                    //if (playerType == PlayerType.Goose)
-                    //{
-                    //    renderer.enabled = false;
-                    //}
-                    //else
-                        renderer.enabled = true;
-
-                }
-            }
-
-            // ÇöÀç °¡Àå °¡±î¿î ¹°Ã¼¸¦ ÀÌÀü ¹°Ã¼·Î ÀúÀå
-            privNearCol = nearCol;
+            Debug.Log("íƒìƒ‰ì¤‘");
         }
     }
     IEnumerator Kill(Collider2D col)
@@ -237,7 +220,7 @@ public class PlayerController : MonoBehaviourPun
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
 
-                    Debug.Log("Á×ÀÓ!"); // ÄğÅ¸ÀÓ Ãß°¡ÇØ¾ßÇÔ 
+                    Debug.Log("ì£½ì„!"); // ì¿¨íƒ€ì„ ì¶”ê°€í•´ì•¼í•¨ 
 
                     col.gameObject.GetComponent<PlayerController>().Die();
                 }
@@ -245,23 +228,23 @@ public class PlayerController : MonoBehaviourPun
             }
 
         }
-        yield return new WaitForSeconds(1f);
+        yield return 1f.GetDelay();
 
     }
     IEnumerator PlayMission()
     {
 
-        Debug.Log("¹Ì¼Ç!");
+        Debug.Log("ë¯¸ì…˜!");
 
-        yield return new WaitForSeconds(1f);
+        yield return 1f.GetDelay();
 
     }
     IEnumerator PlaySabotage()
     {
 
-        Debug.Log("»çº¸Å¸Áö!");
+        Debug.Log("ì‚¬ë³´íƒ€ì§€!");
 
-        yield return new WaitForSeconds(1f);
+        yield return 1f.GetDelay();
 
     }
 
@@ -281,6 +264,7 @@ public class PlayerController : MonoBehaviourPun
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
         yield return new WaitForSeconds(1f);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;  // ë‚˜ì¤‘ì— ë§µ ë³´ê³  ì¶©ëŒ ë°”ê¾¸ëŠ”ê±¸ë¡œ í•´ê²°í•˜ëŠ”ê²Œ ë‚˜ì„ë“¯
     }
 
    
@@ -297,19 +281,19 @@ public class PlayerController : MonoBehaviourPun
         transform.Translate(moveDir * moveSpeed * Time.deltaTime);
 
 
-        if (x < 0) // ¿ŞÂÊÀ¸·Î ÀÌµ¿ ½Ã
+        if (x < 0) // ì™¼ìª½ìœ¼ë¡œ ì´ë™ ì‹œ
         {
             privDir = new Vector3(1, 1, 1);
             transform.localScale = privDir;
             
         }
-        else if (x > 0) // ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ ½Ã
+        else if (x > 0) // ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™ ì‹œ
         {
             privDir = new Vector3(-1, 1, 1);
             transform.localScale = privDir;
             
         }
-        else  // ÀÌÀü ¹æÇâÀ» À¯ÁöÇÏ°Ô 
+        else  // ì´ì „ ë°©í–¥ì„ ìœ ì§€í•˜ê²Œ 
         {
             transform.localScale = privDir;
         }
@@ -329,19 +313,19 @@ public class PlayerController : MonoBehaviourPun
                 eyeAnim.SetBool("Running", true);
                 bodyAnim.SetBool("Running", true);
                 feetAnim.SetBool("Running", true);
-                audio.Play();
+                audioSource.Play();
                 
             }
         }
         else
         {
-            if (isOnMove) // »óÅÂ°¡ º¯°æµÈ °æ¿ì¿¡¸¸ ¾Ö´Ï¸ŞÀÌ¼Ç ¾÷µ¥ÀÌÆ®
+            if (isOnMove) // ìƒíƒœê°€ ë³€ê²½ëœ ê²½ìš°ì—ë§Œ ì• ë‹ˆë©”ì´ì…˜ ì—…ë°ì´íŠ¸
             {
                 isOnMove = false;
                 eyeAnim.SetBool("Running", false);
                 bodyAnim.SetBool("Running", false);
                 feetAnim.SetBool("Running", false);
-                audio.Stop();
+                audioSource.Stop();
             }
         }
         privPos = transform.position;
