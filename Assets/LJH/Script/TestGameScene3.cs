@@ -57,6 +57,7 @@ public class TestGameScene3 : MonoBehaviourPunCallbacks
 
         
         GameObject obj = PhotonNetwork.Instantiate("LJH_Player", randPos, Quaternion.identity);
-     
+        GameObject panel = PhotonNetwork.Instantiate("NamePanel", randPos, Quaternion.identity);
+        panel.GetComponent<UiFollowingPlayer>().setTarget(obj);
     }
 }
