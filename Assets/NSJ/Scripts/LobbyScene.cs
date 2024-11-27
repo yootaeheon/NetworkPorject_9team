@@ -117,6 +117,15 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         ChangePanel(Panel.Room);
         OnJoinedRoomEvent?.Invoke();
     }
+    /// <summary>
+    /// 방 입장 실패 시 콜백
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        ActivateLoadingBox(false);
+    }
 
     /// <summary>
     /// 랜덤매칭 입장 실패 시 콜백

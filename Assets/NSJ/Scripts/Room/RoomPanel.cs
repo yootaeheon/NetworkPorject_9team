@@ -129,8 +129,13 @@ public class RoomPanel : BaseUI
     /// 모두 레디 했는지 체크
     /// </summary>
     private void CheckAllReady()
-    {
+    {    
         if (PhotonNetwork.IsMasterClient == false)
+            return;
+
+        GetUI("RoomStartButton").SetActive(false);
+        // 플레이어 수가 최대 플레이어 수보다 적을때 시작 불가
+        if (PhotonNetwork.PlayerList.Length < PhotonNetwork.CurrentRoom.MaxPlayers)
             return;
 
         foreach (Player player in PhotonNetwork.PlayerList)
