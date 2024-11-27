@@ -5068,6 +5068,7 @@ GameObject:
   - component: {fileID: 1679410122}
   - component: {fileID: 1679410123}
   - component: {fileID: 1679410121}
+  - component: {fileID: 1679410123}
   - component: {fileID: 1679410124}
   m_Layer: 0
   m_Name: VoiceManager

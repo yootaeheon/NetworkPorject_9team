@@ -40,8 +40,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
         }
-
-
     }
 
     private void Update()
@@ -60,12 +58,14 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Util.GetDelay(3f);
-        Debug.Log("¹æ ÀÔÀå Áß  ` ` ` ");
+        Debug.Log("ë°© ì…ì¥ ì¤‘  ` ` ` ");
         PhotonNetwork.JoinRoom(RoomName);
     }
+
+ 
     public override void OnJoinedRoom()
     {
-        // Æİ º¸ÀÌ½º
+        // í€ ë³´ì´ìŠ¤
         if (_voiceClient == null)
         {
             _voiceClient = PunVoiceClient.Instance;
@@ -79,20 +79,20 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     }
 
 
-    // ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ¿¡¼­ È£ÃâÇÒ °Í
+    // í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ì—ì„œ í˜¸ì¶œí•  ê²ƒ
     public void SetVoiceChannel(bool isGhost)
     {
-        // »ì¾ÆÀÖÀ½ => ±×·ì 1 »ç¿ë
+        // ì‚´ì•„ìˆìŒ => ê·¸ë£¹ 1 ì‚¬ìš©
         if (!_controller.isGhost)
         {
             _recorder.InterestGroup = LIVING_GROUP;
-            Debug.Log("»ì¾ÆÀÖÀ½ : 1¹ø Ã¤³Î ÀÌ¿ëÁß");
+            Debug.Log("ì‚´ì•„ìˆìŒ : 1ë²ˆ ì±„ë„ ì´ìš©ì¤‘");
         }
-        // Á×Àº ÇÃ·¹ÀÌ¾î => ±×·ì 2¹ø »ç¿ë
+        // ì£½ì€ í”Œë ˆì´ì–´ => ê·¸ë£¹ 2ë²ˆ ì‚¬ìš©
         else
         {
             _recorder.InterestGroup = DEAD_GROUP;
-            Debug.Log("»ç¸ÁÇÏ¿© Ã¤³Î ÀüÈ¯ : 2¹ø Ã¤³Î");
+            Debug.Log("ì‚¬ë§í•˜ì—¬ ì±„ë„ ì „í™˜ : 2ë²ˆ ì±„ë„");
         }
     }
 }
