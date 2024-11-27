@@ -77,6 +77,8 @@ MonoBehaviour:
   - RpcUnActive
   - 
   - 
+  - RpciconActive
+  - RpcSetNicknamePanel
   - 
   - 
   - 

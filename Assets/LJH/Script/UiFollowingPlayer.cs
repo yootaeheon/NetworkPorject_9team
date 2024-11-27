@@ -13,16 +13,21 @@ public class UiFollowingPlayer : MonoBehaviourPun
     [SerializeField] GameObject MasterIcon;
     [SerializeField] GameObject ReadyIcon;
 
+    string name;
+
     private void Start()
-    {
+    {   
+        name = PhotonNetwork.LocalPlayer.NickName;
+
         if (PhotonNetwork.IsMasterClient == true) 
         {
-            photonView.RPC("RpciconActive", RpcTarget.AllBuffered, "Master", true);
+            if(photonView.IsMine == true)
+                photonView.RPC("RpciconActive", RpcTarget.AllBuffered, "Master", true);
         }
 
+        photonView.RPC("RpcSetNicknamePanel", RpcTarget.AllBuffered,name);
 
-        nameTxt.text = PhotonNetwork.LocalPlayer.NickName;
-        
+
     }
     private void Update()
     {
@@ -71,5 +76,13 @@ public class UiFollowingPlayer : MonoBehaviourPun
         {
             Debug.Log("바르지 않은 이름");
         }
+    }
+
+    [PunRPC]
+
+    private void RpcSetNicknamePanel(string name) 
+    {
+        
+            nameTxt.text =name;
     }
 }
