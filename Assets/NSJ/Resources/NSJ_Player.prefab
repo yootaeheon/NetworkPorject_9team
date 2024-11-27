@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4788597453499390385}
   - component: {fileID: 4865529568086752561}
   - component: {fileID: 4738724979032375517}
+  - component: {fileID: -8518901574245587226}
   m_Layer: 0
   m_Name: NSJ_Player
   m_TagString: Untagged
@@ -139,6 +140,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8580322, y: 0.7444582}
   m_EdgeRadius: 0
+--- !u!114 &-8518901574245587226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9020828835533790692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c27a23c383ed7b49a16a2fedb7255a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9020828835806193221
 GameObject:
   m_ObjectHideFlags: 0
