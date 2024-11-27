@@ -5189,7 +5189,7 @@ GameObject:
   - component: {fileID: 1679410121}
   - component: {fileID: 1679410120}
   m_Layer: 0
-  m_Name: Voice
+  m_Name: VoiceManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5262,7 +5262,7 @@ MonoBehaviour:
   frameDuration: 20000
   bitrate: 30000
   sourceType: 0
-  microphoneType: 0
+  microphoneType: 1
   audioClip: {fileID: 0}
   loopAudioClip: 1
   recordingEnabled: 1

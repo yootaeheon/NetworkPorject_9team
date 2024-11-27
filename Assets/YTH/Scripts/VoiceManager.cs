@@ -6,13 +6,27 @@ using Photon.Voice.Unity;
 
 public class VoiceManager : MonoBehaviour
 {
-    public Recorder recorder;
+    public static VoiceManager Instance { get; private set; }
+
+    [SerializeField] PlayerController _playerController;
+
+    [SerializeField] Recorder _recorder;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
         if (PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
         {
-            recorder.TransmitEnabled = true;
+            _recorder.TransmitEnabled = true;
+        }
+        else
+        {
+             _recorder.TransmitEnabled = false;
         }
     }
 }
