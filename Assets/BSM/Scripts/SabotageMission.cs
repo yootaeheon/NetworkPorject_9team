@@ -1,25 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SabotageMission : MonoBehaviour
 {
-
     private MissionState _missionState;
     private MissionController _missionController;
 
     private Image _arm;
 
+    private TextMeshProUGUI _inputText;
     private TextMeshProUGUI _codeText;
     private int _randCode;
+
+    public event EventHandler OnChangedPassword;
+
 
     private void Awake()
     {
         Init();
     }
-     
+
     private void Init()
     {
         _missionState = GetComponent<MissionState>();
@@ -29,8 +32,7 @@ public class SabotageMission : MonoBehaviour
 
     private void OnEnable()
     {
-        _randCode = Random.Range(1000, 10000);
-        Debug.Log(_randCode);
+        OnChangedPassword += ComparePassword;
     }
 
     private void Start()
@@ -38,33 +40,62 @@ public class SabotageMission : MonoBehaviour
         _arm = _missionController.GetMissionObj<Image>("Arm");
         _arm.color = MissionState.PlayerColor;
 
+        _inputText = _missionController.GetMissionObj<TextMeshProUGUI>("InputText");
+
         _codeText = _missionController.GetMissionObj<TextMeshProUGUI>("Code");
+
+        SetCodeText();
+
+    }
+
+    private void OnDisable()
+    {
+        _inputText.text = ""; 
+        OnChangedPassword -=  ComparePassword;
         SetCodeText();
     }
 
+
     private void SetCodeText()
     {
-        while(_randCode > 0)
+        _codeText.text = "";
+        _randCode = UnityEngine.Random.Range(1000, 10000);
+        _codeText.text = Convert.ToString(_randCode, 10);
+    }
+
+    public void ClickKeypad(string value)
+    {
+
+        _inputText.text += value;
+        SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+
+        if (_inputText.text.Length > 3)
         {
-
-            _codeText.text += (_randCode % 10).ToString() + " ";
-            _randCode /= 10;
-
-        }
-
+            OnChangedPassword?.Invoke(this, EventArgs.Empty);
+        } 
     }
 
 
+    /// <summary>
+    /// 어떤 사보타지 미션인지 종류를 어떻게?
+    /// 프리팹 마다 배치해두니까
+    /// 여기서 Type을 설정해두고 클리어 했을 때 타입에 맞는 보상을 지급?
+    /// Player한테 어떤 값을 넘겨줘야할지
+    /// </summary>
 
+    private void ComparePassword(object sender, EventArgs args)
+    { 
+        if (_codeText.text.Equals(_inputText.text))
+        { 
+            //오리 Player 사보타지 능력 획득
+            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            Debug.Log("사보타지 미션 성공");
+        }
+        else
+        {
+            Debug.Log("사보타지 미션 실패");
+        }
 
-    //랜덤 코드 = random.range
-    //앞자리 부터 짤라서 코드Text에 입력
-
-
-    //버튼 클릭 리스너 = 연동 함수 등록
-    //버튼 키패드 child Text 값을 입력?
-
-
-    //InputText 연동 함수
-
+        _missionController.MissionCoroutine(0.5f);
+    } 
 }

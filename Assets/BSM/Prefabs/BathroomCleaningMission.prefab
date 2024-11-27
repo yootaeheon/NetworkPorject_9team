@@ -341,10 +341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fbbece2104f84445ac50dcea615d0db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <MissionName>k__BackingField: 
-  <ObjectCount>k__BackingField: 5
-  <IsDetect>k__BackingField: 0
-  <MousePos>k__BackingField: {x: 0, y: 0}
   _clips:
   - {fileID: 8300000, guid: a6a2f97d8eeddb442af1aebb66bcf0c3, type: 3}
   - {fileID: 8300000, guid: 81ecc3e023e12d746b5165e91ed1be32, type: 3}

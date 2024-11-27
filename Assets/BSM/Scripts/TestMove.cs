@@ -26,16 +26,17 @@ public class TestMove : MonoBehaviour
         if(hit.collider != null)
         {
 
-            if(hit.collider.gameObject.name == "TempMissionObject")
+            if(hit.collider.gameObject.name == "MissionObject")
             {
                 ActiveMission mission = hit.collider.GetComponent<ActiveMission>();
                  
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    PlayerType type = PlayerType.Goose;
                     color = new Color(0.5f, 1, 1, 1);
                     Debug.Log(color);
                     //미션 활성화
-                    mission.GetMission(color); 
+                    mission.GetMission(color,type); 
                 }
 
             }
