@@ -8,10 +8,6 @@ using UnityEngine.UI;
 
 public class LoadingBox : BaseUI
 {
-    private TMP_Text _loadingText => GetUI<TMP_Text>("LoadingText");
-    [SerializeField] private float _delayTime;
-
-    Coroutine _loadingTextRoutine;
     private void Awake()
     {
         Bind();
@@ -20,25 +16,6 @@ public class LoadingBox : BaseUI
     private void Start()
     {
         SubscribesEvents();
-    }
-
-
-    private void OnEnable()
-    {
-        StartCoroutine(LoadingTextRoutine());
-    }
-
-    IEnumerator LoadingTextRoutine()
-    {
-        while (true)
-        {
-            _loadingText.SetText("로딩 중.".GetText());
-            yield return _delayTime.GetDelay();
-            _loadingText.SetText("로딩 중..".GetText());
-            yield return _delayTime.GetDelay();
-            _loadingText.SetText("로딩 중...".GetText());
-            yield return _delayTime.GetDelay();
-        }
     }
 
     /// <summary>
