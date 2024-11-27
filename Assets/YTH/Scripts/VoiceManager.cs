@@ -15,8 +15,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     public Photon.Voice.Unity.Recorder _recorder;
 
-    public VoiceConnection _voiceConnection;
-
     private const byte LIVING_GROUP = 1;
     private const byte DEAD_GROUP = 2;
 
