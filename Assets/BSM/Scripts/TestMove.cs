@@ -34,8 +34,6 @@ public class TestMove : MonoBehaviour
                 {
                     PlayerType type = PlayerType.Goose;
                     color = new Color(0.5f, 1, 1, 1);
-                    Debug.Log(color);
-                    //미션 활성화
                     mission.GetMission(color,type); 
                 }
 
