@@ -111,7 +111,7 @@ public class BilliardsMission : MonoBehaviour
         {
             //전체 미션 점수 증가
             //미션 점수 동기화 필요 > 어디서 가져올건지
-            GameManager.Instance.TEST();
+            GameManager.Instance.AddMissionScore();
         }
     }
 

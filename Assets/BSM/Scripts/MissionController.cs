@@ -17,6 +17,7 @@ public class MissionController : BaseMission
     private MissionState _missionState;
     [HideInInspector] public GameObject _searchObj;
  
+
     private void Start()
     {
         Init();

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,32 +8,28 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-
-//처음 컬러 값 빨강으로 시작 > 시간이 지나면 G 값 상승
-//G 값 255 되면 R 값 60까지 감소 시작
-
 public class ReactorChargingMission : MonoBehaviour
 {
     private MissionController _missionController;
     private MissionState _missionState;
-
-
+     
     private Animator _chargeAnim;
     private Slider _energySlider;
     private Image _leverColor;
 
-    private bool IsPress;
-    private int reverseHash;
-    private int pressHash; 
+    private bool isPress;
+    private int _reverseHash;
+    private int _pressHash; 
     private float _elapsedTime;
     private float _notPressTime;
-    private bool _checkPress;
+    private bool checkPress;
+    private bool isClear;
+    private int _flag = 1 << 0;
 
     private float _r;
     private float _g;
     private float _b;
-
-
+     
     private void Awake() => Init();
     private void Start()
     {
@@ -40,8 +37,8 @@ public class ReactorChargingMission : MonoBehaviour
         _chargeAnim = _missionController.GetMissionObj<Animator>("Lever");
         _leverColor = _missionController.GetMissionObj<Image>("LeverColor");
 
-        reverseHash = Animator.StringToHash("Reverse");
-        pressHash = Animator.StringToHash("Press");
+        _reverseHash = Animator.StringToHash("Reverse");
+        _pressHash = Animator.StringToHash("Press");
 
         _r = _leverColor.color.r;
         _g = _leverColor.color.g;
@@ -54,20 +51,22 @@ public class ReactorChargingMission : MonoBehaviour
         _missionState = GetComponent<MissionState>();
         _missionState.MissionName = "원자로 중심부 충전하기";
 
-
+        Debug.Log(_missionState.MyPlayerType);
     }
 
     private void OnEnable()
     {
         _elapsedTime = 0;
         _missionState.ObjectCount = 1;
-        IsPress = false;
+        isPress = false; 
     }
 
     private void OnDisable()
     {
+        isClear = false;
+        _flag = 1 << 0;
         _energySlider.value = 0;
-        _leverColor.color = new Color(_r, _g, _b); 
+        _leverColor.color = new Color(_r, _g, _b);
     }
 
 
@@ -77,10 +76,8 @@ public class ReactorChargingMission : MonoBehaviour
         _missionController.PlayerInput();
         LeverPress();
         ChargeEnergy();
-
-
-
-        if (IsPress)
+         
+        if (isPress)
         {
             if(_beepCo == null)
             {
@@ -108,7 +105,7 @@ public class ReactorChargingMission : MonoBehaviour
 
         //레버를 누르고 있는 상태 확인
         //2초 이상 누르고 있지 않은 상태이면 애니메이션 Rebind
-        if (!_checkPress)
+        if (!checkPress)
         {
             _notPressTime += Time.deltaTime;
 
@@ -125,40 +122,49 @@ public class ReactorChargingMission : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            _checkPress = true;
-            _chargeAnim.SetFloat(reverseHash, 1);
-            _chargeAnim.SetBool(pressHash, true);
+            checkPress = true;
+            _chargeAnim.SetFloat(_reverseHash, 1);
+            _chargeAnim.SetBool(_pressHash, true);
              
             _elapsedTime += Time.deltaTime;
 
             if (_elapsedTime > 1.5f)
-                IsPress = true;
+                isPress = true;
 
             if (_energySlider.value >= 1f)
             {
-                Debug.Log("미션 클리어");
-                _missionState.ObjectCount--;
-                MissionClear();
+                isClear = true;
             }
 
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            _chargeAnim.SetFloat(reverseHash, -1f);
-            _chargeAnim.SetBool(pressHash, false);
+            _chargeAnim.SetFloat(_reverseHash, -1f);
+            _chargeAnim.SetBool(_pressHash, false);
              
             _elapsedTime = 0;
-            IsPress = false;
-            _checkPress = false;
+            isPress = false;
+            checkPress = false;
+        }
+
+        //클리어를 했고 flag가 1일 때 미션 클리어 호출
+        if (isClear)
+        {
+            if(_flag == 1 << 0)
+            {
+                _flag = 1 << 1;
+                _missionState.ObjectCount--;
+                MissionClear();
+            } 
         } 
     }
-
+     
     /// <summary>
     /// 누르고 있는 상태에 따라 슬라이더 값 변경
     /// </summary>
     private void ChargeEnergy()
     {
-        _energySlider.value += IsPress ? Time.deltaTime * 0.1f : (-Time.deltaTime * 0.4f);
+        _energySlider.value += isPress ? Time.deltaTime * 0.1f : (-Time.deltaTime * 0.4f);
         ChargeColorChange();
     }
 
@@ -171,7 +177,7 @@ public class ReactorChargingMission : MonoBehaviour
         float colorG = _leverColor.color.g;
         float colorR = _leverColor.color.r;
 
-        if (IsPress)
+        if (isPress)
         {
             if (colorG <= 1f)
             {
@@ -208,12 +214,13 @@ public class ReactorChargingMission : MonoBehaviour
     {
         //Player의 타입을 받아 올 수 있으면 좋음
         PlayerType type = PlayerType.Goose;
+        //PlayerType type = _missionState.PlayerType
 
         if (type.Equals(PlayerType.Goose))
         {
             //전체 미션 점수 증가
             //미션 점수 동기화 필요 > 어디서 가져올건지
-            GameManager.Instance.TEST();
+            GameManager.Instance.AddMissionScore();
         }
     }
 
@@ -237,13 +244,19 @@ public class ReactorChargingMission : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     private IEnumerator BeepCoroutine()
-    {
-
+    { 
         while (true)
         {
-            SoundManager.Instance.SFXPlay(_missionState._clips[0]);
-            yield return Util.GetDelay(1f); 
-        } 
+            if(_energySlider.value < 1f)
+            {
+                SoundManager.Instance.SFXPlay(_missionState._clips[0]); 
+            }
+            else
+            {
+                SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            }
+            yield return Util.GetDelay(1f);
+        }
     }
 
 
