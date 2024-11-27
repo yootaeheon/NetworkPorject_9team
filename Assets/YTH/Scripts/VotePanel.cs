@@ -1,6 +1,8 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,13 +18,15 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject[] _panelList; // PlayerActorNumber 인덱스로 미리 생성해둔 패널들을 리스트에 담아 연결
 
-    [SerializeField] GameObject[] _SkipanonymImage; // 스킵 수 만큼 익명 이미지 생성
+    [SerializeField] GameObject[] _SkipAnonymImage; // 스킵 수 만큼 익명 이미지 생성
+
+    [SerializeField] GameObject[] _panelAnonymImage; // 2차원 배열 이용하여 구현 계획
 
     [SerializeField] VoteScenePlayerData[] playerData;
 
-    [SerializeField] public static Button[] _voteButtons; // 투표하기 위한 버튼들
+    [SerializeField] Button[] _voteButtons; // 투표하기 위한 버튼들
 
-    #region UI Property
+    #region UI
     [Header("UI")]
     // [SerializeField] GameObject _characterImage; // 투표창에서 각 플레이어 캐릭터 이미지
 
@@ -36,7 +40,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject _playerPanel; // 각 플레이어 패널
 
-    [SerializeField] Button _skipButton;
+    [SerializeField] public Button _skipButton;
 
     [SerializeField] Slider _reportTimeCountSlider; // 신고자만 말할 수 있는 시간 카운트
 
@@ -85,16 +89,11 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         SpawnPlayerPanel();
         SetPlayerPanel(PhotonNetwork.LocalPlayer); // 모든 플레이어를 업데이트하게 수정하기
-        foreach (Player player in PhotonNetwork.PlayerList) // 수정 필요
-        {
-            GetComponent<VoteScenePlayerData>();
-        }
-
-        // 투표 씬 입장 때마다 모든 플레이어 _playerData.DidVote == false 해주기
+        // 투표 씬 입장 때마다 모든 플레이어 _playerData.DidVote == false 해주기 (게임방식에 따라서 )
     }
 
     // 각 플레이어 패널을 세팅하는 함수
-    public void SetPlayerPanel(Player player)
+    private void SetPlayerPanel(Player player)
     {
         // _nickNameText.text = player.NickName; // 닉네임 불러오기
         //TODO : _characterImage = ""; // 캐릭터 이미지 불러오기
@@ -103,8 +102,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
     }
 
     // 플레이어 패널 생성 함수
-    public void SpawnPlayerPanel()
-    {   
+    private void SpawnPlayerPanel()
+    {
         photonView.RPC("SpawnPlayerPanelRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber - 1);
     }
 
@@ -117,7 +116,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
 
     //투표 종료 후 스킵 수 만큼 익명 이미지 생성
-    public void SpawnSkipAnonymImage()
+    private void SpawnSkipAnonymImage()
     {
         photonView.RPC("SpawnSkipAnonymImageRPC", RpcTarget.All, _voteData.SkipCount);
     }
@@ -127,12 +126,12 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < index; i++)
         {
-            _SkipanonymImage[i].SetActive(true);
+            _SkipAnonymImage[i].SetActive(true);
         }
     }
 
     //투표 종료 후 득표 수 만큼 플레이어 패널에 익명 이미지 생성
-    public void SpawnAnonymImage()
+    private void SpawnAnonymImage()
     {
         photonView.RPC("SpawnAnonymImageRPC", RpcTarget.All, _voteManager._voteCounts);
     }
@@ -149,36 +148,43 @@ public class VotePanel : MonoBehaviourPunCallbacks
         }
     }
 
-    public void CountTime()
+    // 시간 측정 함수
+    private void CountTime()
     {
         foreach (Button button in _voteButtons)
         {
             button.interactable = false;
+            _skipButton.interactable = false ;
         }
 
         _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime 수정 필요 시 수정
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
-        if (_voteData.ReportTimeCount <= 0)
+        if (_voteData.ReportTimeCount <= 0) // 리포트 타임 종료 시 투표, 스킵 버튼 활성화
         {
             foreach (Button button in _voteButtons)
             {
                 button.interactable = true;
+                _skipButton.interactable= true ;
             }
-
             _reportTimeCountSlider.gameObject.SetActive(false); // 추후 수정할 것
             _voteData.VoteTimeCount -= (float)Time.deltaTime;
-            _voteTimeCountSlider.value = _voteData.VoteTimeCount;
-
-            if (_voteData.VoteTimeCount <= 0)
+            if (_voteData.VoteTimeCount <= 0) // 투표 시간 종료 시 투표, 스킵 버튼 비활성화
             {
-                foreach (Button button in _voteButtons)
-                {
-                    button.interactable = false;
-                }
+                DisableButton();
                 //  SpawnAnonymImage();
                 SpawnSkipAnonymImage();
                 _voteManager.GetVoteResult();
             }
         }
+    }
+
+    public void DisableButton()
+    {
+        foreach (var button in _voteButtons)
+        {
+            button.enabled = false;
+            Debug.Log("투표버튼 비활성화");
+        }
+        _skipButton.enabled = false;
     }
 }
