@@ -79,7 +79,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     private void Start()
     {
         SubscribesEvent();
-        ChangePanel(Panel.Login);
+        InitPanel();
     }
 
     #region 포톤 네트워크 콜백 함수
@@ -279,6 +279,25 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// 초기 패널 설정
+    /// </summary>
+    private void InitPanel()
+    {
+        if (PhotonNetwork.InRoom) // 방에 참가한상태였을때
+        {
+            ChangePanel(Panel.Room);
+        }
+        else if (PhotonNetwork.IsConnected) // 아니면 서버에 연결되있던 상태였을 때
+        {
+            ChangePanel(Panel.Main);
+        }
+        else
+        {
+            ChangePanel(Panel.Login);
         }
     }
 
