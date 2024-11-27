@@ -1,10 +1,12 @@
 using Photon.Pun;
+using Photon.Realtime;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
+    public const string RoomName = "playerpaneltest";
     public static VoiceManager Instance { get; private set; }
 
     [SerializeField] PlayerController _controller;
@@ -30,8 +32,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             Destroy(gameObject);
         }
-
-        PhotonNetwork.ConnectUsingSettings();
     }
 
     void Start()
@@ -40,22 +40,28 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
         }
-        Debug.Log(PhotonNetwork.NetworkClientState);
 
-        //// 서버 연결되어 룸에 있으면 보이스 활성화
-        //if (PhotonNetwork.InRoom)
-        //{
-        //_recorder.TransmitEnabled = true;
-        //}
-        //else
-        //{
-        //_recorder.TransmitEnabled = false;
-        //}
+
+    }
+
+    private void Update()
+    {
+        Debug.Log(PhotonNetwork.NetworkClientState);
     }
 
     public override void OnConnectedToMaster()
     {
-        //
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.JoinLobby();
+        }
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Util.GetDelay(3f);
+        Debug.Log("방 입장 중  ` ` ` ");
+        PhotonNetwork.JoinRoom(RoomName);
     }
     public override void OnJoinedRoom()
     {
@@ -71,6 +77,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
             return;
         }
     }
+
 
     // 플레이어 컨트롤에서 호출할 것
     public void SetVoiceChannel(bool isGhost)
