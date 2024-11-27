@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviourPun
     
     //테스트용
     public int _myScore = 0;
+    public bool _globalMission;
+
 
     private void Awake()
     {
@@ -53,6 +55,17 @@ public class GameManager : MonoBehaviourPun
     {
         _clearMissionScore += score; 
         _missionScoreSlider.value = (float)_clearMissionScore / (float)_totalMissionScore;
+    }
+
+    public void CompleteGlobalMission()
+    {
+
+    }
+
+    [PunRPC]
+    public void GlobalMissionRPC()
+    {
+
     }
 
 }
