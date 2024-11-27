@@ -1,10 +1,12 @@
 using Photon.Pun;
+using Photon.Realtime;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
+    public const string RoomName = "playerpaneltest";
     public static VoiceManager Instance { get; private set; }
 
     [SerializeField] PlayerController _controller;
@@ -30,8 +32,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             Destroy(gameObject);
         }
-
-        PhotonNetwork.ConnectUsingSettings();
     }
 
     void Start()
@@ -40,22 +40,32 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
         }
-        Debug.Log(PhotonNetwork.NetworkClientState);
-
-        //// ¼­¹ö ¿¬°áµÇ¾î ·ë¿¡ ÀÖÀ¸¸é º¸ÀÌ½º È°¼ºÈ­
-        //if (PhotonNetwork.InRoom)
-        //{
-        //_recorder.TransmitEnabled = true;
-        //}
-        //else
-        //{
-        //_recorder.TransmitEnabled = false;
-        //}
     }
 
+    private void Update()
+    {
+        Debug.Log(PhotonNetwork.NetworkClientState);
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.JoinLobby();
+        }
+    }
+
+    public override void OnJoinedLobby()
+    {
+        Util.GetDelay(3f);
+        Debug.Log("ë°© ì…ì¥ ì¤‘  ` ` ` ");
+        PhotonNetwork.JoinRoom(RoomName);
+    }
+
+ 
     public override void OnJoinedRoom()
     {
-        // Æİ º¸ÀÌ½º
+        // í€ ë³´ì´ìŠ¤
         if (_voiceClient == null)
         {
             _voiceClient = PunVoiceClient.Instance;
@@ -68,20 +78,21 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ¿¡¼­ È£ÃâÇÒ °Í
+
+    // í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ì—ì„œ í˜¸ì¶œí•  ê²ƒ
     public void SetVoiceChannel(bool isGhost)
     {
-        // »ì¾ÆÀÖÀ½ => ±×·ì 1 »ç¿ë
+        // ì‚´ì•„ìˆìŒ => ê·¸ë£¹ 1 ì‚¬ìš©
         if (!_controller.isGhost)
         {
             _recorder.InterestGroup = LIVING_GROUP;
-            Debug.Log("»ì¾ÆÀÖÀ½ : 1¹ø Ã¤³Î ÀÌ¿ëÁß");
+            Debug.Log("ì‚´ì•„ìˆìŒ : 1ë²ˆ ì±„ë„ ì´ìš©ì¤‘");
         }
-        // Á×Àº ÇÃ·¹ÀÌ¾î => ±×·ì 2¹ø »ç¿ë
+        // ì£½ì€ í”Œë ˆì´ì–´ => ê·¸ë£¹ 2ë²ˆ ì‚¬ìš©
         else
         {
             _recorder.InterestGroup = DEAD_GROUP;
-            Debug.Log("»ç¸ÁÇÏ¿© Ã¤³Î ÀüÈ¯ : 2¹ø Ã¤³Î");
+            Debug.Log("ì‚¬ë§í•˜ì—¬ ì±„ë„ ì „í™˜ : 2ë²ˆ ì±„ë„");
         }
     }
 }
