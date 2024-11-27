@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviourPun
     public static GameManager Instance { get; private set; }
     [field: SerializeField] public bool MissionDelay { get; set; }
 
-    [SerializeField] public Slider _tempSliderValue;
+    [SerializeField] public Slider _missionScoreSlider;
 
     private int _totalMissionScore = 30;
     private int _clearMissionScore = 0;
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviourPun
     public void MissionTotalScore(int score)
     {
         _clearMissionScore += score; 
-        _tempSliderValue.value = (float)_clearMissionScore / (float)_totalMissionScore;
+        _missionScoreSlider.value = (float)_clearMissionScore / (float)_totalMissionScore;
     }
 
 }
