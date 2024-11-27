@@ -37,7 +37,17 @@ public class GlobalBreakerMission : MonoBehaviour
 
     private void Interaction()
     {
+        if (!_missionState.IsDetect) return;
 
+        Debug.Log(_missionController._searchObj.name);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            GlobalButton global = _missionController._searchObj.GetComponent<GlobalButton>();
+
+            global.PlayAnimation();
+
+        }
 
 
     }
