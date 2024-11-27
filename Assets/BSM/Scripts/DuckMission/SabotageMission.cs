@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -50,8 +51,12 @@ public class SabotageMission : MonoBehaviour
 
     private void OnDisable()
     {
-        _inputText.text = ""; 
-        OnChangedPassword -=  ComparePassword;
+        _inputText.text = "";
+        _inputText.color = Color.white;
+        _inputText.alignment = TextAlignmentOptions.Left;
+        _inputText.fontSize = 55;
+
+        OnChangedPassword -= ComparePassword;
         SetCodeText();
     }
 
@@ -72,7 +77,7 @@ public class SabotageMission : MonoBehaviour
         if (_inputText.text.Length > 3)
         {
             OnChangedPassword?.Invoke(this, EventArgs.Empty);
-        } 
+        }
     }
 
 
@@ -83,19 +88,31 @@ public class SabotageMission : MonoBehaviour
     /// Player한테 어떤 값을 넘겨줘야할지
     /// </summary>
 
+
+    /// <summary>
+    /// 비밀번호 비교 기능 및 Text 설정
+    /// </summary>
     private void ComparePassword(object sender, EventArgs args)
     { 
         if (_codeText.text.Equals(_inputText.text))
-        { 
+        {
             //오리 Player 사보타지 능력 획득
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             Debug.Log("사보타지 미션 성공");
+            _inputText.text = "성공!";
+            _inputText.color = Color.green;
+            _inputText.alignment = TextAlignmentOptions.Center;
+            _inputText.fontSize = 70;
         }
         else
         {
             Debug.Log("사보타지 미션 실패");
+            _inputText.text = "실패";
+            _inputText.color = Color.red;
+            _inputText.alignment = TextAlignmentOptions.Center;
+            _inputText.fontSize = 70;
         }
 
-        _missionController.MissionCoroutine(0.5f);
+        _missionController.MissionCoroutine(1f);
     } 
 }
