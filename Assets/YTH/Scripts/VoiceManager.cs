@@ -53,6 +53,10 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         //}
     }
 
+    public override void OnConnectedToMaster()
+    {
+        //
+    }
     public override void OnJoinedRoom()
     {
         // ∆› ∫∏¿ÃΩ∫
