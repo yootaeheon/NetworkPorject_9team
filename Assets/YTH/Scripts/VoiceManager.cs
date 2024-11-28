@@ -15,10 +15,29 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
+    private PhotonVoiceView _voiceView;
+
+    private Speaker _speaker;
+
     private const byte LIVING_GROUP = 1;
     private const byte DEAD_GROUP = 2;
 
+    public override void OnEnable()
+    {
+        _speaker = GetComponent<Speaker>();
+        _voiceView = GetComponent<PhotonVoiceView>();
 
+        if (_voiceView != null && PunVoiceClient.Instance != null)
+        {
+            // Recorder와 Speaker 초기화 확인
+            if (!_voiceView.IsRecording || !_voiceView.IsSpeaking)
+            {
+                Debug.LogWarning("Recorder 또는 Speaker가 제대로 설정 X.");
+                return;
+            }
+        }
+
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -76,6 +95,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         //    Debug.LogError("Recorder is not assigned!");
         //    return;
         //}
+        Debug.Log("룸에 입장했습니다. Voice 설정을 확인합니다.");
     }
 
 
