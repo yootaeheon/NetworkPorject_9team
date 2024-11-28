@@ -7,7 +7,8 @@ public class GlobalFireMission : MonoBehaviour
     private MissionState _missionState;
     private MissionController _missionController;
 
-    private GameObject _fireExtinguisher; 
+
+    private GameObject _fireObjects;
 
     private void Awake()
     {
@@ -20,16 +21,22 @@ public class GlobalFireMission : MonoBehaviour
         _missionState = GetComponent<MissionState>();
         _missionState.MissionName = "화재 진압하기";
     }
-
+     
     private void OnEnable()
     {
         _missionState.ObjectCount = 3;
+    }
+
+    private void Start()
+    {
+        _fireObjects = _missionController.GetMissionObj("FireObjects");
     }
 
     private void Update()
     {
         _missionController.PlayerInput();
         SelectFireExtinguisher();
+        OffFireCheck();
     }
 
     private void SelectFireExtinguisher()
@@ -48,7 +55,7 @@ public class GlobalFireMission : MonoBehaviour
         else if (Input.GetMouseButton(0))
         {
             _missionController._searchObj.transform.position = _missionState.MousePos;
-
+            fire.FireCheck();
         }
 
         else if (Input.GetMouseButtonUp(0))
@@ -57,10 +64,30 @@ public class GlobalFireMission : MonoBehaviour
         }
 
     }
+    
+    private void OffFireCheck()
+    {
+        int count = 0;    
 
+        for(int i = 0; i < _fireObjects.transform.childCount; i++)
+        {
+            if (_fireObjects.transform.GetChild(i).gameObject.activeSelf)
+            {
+                count++;
+            } 
+        }
+        Debug.Log(_missionState.ObjectCount);
+        _missionState.ObjectCount = count;
 
+        MissionClear(); 
+    }
 
-    //MissionClear
+    private void MissionClear()
+    {
+        if (_missionState.ObjectCount > 0) return;
 
-
+        SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+        GameManager.Instance.CompleteGlobalMission();
+        _missionController.MissionCoroutine(0.5f);
+    } 
 }
