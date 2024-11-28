@@ -71,7 +71,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
         
         
-        if (_recorder.IsCurrentlyTransmitting)
+        if (_recorder.IsCurrentlyTransmitting) // 포톤보이스뷰.isSpeaking 으로 수정해야함 각가 플레이어가 포톤보이스뷰 들고있어야할듯
         {
             _image.SetActive(true);
         }
