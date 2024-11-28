@@ -87,8 +87,8 @@ MonoBehaviour:
   - 
   - 
   - RPCVent
-  - 
-  - 
+  - RPCSetPlayerToOrigin
+  - RPCSetPlayerToNewPlayer
   - 
   - 
   - 

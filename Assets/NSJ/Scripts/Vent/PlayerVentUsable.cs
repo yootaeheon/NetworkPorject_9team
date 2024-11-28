@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class PlayerVentUsable : MonoBehaviourPun
 {
-
+    private PlayerController _player;
     private Vent _vent;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (photonView.IsMine == false) 
+            return;
+        if (_player.playerType == PlayerType.Goose)
+            return;
+
+
+
         if(_enterTriggerRoutine == null)
         {
             _enterTriggerRoutine = StartCoroutine(EnterTriggerRoutine(collision));
@@ -16,7 +23,13 @@ public class PlayerVentUsable : MonoBehaviourPun
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(_enterTriggerRoutine != null)
+        if (photonView.IsMine == false) 
+            return;
+        if (_player.playerType == PlayerType.Goose) 
+            return;
+
+
+        if (_enterTriggerRoutine != null)
         {
             StopCoroutine(_enterTriggerRoutine);
             _enterTriggerRoutine = null;
