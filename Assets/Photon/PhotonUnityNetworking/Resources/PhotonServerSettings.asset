@@ -100,6 +100,9 @@ MonoBehaviour:
   - SpawnAnonymImageRPC
   - OnClickSkipRPC
   - RpciconActive
+  - FireCountSync
+  - FirstFireRPC
+  - SecondFireRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

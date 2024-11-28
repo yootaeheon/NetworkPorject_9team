@@ -28,7 +28,7 @@ public class GlobalBreakerMission : MonoBehaviour
     private void Update()
     {
         //클라이언트에서 미션을 클리어 했을 경우 모든 클라이언트 미션 팝업창 비활성화
-        if (GameManager.Instance._globalMission)
+        if (GameManager.Instance._globalMissionClear)
         {
             gameObject.SetActive(false);
         }
