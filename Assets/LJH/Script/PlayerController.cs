@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon;
 using Photon.Pun;
 using Unity.VisualScripting;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] public PlayerType playerType;
     [SerializeField] float moveSpeed;  // 이동속도 
     [SerializeField] float Detectradius;  // 탐색 범위
+    [SerializeField] LayerMask layerMask;
     //[SerializeField] string playerName;
     // [SerializeField] Color highLightColor;
 
@@ -19,7 +21,7 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] GameObject IdleBody;
     [SerializeField] GameObject Ghost;
     [SerializeField] GameObject Corpse;
-    
+
 
 
     [SerializeField] SpriteRenderer body;
@@ -30,12 +32,12 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
 
-    
+
 
     private Vector3 privPos;
     private Vector3 privDir;
     [SerializeField] float threshold = 0.001f;
-    private Color randomColor; 
+    private Color randomColor;
     bool isOnMove = false;
     public bool isGhost = false;
 
@@ -66,64 +68,65 @@ public class PlayerController : MonoBehaviourPun
         Move();
         MoveCheck();
         FindNearObject();
+
     }
 
     // r 신고 , e 상호작용 , space 살인 
     // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
     // 신고가 되면 시체도 사라져야 함 
-
-    private Collider2D privNearCol= null;
+    private Collider2D privNearCol = null;
     private Color privColor;
     private void FindNearObject()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(this.transform.position, Detectradius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(this.transform.position, Detectradius, layerMask);
         Collider2D nearCol = null;
         float minDistance = 1000f;
         foreach (Collider2D col in colliders)
         {
-           
+
             if (col.transform.position != this.transform.position) // 자신 아니고 
             {
-                if (col.gameObject.layer != 9) // 유령 아니고 , 시체 플레이어는 밑의 코드로 못불러와서 짜피 안됨 
+
+                if (col != null)
                 {
-                    if (col != null)
+                    float distance = Vector2.Distance(this.transform.position, col.transform.position);
+                    if (distance < minDistance)
                     {
-                        float distance = Vector2.Distance(this.transform.position, col.transform.position);
-                        if (distance < minDistance)
+                        minDistance = distance;  // 가장 가까운 물체 찾기
+                        if (playerType == PlayerType.Goose)
                         {
-                            minDistance = distance;  // 가장 가까운 물체 찾기
-                            if(playerType == PlayerType.Goose) 
+                            if (col.gameObject.layer == 10)
                             {
-                                if (col.gameObject.layer == 10) 
-                                {
-                                    nearCol = null;
-                                }
-                                else
-                                    nearCol = col;
+                                nearCol = null;
                             }
                             else
                                 nearCol = col;
-                            
-                            
                         }
+                        else
+                            nearCol = col;
+
+
                     }
                 }
+
+
+
             }
         }
-          
-        if (isGhost == false) 
+
+        if (isGhost == false)
         {
             ObjectHighLight(nearCol);// 선택된 오브젝트 강조 및 선택
             PlayerAction(nearCol);// 선택 오브젝트에 대한 행동 
         }
-             
-    } 
 
-    private void ObjectHighLight(Collider2D nearCol) 
+    }
+
+    private void ObjectHighLight(Collider2D nearCol)
     {
         if (nearCol != privNearCol)
         {
-            
+
             if (privNearCol != null)
             {
                 SpriteRenderer prevRenderer = privNearCol.GetComponent<SpriteRenderer>();
@@ -137,7 +140,7 @@ public class PlayerController : MonoBehaviourPun
                     prevRenderer.enabled = false;
             }
 
-            
+
             if (nearCol != null)
             {
                 SpriteRenderer renderer = nearCol.GetComponent<SpriteRenderer>();
@@ -160,7 +163,7 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
-    private void PlayerAction(Collider2D nearCol) 
+    private void PlayerAction(Collider2D nearCol)
     {
         if (nearCol != null)
         {
@@ -189,7 +192,7 @@ public class PlayerController : MonoBehaviourPun
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     coroutine = StartCoroutine(PlayMission());
-                   // nearCol.gameObject.GetComponent<MissionController>();// randomColor를 인수로 미션  함수 실행시키는거 붙여야 함 
+                    // nearCol.gameObject.GetComponent<MissionController>();// randomColor를 인수로 미션  함수 실행시키는거 붙여야 함 
 
                 }
             }
@@ -267,7 +270,7 @@ public class PlayerController : MonoBehaviourPun
         gameObject.GetComponent<BoxCollider2D>().enabled = false;  // 나중에 맵 보고 충돌 바꾸는걸로 해결하는게 나을듯
     }
 
-   
+
     private void Move()
     {
         float x = Input.GetAxisRaw("Horizontal");
@@ -285,13 +288,13 @@ public class PlayerController : MonoBehaviourPun
         {
             privDir = new Vector3(1, 1, 1);
             transform.localScale = privDir;
-            
+
         }
         else if (x > 0) // 오른쪽으로 이동 시
         {
             privDir = new Vector3(-1, 1, 1);
             transform.localScale = privDir;
-            
+
         }
         else  // 이전 방향을 유지하게 
         {
@@ -314,7 +317,7 @@ public class PlayerController : MonoBehaviourPun
                 bodyAnim.SetBool("Running", true);
                 feetAnim.SetBool("Running", true);
                 audioSource.Play();
-                
+
             }
         }
         else
