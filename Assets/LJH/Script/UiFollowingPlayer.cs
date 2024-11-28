@@ -13,7 +13,7 @@ public class UiFollowingPlayer : MonoBehaviourPun
     [SerializeField] GameObject MasterIcon;
     [SerializeField] GameObject ReadyIcon;
 
-    string name;
+   
 
     private void Start()
     {   

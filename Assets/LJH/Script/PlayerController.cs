@@ -167,9 +167,7 @@ public class PlayerController : MonoBehaviourPun
     {
         if (nearCol != null)
         {
-
-
-            if (nearCol.tag == "Test") // 나중에 시체용 레이어 더해서 사용하기 
+            if (nearCol.gameObject.layer == 13) // 나중에 시체용 레이어 더해서 사용하기 
             {
 
                 if (Input.GetKeyDown(KeyCode.R))
@@ -180,11 +178,11 @@ public class PlayerController : MonoBehaviourPun
 
                     nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제, 씬 재진입이면 필요없을지도 
 
+                    GameFlowManager.Instance.ReportingOn();
                 }
             }
             else if (nearCol.gameObject.layer == gameObject.layer)
             {
-
                 coroutine = StartCoroutine(Kill(nearCol));
             }
             else if (nearCol.gameObject.layer == 8)  // 미션 
@@ -193,7 +191,7 @@ public class PlayerController : MonoBehaviourPun
                 {
                     coroutine = StartCoroutine(PlayMission());
                     // nearCol.gameObject.GetComponent<MissionController>();// randomColor를 인수로 미션  함수 실행시키는거 붙여야 함 
-
+                    GameFlowManager.Instance.MissionTest();
                 }
             }
             else if (nearCol.gameObject.layer == 10) // 사보타지(임포스터만 가능 ) , 미션 함수 가져올 때 인수로 본인 컬러 넘겨줘야함 
@@ -204,6 +202,7 @@ public class PlayerController : MonoBehaviourPun
                     {
                         coroutine = StartCoroutine(PlaySabotage());
                         //nearCol.gameObject.GetComponent<SabotageMission>();// randomColor를 인수로 미션  사보타지 실행시키는거 붙여야 함 
+                        GameFlowManager.Instance.SabotageSucc();
                     }
                 }
             }
