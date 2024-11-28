@@ -47,7 +47,7 @@ public class RoomPanel : BaseUI
     {
         // TODO : 게임씬 전환
         Debug.Log("게임 시작!");
-        SceneChanger.Instance.LoadScene("Test1", LoadSceneMode.Additive);
+        SceneChanger.LoadScene("Test1", LoadSceneMode.Additive);
     }
 
     /// <summary>

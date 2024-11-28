@@ -7,18 +7,29 @@ public class SceneChanger : MonoBehaviourPun
 {
     public static SceneChanger Instance;
 
+    private PhotonView _photonView;
+    private static PhotonView PhotonView { get { return Instance._photonView; } }
+
     private void Awake()
     {
+        _photonView = GetComponent<PhotonView>();
         InitSingleTon();
     }
 
-    public void LoadScene(string scene, LoadSceneMode loadSceneMode)
+    /// <summary>
+    /// 네트워크 씬 로드
+    /// </summary>
+    public static void LoadScene(string scene, LoadSceneMode loadSceneMode)
     {
-        photonView.RPC(nameof(RPCLoadScene), RpcTarget.AllViaServer, scene, (int)loadSceneMode);
+        PhotonView.RPC(nameof(RPCLoadScene), RpcTarget.AllViaServer, scene, (int)loadSceneMode);
     }
-    public void UnLoadScene(string scene)
+    /// <summary>
+    /// 네트워크 씬 언로드
+    /// </summary>
+    /// <param name="scene"></param>
+    public static void UnLoadScene(string scene)
     {
-        photonView.RPC(nameof(RPCUnLoadScene), RpcTarget.AllViaServer, scene);
+        PhotonView.RPC(nameof(RPCUnLoadScene), RpcTarget.AllViaServer, scene);
     }
 
     [PunRPC]

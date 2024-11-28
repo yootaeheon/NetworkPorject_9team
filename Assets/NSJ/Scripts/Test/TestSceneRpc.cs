@@ -19,6 +19,14 @@ public class TestSceneRpc : MonoBehaviourPun
         StartCoroutine(testRoutine());
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneChanger.UnLoadScene("Test1");
+        }
+    }
+
     IEnumerator testRoutine()
     {
         while (true)

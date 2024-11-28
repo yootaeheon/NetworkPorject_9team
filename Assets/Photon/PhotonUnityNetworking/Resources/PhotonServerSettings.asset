@@ -93,7 +93,7 @@ MonoBehaviour:
   - RPCLoadScene
   - RPCUnLoadScene
   - Test
-  - 
+  - RPCSetParent
   - 
   - 
   - SpawnSkipAnonymImageRPC
