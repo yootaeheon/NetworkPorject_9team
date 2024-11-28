@@ -20,8 +20,9 @@ public class GlobalButton : MonoBehaviour
         }
         set
         {
+            //PowerCount의 변화가 있을 때마다 호출
             _powerCount = value;
- 
+             
             if(_powerCount < 0)
             {
                 LightActive = ButtonActive;
@@ -58,6 +59,9 @@ public class GlobalButton : MonoBehaviour
         LightActive = false;
     }
 
+    /// <summary>
+    /// 스위치 On, Off 사운드, 애니메이션 재생 기능
+    /// </summary>
     public void PlayAnimation()
     {
         ButtonActive = !ButtonActive;
@@ -69,8 +73,7 @@ public class GlobalButton : MonoBehaviour
         }
         else
         {
-            SoundManager.Instance.SFXPlay(_powerClips[0]);
- 
+            SoundManager.Instance.SFXPlay(_powerClips[0]); 
         }
 
         _buttonAnimator.SetBool(_completeHash, ButtonActive);

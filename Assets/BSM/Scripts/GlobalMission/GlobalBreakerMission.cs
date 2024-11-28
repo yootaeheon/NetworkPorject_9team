@@ -12,7 +12,7 @@ public class GlobalBreakerMission : MonoBehaviour
     {
         Init();
     }
-
+     
     private void Init()
     {
         _missionController = GetComponent<MissionController>();
@@ -22,19 +22,28 @@ public class GlobalBreakerMission : MonoBehaviour
 
     private void OnEnable()
     {
-        _missionState.ObjectCount = 8; 
-    }
+        _missionState.ObjectCount = 8;
+    } 
 
     private void Update()
     {
+        //클라이언트에서 미션을 클리어 했을 경우 모든 클라이언트 미션 팝업창 비활성화
+        if (GameManager.Instance._globalMission)
+        {
+            gameObject.SetActive(false);
+        }
+
         _missionController.PlayerInput(); 
         Interaction();
     }
      
+    /// <summary>
+    /// 스위치 이미지와의 상호작용
+    /// </summary>
     private void Interaction()
     {
         if (!_missionState.IsDetect) return;
- 
+        
         if (Input.GetMouseButtonDown(0))
         {
             GlobalButton global = _missionController._searchObj.GetComponent<GlobalButton>();
@@ -57,9 +66,8 @@ public class GlobalBreakerMission : MonoBehaviour
         if (_missionState.ObjectCount > 0) return;
 
         SoundManager.Instance.SFXPlay(_missionState._clips[1]);
-        _missionController.MissionCoroutine(0.5f);
-        //GameManager한테 글로벌 미션 클리어 했다고 전달?
-        //RPC로 전달
+        GameManager.Instance.CompleteGlobalMission();
+        _missionController.MissionCoroutine(0.5f); 
     }
 
 

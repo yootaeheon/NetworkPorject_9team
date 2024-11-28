@@ -24,11 +24,14 @@ public class MissionState : MonoBehaviour
     [HideInInspector] public Animator _anim;
 
     [HideInInspector] public int _openHash;
-    [HideInInspector] public int _closeHash; 
-      
+    [HideInInspector] public int _closeHash;
+
+    private bool isAnimCheck;
+
     private void Awake()
     {
-        _anim = GetComponent<Animator>();
+        //_anim = GetComponent<Animator>();
+        isAnimCheck = TryGetComponent<Animator>(out _anim);
 
         _openHash = Animator.StringToHash("OpenPopup");
         _closeHash = Animator.StringToHash("ClosePopup"); 
@@ -36,13 +39,15 @@ public class MissionState : MonoBehaviour
 
     private void OnEnable()
     {
-        _anim.Play(_openHash);
+        if(isAnimCheck)
+            _anim.Play(_openHash);
         Debug.Log($"현재 미션 내용 : {MissionName}");
     }
 
     public void ClosePopAnim()
     {
-        _anim.Play(_closeHash);
+        if(isAnimCheck)
+            _anim.Play(_closeHash);
     }
 
 }
