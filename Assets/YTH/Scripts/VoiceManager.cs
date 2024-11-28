@@ -3,6 +3,7 @@ using Photon.Realtime;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
@@ -15,6 +16,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
+    [SerializeField] GameObject _image;
    // private PhotonVoiceView _voiceView;
 
     private Speaker _speaker;
@@ -39,7 +41,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
        //         Debug.LogWarning("Speaker가 제대로 설정 X.");
        //     }
        // }
-
     }
     private void Awake()
     {
@@ -67,6 +68,18 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
+
+        
+        
+        if (_recorder.IsCurrentlyTransmitting)
+        {
+            _image.SetActive(true);
+        }
+        else
+        {
+            _image.SetActive(false);
+        }
+        
     }
 
     public override void OnConnectedToMaster()
@@ -87,17 +100,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
  
     public override void OnJoinedRoom()
     {
-        //// 펀 보이스
-        //if (_voiceClient == null)
-        //{
-        //    _voiceClient = PunVoiceClient.Instance;
-        //}
-        //
-        //if (_recorder == null)
-        //{
-        //    Debug.LogError("Recorder is not assigned!");
-        //    return;
-        //}
         Debug.Log("룸에 입장했습니다. Voice 설정을 확인합니다.");
     }
 
@@ -109,6 +111,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         if (!_controller.isGhost)
         {
             _recorder.InterestGroup = LIVING_GROUP;
+            _recorder.TransmitEnabled = false;
             Debug.Log("살아있음 : 1번 채널 이용중");
         }
         // 죽은 플레이어 => 그룹 2번 사용
