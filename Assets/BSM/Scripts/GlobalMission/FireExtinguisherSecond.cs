@@ -60,7 +60,7 @@ public class FireExtinguisherSecond : MonoBehaviour
     private void OnEnable()
     {
         _elapsedTime = 0;
-        _fireExtinguisher.anchoredPosition = new Vector2(55f, -147f);
+        _fireExtinguisher.anchoredPosition = new Vector2(-319f, -147f);
 
         _fire1.SetActive(true);
         _fire2.SetActive(true);
