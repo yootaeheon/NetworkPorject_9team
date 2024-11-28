@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerVentUsable : MonoBehaviourPun
 {
+    public bool InVent;
+
     private PlayerController _player;
     private Vent _vent;
 
@@ -61,6 +63,8 @@ public class PlayerVentUsable : MonoBehaviourPun
     /// </summary>
     private void EnterVent(Vent vent)
     {
+        InVent =true;
+
         // 벤트 등록
         _vent = vent;
         // 벤트 변경 이벤트 등록
@@ -119,6 +123,8 @@ public class PlayerVentUsable : MonoBehaviourPun
         transform.position = _vent.transform.position;
         // 벤트 퇴장
         _vent.Exit(Vent.ActorType.Enter);
+
+        InVent = false;
     }
 
     /// <summary>

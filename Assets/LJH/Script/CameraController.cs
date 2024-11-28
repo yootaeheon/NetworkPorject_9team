@@ -20,8 +20,18 @@ public class CameraController : MonoBehaviourPun
     private bool isOnMove = false;
 
 
+    private PlayerController controller;
+    private PlayerVentUsable _ventUsable;
 
-    
+    private void Awake()
+    {
+        controller = GetComponent<PlayerController>();
+        if(TryGetComponent<PlayerVentUsable>(out PlayerVentUsable ventUsable))
+        {
+            _ventUsable = ventUsable;
+        }
+    }
+
     // °¡¸¸È÷ ÀÖÀ¸¸é ÁÜ ¶¯°ÜÁö°Ô 
     // ±×¸²ÀÚ ? 
     private void Start()
@@ -32,12 +42,15 @@ public class CameraController : MonoBehaviourPun
        
     }
     private void LateUpdate()
-    {   
+    {
+        if (_ventUsable != null && _ventUsable.InVent)
+            return;
+
         FollowPlayer();
         if (photonView.IsMine == true)
         {
             MoveCheck();
-            if (transform.GetComponent<PlayerController>().isGhost == true)
+            if (controller.isGhost == true)
             {
                 Camera.main.cullingMask = -1;
             }
@@ -94,14 +107,14 @@ public class CameraController : MonoBehaviourPun
    
     IEnumerator ZoomInZoomOut()  // ¿òÁ÷ÀÌ¸é ÁÜ ¾Æ¿ô ¸ØÃß¸é ÁÜ ÀÎ 
     {
-        WaitForSeconds time = new WaitForSeconds(0.05f);
+        //WaitForSeconds time = new WaitForSeconds(0.05f);
 
         if (isOnMove == true)
         {
             while (camSize <= camSizeMax)
             {
                 
-                yield return time;
+                yield return 0.05f.GetDelay();
                 camSize += 0.05f;
                 Camera.main.orthographicSize = camSize;
                 if (isOnMove == false)
@@ -115,7 +128,7 @@ public class CameraController : MonoBehaviourPun
             while (camSize >= camSizeMin) 
             {
                
-                yield return time;
+                yield return 0.05f.GetDelay();
                 camSize -= 0.05f;
                 Camera.main.orthographicSize = camSize;
                 if (isOnMove == true) 
