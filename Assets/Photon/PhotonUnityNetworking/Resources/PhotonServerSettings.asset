@@ -90,9 +90,9 @@ MonoBehaviour:
   - RPCSetPlayerToOrigin
   - RPCSetPlayerToNewPlayer
   - RPCSetPlayerProperty
-  - 
-  - 
-  - 
+  - RPCLoadScene
+  - RPCUnLoadScene
+  - Test
   - 
   - 
   - 
