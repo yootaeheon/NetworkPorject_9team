@@ -65,6 +65,8 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void GlobalMissionRPC()
     {
+        //globalMission == false 일때에만 미션 활성화 가능하도록?
+        //true가 되면 진행하던 모든 클라이언트의 미션 팝업창 Active False?
 
     }
 

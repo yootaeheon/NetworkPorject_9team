@@ -2682,11 +2682,6 @@ MonoBehaviour:
   _powerClips:
   - {fileID: 8300000, guid: ecc744bc3769ac24aa96929bd2158d9d, type: 3}
   - {fileID: 8300000, guid: 31bb48b831f384b4faafbebb70130620, type: 3}
---- !u!1 &1251238865 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9040304968191844654, guid: 3d4ece215e2043743b448a293a4736a2, type: 3}
-  m_PrefabInstance: {fileID: 1958888495035869048}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1324168010
 GameObject:
   m_ObjectHideFlags: 0
@@ -4590,7 +4585,7 @@ PrefabInstance:
     - target: {fileID: 691681831772421329, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: _missionPrefab
       value: 
-      objectReference: {fileID: 1251238865}
+      objectReference: {fileID: 4478597063016219923}
     - target: {fileID: 691681831772421330, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: m_RootOrder
       value: 2

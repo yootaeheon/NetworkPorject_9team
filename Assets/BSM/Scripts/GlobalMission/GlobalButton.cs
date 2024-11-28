@@ -8,11 +8,9 @@ public class GlobalButton : MonoBehaviour
 
     private bool ButtonActive;
     private bool LightActive;
+    public bool ButtonCheck { get { return ButtonActive; } }
 
     private int _completeHash;
-    private int _lightHash;
-
-
     private int _powerCount;
     public int PowerCount
     {
@@ -54,6 +52,12 @@ public class GlobalButton : MonoBehaviour
 
     }
 
+    private void OnDisable()
+    {
+        ButtonActive = false;
+        LightActive = false;
+    }
+
     public void PlayAnimation()
     {
         ButtonActive = !ButtonActive;
@@ -70,8 +74,7 @@ public class GlobalButton : MonoBehaviour
         }
 
         _buttonAnimator.SetBool(_completeHash, ButtonActive);
-        
          
     }
-  
+     
 }
