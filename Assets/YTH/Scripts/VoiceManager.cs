@@ -11,11 +11,9 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] PlayerController _controller;
 
-    public PunVoiceClient _voiceClient;
+    [SerializeField] PunVoiceClient _voiceClient;
 
-    public Photon.Voice.Unity.Recorder _recorder;
-
-    public VoiceConnection _voiceConnection;
+    [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
     private const byte LIVING_GROUP = 1;
     private const byte DEAD_GROUP = 2;
@@ -32,6 +30,8 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             Destroy(gameObject);
         }
+        
+        //TODO : 플레이어컨트롤러 겟컴포넌트로 참조 시킬 것
     }
 
     void Start()
@@ -65,17 +65,17 @@ public class VoiceManager : MonoBehaviourPunCallbacks
  
     public override void OnJoinedRoom()
     {
-        // 펀 보이스
-        if (_voiceClient == null)
-        {
-            _voiceClient = PunVoiceClient.Instance;
-        }
-
-        if (_recorder == null)
-        {
-            Debug.LogError("Recorder is not assigned!");
-            return;
-        }
+        //// 펀 보이스
+        //if (_voiceClient == null)
+        //{
+        //    _voiceClient = PunVoiceClient.Instance;
+        //}
+        //
+        //if (_recorder == null)
+        //{
+        //    Debug.LogError("Recorder is not assigned!");
+        //    return;
+        //}
     }
 
 
