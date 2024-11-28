@@ -87,7 +87,7 @@ public class PlayerSpawner : MonoBehaviourPun
     private void SetPlayer(PhotonView photonView, Player player)
     {
         TMP_Text nickNameText = photonView.GetComponentInChildren<TMP_Text>();
-        nickNameText.SetText(player.NickName);
+        //nickNameText.SetText(player.NickName);
 
         // 레디 UI 설정
         PlayerReadyUI readyUI = Instantiate(_readyUI, photonView.transform);
