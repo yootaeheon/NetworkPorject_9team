@@ -6,7 +6,9 @@ public class GlobalButton : MonoBehaviour
 {
     [SerializeField] private List<AudioClip> _powerClips = new List<AudioClip>();
 
-    private bool isPlay;
+    private bool ButtonActive;
+    private bool LightActive;
+
     private int _completeHash;
     private int _lightHash;
 
@@ -21,13 +23,12 @@ public class GlobalButton : MonoBehaviour
         set
         {
             _powerCount = value;
-
-            if(_powerCount < 1)
+ 
+            if(_powerCount < 0)
             {
-                //껐다 킬 수 있게 Bool 변수 셋팅
-            }
-
-
+                LightActive = ButtonActive;
+                _lightAnimator.SetBool(_completeHash, LightActive); 
+            } 
         }
     }
 
@@ -44,37 +45,33 @@ public class GlobalButton : MonoBehaviour
         _buttonAnimator = GetComponent<Animator>();
         _lightAnimator = transform.GetChild(0).GetComponent<Animator>();
 
-        _completeHash = Animator.StringToHash("Complete");
-
+        _completeHash = Animator.StringToHash("Complete"); 
     }
 
     private void OnEnable()
     {
         _powerCount = Random.Range(1, 15); 
+
     }
 
     public void PlayAnimation()
     {
-        isPlay = !isPlay;
+        ButtonActive = !ButtonActive;
 
-        if (isPlay)
+        if (ButtonActive)
         {
             SoundManager.Instance.SFXPlay(_powerClips[1]);
+             
         }
         else
         {
             SoundManager.Instance.SFXPlay(_powerClips[0]);
+ 
         }
 
-        _buttonAnimator.SetBool(_completeHash, isPlay);
-        _lightAnimator.SetBool(_completeHash, isPlay);
-
+        _buttonAnimator.SetBool(_completeHash, ButtonActive);
         
-
-
+         
     }
-
-
-    //각 버튼 별 클릭해야 할 횟수 > Random.Range로 부여
-    //각 버튼 별 스크립트로 넘겨주는게 좋을듯
+  
 }
