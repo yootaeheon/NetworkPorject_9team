@@ -11,8 +11,8 @@ public class PlayerVentUsable : MonoBehaviourPun
     {
         if (photonView.IsMine == false) 
             return;
-        if (_player.playerType == PlayerType.Goose)
-            return;
+        //if (_player.playerType == PlayerType.Goose)
+        //    return;
 
 
 
@@ -25,8 +25,8 @@ public class PlayerVentUsable : MonoBehaviourPun
     {
         if (photonView.IsMine == false) 
             return;
-        if (_player.playerType == PlayerType.Goose) 
-            return;
+        //if (_player.playerType == PlayerType.Goose) 
+        //    return;
 
 
         if (_enterTriggerRoutine != null)

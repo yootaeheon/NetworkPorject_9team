@@ -89,7 +89,7 @@ MonoBehaviour:
   - RPCVent
   - RPCSetPlayerToOrigin
   - RPCSetPlayerToNewPlayer
-  - 
+  - RPCSetPlayerProperty
   - 
   - 
   - 
