@@ -65,17 +65,17 @@ public class VoiceManager : MonoBehaviourPunCallbacks
  
     public override void OnJoinedRoom()
     {
-        // 펀 보이스
-        if (_voiceClient == null)
-        {
-            _voiceClient = PunVoiceClient.Instance;
-        }
-
-        if (_recorder == null)
-        {
-            Debug.LogError("Recorder is not assigned!");
-            return;
-        }
+        //// 펀 보이스
+        //if (_voiceClient == null)
+        //{
+        //    _voiceClient = PunVoiceClient.Instance;
+        //}
+        //
+        //if (_recorder == null)
+        //{
+        //    Debug.LogError("Recorder is not assigned!");
+        //    return;
+        //}
     }
 
 
