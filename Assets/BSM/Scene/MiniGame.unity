@@ -2393,6 +2393,11 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1179206506 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 649917178171291572, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
+  m_PrefabInstance: {fileID: 5882136194558093332}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1211198415
 GameObject:
   m_ObjectHideFlags: 0
@@ -4585,7 +4590,7 @@ PrefabInstance:
     - target: {fileID: 691681831772421329, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: _missionPrefab
       value: 
-      objectReference: {fileID: 4478597063016219923}
+      objectReference: {fileID: 1179206506}
     - target: {fileID: 691681831772421330, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -5946,10 +5951,6 @@ PrefabInstance:
     - target: {fileID: 649917178171291572, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
       propertyPath: m_Name
       value: WireConnectionMission
-      objectReference: {fileID: 0}
-    - target: {fileID: 649917178171291572, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 649917178171291575, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
       propertyPath: m_Pivot.x

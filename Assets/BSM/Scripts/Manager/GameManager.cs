@@ -15,13 +15,16 @@ public class GameManager : MonoBehaviourPun
 
     private int _totalMissionScore = 30;
     private int _clearMissionScore = 0;
+    
+     
+    //글로벌 미션 팝업창 종료 변수
     public bool _globalMission;
 
 
     //테스트용
     public int _myScore = 0;
 
-
+    //각 글로벌 미션에서 클리어 했을 시 사용할 변수 목록 필요
 
     private void Awake()
     {
