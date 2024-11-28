@@ -6,6 +6,11 @@ public class GlobalButton : MonoBehaviour
 {
     [SerializeField] private List<AudioClip> _powerClips = new List<AudioClip>();
 
+    private bool ButtonActive;
+    private bool LightActive;
+    public bool ButtonCheck { get { return ButtonActive; } }
+
+    private int _completeHash;
     private int _powerCount;
     public int PowerCount
     {
@@ -15,24 +20,64 @@ public class GlobalButton : MonoBehaviour
         }
         set
         {
+            //PowerCount의 변화가 있을 때마다 호출
             _powerCount = value;
-
-            if(_powerCount < 1)
+             
+            if(_powerCount < 0)
             {
-                //껐다 킬 수 있게 Bool 변수 셋팅
-            }
-
-
+                LightActive = ButtonActive;
+                _lightAnimator.SetBool(_completeHash, LightActive); 
+            } 
         }
+    }
+
+    private Animator _buttonAnimator;
+    private Animator _lightAnimator;
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    private void Init()
+    {
+        _buttonAnimator = GetComponent<Animator>();
+        _lightAnimator = transform.GetChild(0).GetComponent<Animator>();
+
+        _completeHash = Animator.StringToHash("Complete"); 
     }
 
     private void OnEnable()
     {
-        _powerCount = Random.Range(1, 15);
-        Debug.Log($"{gameObject.name} : {_powerCount}");
+        _powerCount = Random.Range(1, 15); 
+
     }
 
+    private void OnDisable()
+    {
+        ButtonActive = false;
+        LightActive = false;
+    }
 
-    //각 버튼 별 클릭해야 할 횟수 > Random.Range로 부여
-    //각 버튼 별 스크립트로 넘겨주는게 좋을듯
+    /// <summary>
+    /// 스위치 On, Off 사운드, 애니메이션 재생 기능
+    /// </summary>
+    public void PlayAnimation()
+    {
+        ButtonActive = !ButtonActive;
+
+        if (ButtonActive)
+        {
+            SoundManager.Instance.SFXPlay(_powerClips[1]);
+             
+        }
+        else
+        {
+            SoundManager.Instance.SFXPlay(_powerClips[0]); 
+        }
+
+        _buttonAnimator.SetBool(_completeHash, ButtonActive);
+         
+    }
+     
 }
