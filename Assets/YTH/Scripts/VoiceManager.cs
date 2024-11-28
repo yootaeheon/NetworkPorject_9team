@@ -1,9 +1,7 @@
 using Photon.Pun;
-using Photon.Realtime;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
@@ -17,7 +15,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
     //[SerializeField] GameObject _image;
-   // private PhotonVoiceView _voiceView;
+   // [SerializeField] PhotonVoiceView[] _voiceViews;
 
     private Speaker _speaker;
 
@@ -26,21 +24,21 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     public override void OnEnable()
     {
-       // _speaker = GetComponent<Speaker>();
-       //// _voiceView = GetComponent<PhotonVoiceView>();
-       //
-       // if (_voiceView != null && PunVoiceClient.Instance != null)
-       // {
-       //     // Recorder와 Speaker 초기화 확인
-       //     if (!_voiceView.IsRecording )
-       //     {
-       //         Debug.LogWarning("Recorder 제대로 설정 X.");
-       //     }
-       //     if (!_voiceView.IsSpeaking)
-       //     {
-       //         Debug.LogWarning("Speaker가 제대로 설정 X.");
-       //     }
-       // }
+        // _speaker = GetComponent<Speaker>();
+        //// _voiceView = GetComponent<PhotonVoiceView>();
+        //
+        // if (_voiceView != null && PunVoiceClient.Instance != null)
+        // {
+        //     // Recorder와 Speaker 초기화 확인
+        //     if (!_voiceView.IsRecording )
+        //     {
+        //         Debug.LogWarning("Recorder 제대로 설정 X.");
+        //     }
+        //     if (!_voiceView.IsSpeaking)
+        //     {
+        //         Debug.LogWarning("Speaker가 제대로 설정 X.");
+        //     }
+        // }
     }
     private void Awake()
     {
@@ -53,7 +51,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             Destroy(gameObject);
         }
-        
+
         //TODO : 플레이어컨트롤러 겟컴포넌트로 참조 시킬 것
     }
 
@@ -69,17 +67,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
 
-        
-        
-       // if (_recorder.IsCurrentlyTransmitting) // 포톤보이스뷰.isSpeaking 으로 수정해야함 각가 플레이어가 포톤보이스뷰 들고있어야할듯
-       // {
-       //     _image.SetActive(true);
-       // }
-       // else
-       // {
-       //     _image.SetActive(false);
-       // }
-        
     }
 
     public override void OnConnectedToMaster()
@@ -97,7 +84,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(RoomName);
     }
 
- 
+
     public override void OnJoinedRoom()
     {
         Debug.Log("룸에 입장했습니다. Voice 설정을 확인합니다.");
@@ -121,4 +108,16 @@ public class VoiceManager : MonoBehaviourPunCallbacks
             Debug.Log("사망하여 채널 전환 : 2번 채널");
         }
     }
+
+    //public void IsSpeakingImageEnable(int index)
+    //{
+    //    if (_recorder.IsCurrentlyTransmitting) // 포톤보이스뷰.isSpeaking 으로 수정해야함 각가 플레이어가 포톤보이스뷰 들고있어야할듯
+    //    {
+    //        _image[].SetActive(true);
+    //    }
+    //    else
+    //    {
+    //        _image.SetActive(false);
+    //    }
+    //}
 }
