@@ -11,16 +11,36 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] PlayerController _controller;
 
-    public PunVoiceClient _voiceClient;
+    [SerializeField] PunVoiceClient _voiceClient;
 
-    public Photon.Voice.Unity.Recorder _recorder;
+    [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
-    public VoiceConnection _voiceConnection;
+   // private PhotonVoiceView _voiceView;
+
+    private Speaker _speaker;
 
     private const byte LIVING_GROUP = 1;
     private const byte DEAD_GROUP = 2;
 
+    public override void OnEnable()
+    {
+       // _speaker = GetComponent<Speaker>();
+       //// _voiceView = GetComponent<PhotonVoiceView>();
+       //
+       // if (_voiceView != null && PunVoiceClient.Instance != null)
+       // {
+       //     // Recorder와 Speaker 초기화 확인
+       //     if (!_voiceView.IsRecording )
+       //     {
+       //         Debug.LogWarning("Recorder 제대로 설정 X.");
+       //     }
+       //     if (!_voiceView.IsSpeaking)
+       //     {
+       //         Debug.LogWarning("Speaker가 제대로 설정 X.");
+       //     }
+       // }
 
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -32,6 +52,8 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         {
             Destroy(gameObject);
         }
+        
+        //TODO : 플레이어컨트롤러 겟컴포넌트로 참조 시킬 것
     }
 
     void Start()
@@ -65,17 +87,18 @@ public class VoiceManager : MonoBehaviourPunCallbacks
  
     public override void OnJoinedRoom()
     {
-        // 펀 보이스
-        if (_voiceClient == null)
-        {
-            _voiceClient = PunVoiceClient.Instance;
-        }
-
-        if (_recorder == null)
-        {
-            Debug.LogError("Recorder is not assigned!");
-            return;
-        }
+        //// 펀 보이스
+        //if (_voiceClient == null)
+        //{
+        //    _voiceClient = PunVoiceClient.Instance;
+        //}
+        //
+        //if (_recorder == null)
+        //{
+        //    Debug.LogError("Recorder is not assigned!");
+        //    return;
+        //}
+        Debug.Log("룸에 입장했습니다. Voice 설정을 확인합니다.");
     }
 
 
