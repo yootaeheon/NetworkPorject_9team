@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class SabotageMission : MonoBehaviour
 {
+    [SerializeField] private AudioClip _wrongClip;
+
     private MissionState _missionState;
     private MissionController _missionController;
 
@@ -107,6 +109,7 @@ public class SabotageMission : MonoBehaviour
         else
         {
             Debug.Log("사보타지 미션 실패");
+            SoundManager.Instance.SFXPlay(_wrongClip);
             _inputText.text = "실패";
             _inputText.color = Color.red;
             _inputText.alignment = TextAlignmentOptions.Center;
