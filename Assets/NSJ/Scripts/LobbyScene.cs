@@ -324,6 +324,8 @@ public class LobbyScene : MonoBehaviourPunCallbacks
 
         ActivateLoadingBox(false);
         ActivateOptionBox(false);
+
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     /// <summary>

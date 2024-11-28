@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class PlayerVentUsable : MonoBehaviourPun
 {
+    public bool InVent;
 
+    private PlayerController _player;
     private Vent _vent;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (photonView.IsMine == false) 
+            return;
+        //if (_player.playerType == PlayerType.Goose)
+        //    return;
+
+
+
         if(_enterTriggerRoutine == null)
         {
             _enterTriggerRoutine = StartCoroutine(EnterTriggerRoutine(collision));
@@ -16,7 +25,13 @@ public class PlayerVentUsable : MonoBehaviourPun
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(_enterTriggerRoutine != null)
+        if (photonView.IsMine == false) 
+            return;
+        //if (_player.playerType == PlayerType.Goose) 
+        //    return;
+
+
+        if (_enterTriggerRoutine != null)
         {
             StopCoroutine(_enterTriggerRoutine);
             _enterTriggerRoutine = null;
@@ -48,6 +63,8 @@ public class PlayerVentUsable : MonoBehaviourPun
     /// </summary>
     private void EnterVent(Vent vent)
     {
+        InVent =true;
+
         // 벤트 등록
         _vent = vent;
         // 벤트 변경 이벤트 등록
@@ -106,6 +123,8 @@ public class PlayerVentUsable : MonoBehaviourPun
         transform.position = _vent.transform.position;
         // 벤트 퇴장
         _vent.Exit(Vent.ActorType.Enter);
+
+        InVent = false;
     }
 
     /// <summary>

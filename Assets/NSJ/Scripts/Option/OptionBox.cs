@@ -35,6 +35,11 @@ public class OptionBox : BaseUI
         SubscribeEvents();
     }
 
+    private void OnEnable()
+    {
+        ChangeBox(Box.Sound);
+    }
+
     /// <summary>
     /// UI 박스 변경
     /// </summary>
@@ -61,9 +66,7 @@ public class OptionBox : BaseUI
         _boxs[(int)Box.GameOption] = _gameOption;
         _boxs[(int)Box.Quit] = _quit;
         _boxs[(int)Box.Delete] = _delete;
-        #endregion
-
-        ChangeBox(Box.Sound);
+        #endregion        
     }
     private void SubscribeEvents()
     {
