@@ -14,6 +14,7 @@ public class SoundManager : BaseMission
 
     private AudioSource _sfxSource;
     private AudioSource _bgmSource;
+    private AudioSource _loopSfxSource;
 
     private void Start()
     {
@@ -38,7 +39,8 @@ public class SoundManager : BaseMission
     private void SetObject()
     {
         _sfxSource = GetMissionComponent<AudioSource>("SFX");
-        _bgmSource = GetMissionComponent<AudioSource>("BGM"); 
+        _bgmSource = GetMissionComponent<AudioSource>("BGM");
+        _loopSfxSource = GetMissionComponent<AudioSource>("LoopSFX");
         _sfxSlider.onValueChanged.AddListener(SetVolumeSFX);
         _bgmSlider.onValueChanged.AddListener(SetVolumeBGM);
     }
@@ -78,6 +80,13 @@ public class SoundManager : BaseMission
     public void SFXPlay(AudioClip clip)
     {
         _sfxSource.clip = clip;
-        _sfxSource.Play();
+        _sfxSource.Play(); 
     }
+
+    public void LoopSFXPlay(AudioClip clip)
+    {
+        _loopSfxSource.clip = clip;
+        _loopSfxSource.Play();
+    }
+
 }

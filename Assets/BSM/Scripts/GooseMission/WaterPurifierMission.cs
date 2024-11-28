@@ -103,7 +103,7 @@ public class WaterPurifierMission : MonoBehaviour
             _cordAnimator.Play(_cordHash);
             _cord.anchoredPosition = _socketLocation.position;
             _missionState.ObjectCount--;
-            GameManager.Instance.MissionDelay = true;
+
             MissionClear();
         } 
         else

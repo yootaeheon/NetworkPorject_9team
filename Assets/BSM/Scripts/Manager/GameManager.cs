@@ -8,8 +8,7 @@ public class GameManager : MonoBehaviourPun
 {
     //테스트용 코드
 
-    public static GameManager Instance { get; private set; }
-    [field: SerializeField] public bool MissionDelay { get; set; }
+    public static GameManager Instance { get; private set; } 
 
     [SerializeField] public Slider _missionScoreSlider;
 
