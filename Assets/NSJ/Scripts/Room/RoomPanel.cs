@@ -38,13 +38,13 @@ public class RoomPanel : BaseUI
     private void OnEnable()
     {
         ChangeBox(Box.Room);
+        PlayerNumbering.OnPlayerNumberingChanged += UpdateChangeRoom;
     }
 
     private void OnDisable()
     {
         PlayerNumbering.OnPlayerNumberingChanged -= UpdateChangeRoom;
-        LobbyScene.Instance.OnMasterClientSwitchedEvent -= UpdateMasterClientSwitch;
-        LobbyScene.Instance.OnPlayerPropertiesUpdateEvent -= UpdatePlayerProperty;
+       
     }
 
     /// <summary>
@@ -315,7 +315,6 @@ public class RoomPanel : BaseUI
     // 이벤트 구독
     private void SubscribesEvent()
     {
-        PlayerNumbering.OnPlayerNumberingChanged += UpdateChangeRoom;
         LobbyScene.Instance.OnMasterClientSwitchedEvent += UpdateMasterClientSwitch;
         LobbyScene.Instance.OnPlayerPropertiesUpdateEvent += UpdatePlayerProperty;
 
