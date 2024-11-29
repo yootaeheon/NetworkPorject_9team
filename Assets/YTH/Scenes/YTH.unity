@@ -2809,7 +2809,19 @@ MonoBehaviour:
   - {fileID: 974068277}
   - {fileID: 1569040300}
   _panelAnonymImage: []
-  _playerData: []
+  _playerData:
+  - {fileID: 158386961}
+  - {fileID: 1070349516}
+  - {fileID: 2114097607}
+  - {fileID: 156348684}
+  - {fileID: 1206953185}
+  - {fileID: 1122004463}
+  - {fileID: 227493249}
+  - {fileID: 20576970}
+  - {fileID: 1382076202}
+  - {fileID: 636307905}
+  - {fileID: 1054231954}
+  - {fileID: 747739039}
   _voteButtons:
   - {fileID: 203272682}
   - {fileID: 1070349511}

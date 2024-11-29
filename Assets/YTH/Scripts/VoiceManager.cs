@@ -48,7 +48,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        Debug.Log(PhotonNetwork.NetworkClientState);
         //IsSpeakingImageEnable();
        // FindAndLogConnectedSpeakers();
 
