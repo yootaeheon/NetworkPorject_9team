@@ -75,6 +75,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
         {
             playerData[i].DidVote = false;
         }
+
+        SpawnPlayerPanelRoutine();
     }
 
     private void Update()
@@ -110,6 +112,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         photonView.RPC("SpawnSkipAnonymImageRPC", RpcTarget.All, _voteData.SkipCount);
     }
+
+
 
     [PunRPC]
     public void SpawnSkipAnonymImageRPC(int index)
@@ -180,5 +184,11 @@ public class VotePanel : MonoBehaviourPunCallbacks
             Debug.Log("투표버튼 비활성화");
         }
         _skipButton.enabled = false;
+    }
+
+    IEnumerator SpawnPlayerPanelRoutine ()
+    {
+        yield return 2f.GetDelay();
+        SpawnPlayerPanel();
     }
 }
