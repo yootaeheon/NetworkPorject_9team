@@ -6,6 +6,7 @@ using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine.Rendering.Universal;
 using Photon.Pun.UtilityScripts;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -178,7 +179,7 @@ public class PlayerController : MonoBehaviourPun
 
                     nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제, 씬 재진입이면 필요없을지도 
 
-                    GameFlowManager.Instance.ReportingOn();
+                    SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive); 
                 }
             }
             else if (nearCol.gameObject.layer == gameObject.layer)
