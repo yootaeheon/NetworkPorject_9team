@@ -56,6 +56,9 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     private void Init()
     {
+        _reportTimeCountSlider.maxValue = _voteData.ReportTimeCount;
+        _voteTimeCountSlider.maxValue = _voteData.VoteTimeCount;
+
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
         _voteTimeCountSlider.value = _voteData.VoteTimeCount;
     }
@@ -143,6 +146,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             button.interactable = false;
             _skipButton.interactable = false;
         }
+     
 
         _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime 수정 필요 시 수정
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
@@ -156,6 +160,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             }
             _reportTimeCountSlider.gameObject.SetActive(false); // 추후 수정할 것
             _voteData.VoteTimeCount -= (float)Time.deltaTime;
+            _voteTimeCountSlider.value = _voteData._voteTimeCount;
             if (_voteData.VoteTimeCount <= 0) // 투표 시간 종료 시 투표, 스킵 버튼 비활성화
             {
                 DisableButton();
