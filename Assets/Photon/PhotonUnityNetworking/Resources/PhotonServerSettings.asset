@@ -75,10 +75,13 @@ MonoBehaviour:
   - 
   - 
   - RpcUnActive
-  - 
-  - 
+  - RpcUpdatePlayerGhostList
   - RpciconActive
   - RpcSetNicknamePanel
+  - RpcSetPlayerData
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -99,7 +102,6 @@ MonoBehaviour:
   - SpawnSkipAnonymImageRPC
   - SpawnAnonymImageRPC
   - OnClickSkipRPC
-  - RpciconActive
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

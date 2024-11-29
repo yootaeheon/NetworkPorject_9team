@@ -5,6 +5,7 @@ using Photon;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine.Rendering.Universal;
+using Photon.Pun.UtilityScripts;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -56,9 +57,10 @@ public class PlayerController : MonoBehaviourPun
         randomColor = new Color(Random.value, Random.value, Random.value, 1f);
         photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
 
-
+        PlayerDataContainer.Instance.SetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, playerType, randomColor.r, randomColor.g, randomColor.b, false);
 
     }
+    
     private void Update()
     {
 
@@ -104,8 +106,6 @@ public class PlayerController : MonoBehaviourPun
                         }
                         else
                             nearCol = col;
-
-
                     }
                 }
 
@@ -189,9 +189,7 @@ public class PlayerController : MonoBehaviourPun
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    //coroutine = StartCoroutine(PlayMission());
-                    // nearCol.gameObject.GetComponent<MissionController>();// randomColor를 인수로 미션  함수 실행시키는거 붙여야 함 
-                    //GameFlowManager.Instance.MissionTest();
+
                     nearCol.gameObject.GetComponent<ActiveMission>().GetMission(randomColor,playerType);
                 }
             }
@@ -201,9 +199,7 @@ public class PlayerController : MonoBehaviourPun
                 {
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        //coroutine = StartCoroutine(PlaySabotage());
-                        //nearCol.gameObject.GetComponent<SabotageMission>();// randomColor를 인수로 미션  사보타지 실행시키는거 붙여야 함 
-                        //GameFlowManager.Instance.SabotageSucc();
+
                         nearCol.gameObject.GetComponent<ActiveMission>().GetMission(randomColor, playerType);
                     }
                 }
@@ -235,25 +231,7 @@ public class PlayerController : MonoBehaviourPun
         yield return 1f.GetDelay();
 
     }
-    IEnumerator PlayMission()
-    {
-
-        Debug.Log("미션!");
-
-        yield return 1f.GetDelay();
-
-    }
-    IEnumerator PlaySabotage()
-    {
-
-        Debug.Log("사보타지!");
-
-        yield return 1f.GetDelay();
-
-    }
-
-
-
+    
     public void Die()
     {
         StartCoroutine(switchGhost());
@@ -269,6 +247,7 @@ public class PlayerController : MonoBehaviourPun
         yield return new WaitForSeconds(1f);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
         gameObject.GetComponent<BoxCollider2D>().enabled = false;  // 나중에 맵 보고 충돌 바꾸는걸로 해결하는게 나을듯
+        PlayerDataContainer.Instance.UpdatePlayerGhostList(PhotonNetwork.LocalPlayer.ActorNumber);
     }
 
 
