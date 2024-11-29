@@ -67,6 +67,14 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SetVoiceChannel(true);
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            SetVoiceChannel(false);
+        }
     }
 
     public override void OnConnectedToMaster()
@@ -96,7 +104,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     {
         // IsGhohst 변경 시 이벤트로 하는게 좋을듯
         // 살아있음 => 그룹 1 사용
-        if (!_controller.isGhost)
+        if (isGhost)
         {
             _recorder.InterestGroup = LIVING_GROUP;
             _recorder.TransmitEnabled = false;
