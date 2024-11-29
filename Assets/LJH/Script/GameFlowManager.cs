@@ -43,7 +43,7 @@ public class GameFlowManager : MonoBehaviourPunCallbacks   // 나중에 떼야함
 
         PhotonNetwork.JoinOrCreateRoom(RoomName, options, TypedLobby.Default);
     }
-
+    
     public override void OnJoinedRoom()
     {
         // 방에 들어가면 ~   
