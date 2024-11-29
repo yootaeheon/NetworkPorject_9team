@@ -33,8 +33,8 @@ public class PlayerDataContainer : MonoBehaviourPun
         }
 
         LobbyScene.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
+        LobbyScene.Instance.OnPlayerLeftRoomEvent += SetExitPlayerData;
     }
-
     public void SetPlayerData(int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
         photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, actorNumber, playerName, type, Rcolor, Gcolor, Bcolor, isGhost);
@@ -54,6 +54,12 @@ public class PlayerDataContainer : MonoBehaviourPun
             data.PlayerColor.g,
             data.PlayerColor.b,
             data.IsGhost);
+    }
+    private void SetExitPlayerData(Player exitPlayer)
+    {
+        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        PlayerData data = GetPlayerData(actorNumber);
+        photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, actorNumber, "None", PlayerType.Goose, Color.white.r, Color.white.g, Color.white.b, true);
     }
 
 
