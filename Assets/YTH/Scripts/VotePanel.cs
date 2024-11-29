@@ -13,39 +13,39 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] VoteSceneData _voteData;
 
-    private PlayerType _playerType; // DuckÀÌ ¸¶ÇÇ¾Æ
+    private PlayerType _playerType; // Duckì´ ë§ˆí”¼ì•„
 
-    [SerializeField] GameObject[] _panelList; // PlayerActorNumber ÀÎµ¦½º·Î ¹Ì¸® »ı¼ºÇØµĞ ÆĞ³ÎµéÀ» ¸®½ºÆ®¿¡ ´ã¾Æ ¿¬°á
+    [SerializeField] GameObject[] _panelList; // PlayerActorNumber ì¸ë±ìŠ¤ë¡œ ë¯¸ë¦¬ ìƒì„±í•´ë‘” íŒ¨ë„ë“¤ì„ ë¦¬ìŠ¤íŠ¸ì— ë‹´ì•„ ì—°ê²°
 
-    [SerializeField] GameObject[] _SkipAnonymImage; // ½ºÅµ ¼ö ¸¸Å­ ÀÍ¸í ÀÌ¹ÌÁö »ı¼º
+    [SerializeField] GameObject[] _SkipAnonymImage; // ìŠ¤í‚µ ìˆ˜ ë§Œí¼ ìµëª… ì´ë¯¸ì§€ ìƒì„±
 
-    [SerializeField] GameObject[] _panelAnonymImage; // 2Â÷¿ø ¹è¿­ ÀÌ¿ëÇÏ¿© ±¸Çö °èÈ¹
+    [SerializeField] GameObject[] _panelAnonymImage; // 2ì°¨ì› ë°°ì—´ ì´ìš©í•˜ì—¬ êµ¬í˜„ ê³„íš
 
     [SerializeField] VoteScenePlayerData[] _playerData;
 
-    [SerializeField] Button[] _voteButtons; // ÅõÇ¥ÇÏ±â À§ÇÑ ¹öÆ°µé
+    [SerializeField] Button[] _voteButtons; // íˆ¬í‘œí•˜ê¸° ìœ„í•œ ë²„íŠ¼ë“¤
 
     #region UI
     [Header("UI")]
-    // [SerializeField] GameObject _characterImage; // ÅõÇ¥Ã¢¿¡¼­ °¢ ÇÃ·¹ÀÌ¾î Ä³¸¯ÅÍ ÀÌ¹ÌÁö
+    // [SerializeField] GameObject _characterImage; // íˆ¬í‘œì°½ì—ì„œ ê° í”Œë ˆì´ì–´ ìºë¦­í„° ì´ë¯¸ì§€
 
-    //  [SerializeField] Image _voteSignImage; // ÅõÇ¥ÇÑ ÇÃ·¹ÀÌ¾î Ç¥½Ã ÀÌ¹ÌÁö
+    //  [SerializeField] Image _voteSignImage; // íˆ¬í‘œí•œ í”Œë ˆì´ì–´ í‘œì‹œ ì´ë¯¸ì§€
 
-    //  [SerializeField] Image _deadSignImage; // Á×Àº »óÅÂ Ç¥½Ã ÀÌ¹ÌÁö
+    //  [SerializeField] Image _deadSignImage; // ì£½ì€ ìƒíƒœ í‘œì‹œ ì´ë¯¸ì§€
 
-    [SerializeField] TMP_Text _nickNameText; // °¢ ÇÃ·¹ÀÌ¾î ´Ğ³×ÀÓ ÅØ½ºÆ®
+    [SerializeField] TMP_Text _nickNameText; // ê° í”Œë ˆì´ì–´ ë‹‰ë„¤ì„ í…ìŠ¤íŠ¸
 
     [SerializeField] TMP_Text _stateText;
 
-    [SerializeField] GameObject _votePanel; // ÅõÇ¥Ã¢ ÀüÃ¼ ÆĞ³Î
+    [SerializeField] GameObject _votePanel; // íˆ¬í‘œì°½ ì „ì²´ íŒ¨ë„
 
-    [SerializeField] GameObject _playerPanel; // °¢ ÇÃ·¹ÀÌ¾î ÆĞ³Î
+    [SerializeField] GameObject _playerPanel; // ê° í”Œë ˆì´ì–´ íŒ¨ë„
 
     [SerializeField] public Button _skipButton;
 
-    [SerializeField] Slider _reportTimeCountSlider; // ½Å°íÀÚ¸¸ ¸»ÇÒ ¼ö ÀÖ´Â ½Ã°£ Ä«¿îÆ®
+    [SerializeField] Slider _reportTimeCountSlider; // ì‹ ê³ ìë§Œ ë§í•  ìˆ˜ ìˆëŠ” ì‹œê°„ ì¹´ìš´íŠ¸
 
-    [SerializeField] Slider _voteTimeCountSlider; // ÅõÇ¥ °¡´É ½Ã°£ Ä«¿îÆ®
+    [SerializeField] Slider _voteTimeCountSlider; // íˆ¬í‘œ ê°€ëŠ¥ ì‹œê°„ ì¹´ìš´íŠ¸
     #endregion
 
     private void Awake()
@@ -72,19 +72,20 @@ public class VotePanel : MonoBehaviourPunCallbacks
         {
             SpawnPlayerPanel();
         }
-     
+   
 
-        // ÅõÇ¥¾À ÀÔÀå ½Ã ÅõÇ¥ ¿©ºÎ false·Î ÃÊ±âÈ­
+        // íˆ¬í‘œì”¬ ì…ì¥ ì‹œ íˆ¬í‘œ ì—¬ë¶€ falseë¡œ ì´ˆê¸°í™”
         //for (int i = 0; i < 12; i++)
         //{
         //    _playerData[i].DidVote = false;
         //}
     }
+
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = 8;
-        options.IsVisible = false; // ºñ°ø°³ ¹æ
+        options.IsVisible = false; // ë¹„ê³µê°œ ë°©
 
         PhotonNetwork.JoinOrCreateRoom(RoomName, options, TypedLobby.Default);
     }
@@ -94,7 +95,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
         SpawnPlayerPanel();
     }
 
-
     private void Update()
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
@@ -102,16 +102,16 @@ public class VotePanel : MonoBehaviourPunCallbacks
         CountTime();
     }
 
-    // °¢ ÇÃ·¹ÀÌ¾î ÆĞ³ÎÀ» ¼¼ÆÃÇÏ´Â ÇÔ¼ö
+    // ê° í”Œë ˆì´ì–´ íŒ¨ë„ì„ ì„¸íŒ…í•˜ëŠ” í•¨ìˆ˜
     private void SetPlayerPanel(GameObject[] panelList)
     {
-        // _nickNameText.text = player.NickName; // ´Ğ³×ÀÓ ºÒ·¯¿À±â
-        //TODO : _characterImage = ""; // Ä³¸¯ÅÍ ÀÌ¹ÌÁö ºÒ·¯¿À±â
-        //TODO : Á×Àº Ä³¸¯ÅÍ¿¡ »ç¸Á Ç¥½Ã ¶ç¿ö³õ±â
-        //TODO : ÇÃ·¹ÀÌ¾î°¡ Á×Àº »óÅÂ¶ó¸é ±× ÇÃ·¹ÀÌ¾î ÅõÇ¥ ¹öÆ° ºñÈ°¼ºÈ­ // button.interatable == false
+        // _nickNameText.text = player.NickName; // ë‹‰ë„¤ì„ ë¶ˆëŸ¬ì˜¤ê¸°
+        //TODO : _characterImage = ""; // ìºë¦­í„° ì´ë¯¸ì§€ ë¶ˆëŸ¬ì˜¤ê¸°
+        //TODO : ì£½ì€ ìºë¦­í„°ì— ì‚¬ë§ í‘œì‹œ ë„ì›Œë†“ê¸°
+        //TODO : í”Œë ˆì´ì–´ê°€ ì£½ì€ ìƒíƒœë¼ë©´ ê·¸ í”Œë ˆì´ì–´ íˆ¬í‘œ ë²„íŠ¼ ë¹„í™œì„±í™” // button.interatable == false
     }
 
-    // ÇÃ·¹ÀÌ¾î ÆĞ³Î »ı¼º ÇÔ¼ö
+    // í”Œë ˆì´ì–´ íŒ¨ë„ ìƒì„± í•¨ìˆ˜
     private void SpawnPlayerPanel()
     {
         photonView.RPC("SpawnPlayerPanelRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber - 1);
@@ -125,14 +125,11 @@ public class VotePanel : MonoBehaviourPunCallbacks
         _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(index); });
     }
 
-
-    //ÅõÇ¥ Á¾·á ÈÄ ½ºÅµ ¼ö ¸¸Å­ ÀÍ¸í ÀÌ¹ÌÁö »ı¼º
+    //íˆ¬í‘œ ì¢…ë£Œ í›„ ìŠ¤í‚µ ìˆ˜ ë§Œí¼ ìµëª… ì´ë¯¸ì§€ ìƒì„±
     private void SpawnSkipAnonymImage()
     {
         photonView.RPC("SpawnSkipAnonymImageRPC", RpcTarget.All, _voteData.SkipCount);
     }
-
-
 
     [PunRPC]
     public void SpawnSkipAnonymImageRPC(int index)
@@ -143,7 +140,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
         }
     }
 
-    //ÅõÇ¥ Á¾·á ÈÄ µæÇ¥ ¼ö ¸¸Å­ ÇÃ·¹ÀÌ¾î ÆĞ³Î¿¡ ÀÍ¸í ÀÌ¹ÌÁö »ı¼º
+    //íˆ¬í‘œ ì¢…ë£Œ í›„ ë“í‘œ ìˆ˜ ë§Œí¼ í”Œë ˆì´ì–´ íŒ¨ë„ì— ìµëª… ì´ë¯¸ì§€ ìƒì„±
     private void SpawnAnonymImage()
     {
         photonView.RPC("SpawnAnonymImageRPC", RpcTarget.All, _voteManager._voteCounts);
@@ -156,12 +153,12 @@ public class VotePanel : MonoBehaviourPunCallbacks
         {
             for (int j = 0; j < index; j++)
             {
-                //TODO : µæÇ¥¼ö¸¸Å­ È°¼ºÈ­, 2Â÷¿ø ¹è¿­ »ç¿ë
+                //TODO : ë“í‘œìˆ˜ë§Œí¼ í™œì„±í™”, 2ì°¨ì› ë°°ì—´ ì‚¬ìš©
             }
         }
     }
 
-    // ½Ã°£ ÃøÁ¤ ÇÔ¼ö
+    // ì‹œê°„ ì¸¡ì • í•¨ìˆ˜
     private void CountTime()
     {
         foreach (Button button in _voteButtons)
@@ -171,9 +168,9 @@ public class VotePanel : MonoBehaviourPunCallbacks
         }
 
 
-        _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime ¼öÁ¤ ÇÊ¿ä ½Ã ¼öÁ¤
+        _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime ìˆ˜ì • í•„ìš” ì‹œ ìˆ˜ì •
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
-        if (_voteData.ReportTimeCount <= 0) // ¸®Æ÷Æ® Å¸ÀÓ Á¾·á ½Ã ÅõÇ¥, ½ºÅµ ¹öÆ° È°¼ºÈ­
+        if (_voteData.ReportTimeCount <= 0) // ë¦¬í¬íŠ¸ íƒ€ì„ ì¢…ë£Œ ì‹œ íˆ¬í‘œ, ìŠ¤í‚µ ë²„íŠ¼ í™œì„±í™”
         {
             _stateText.text = "VOTE!";
             foreach (Button button in _voteButtons)
@@ -181,10 +178,10 @@ public class VotePanel : MonoBehaviourPunCallbacks
                 button.interactable = true;
                 _skipButton.interactable = true;
             }
-            _reportTimeCountSlider.gameObject.SetActive(false); // ÃßÈÄ ¼öÁ¤ÇÒ °Í
+            _reportTimeCountSlider.gameObject.SetActive(false); // ì¶”í›„ ìˆ˜ì •í•  ê²ƒ
             _voteData.VoteTimeCount -= (float)Time.deltaTime;
             _voteTimeCountSlider.value = _voteData._voteTimeCount;
-            if (_voteData.VoteTimeCount <= 0) // ÅõÇ¥ ½Ã°£ Á¾·á ½Ã ÅõÇ¥, ½ºÅµ ¹öÆ° ºñÈ°¼ºÈ­
+            if (_voteData.VoteTimeCount <= 0) // íˆ¬í‘œ ì‹œê°„ ì¢…ë£Œ ì‹œ íˆ¬í‘œ, ìŠ¤í‚µ ë²„íŠ¼ ë¹„í™œì„±í™”
             {
                 DisableButton();
                 //  SpawnAnonymImage();
@@ -194,13 +191,13 @@ public class VotePanel : MonoBehaviourPunCallbacks
         }
     }
 
-    // ÅõÇ¥ ¹öÆ° ºñÈ°¼ºÈ­ ÇÔ¼ö
+    // íˆ¬í‘œ ë²„íŠ¼ ë¹„í™œì„±í™” í•¨ìˆ˜
     public void DisableButton()
     {
         foreach (var button in _voteButtons)
         {
             button.enabled = false;
-            Debug.Log("ÅõÇ¥¹öÆ° ºñÈ°¼ºÈ­");
+            Debug.Log("íˆ¬í‘œë²„íŠ¼ ë¹„í™œì„±í™”");
         }
         _skipButton.enabled = false;
     }

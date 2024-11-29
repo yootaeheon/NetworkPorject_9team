@@ -2919,8 +2919,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skipCount: 0
-  _reportTimeCount: 10
-  _voteTimeCount: 30
+  _reportTimeCount: 8
+  _voteTimeCount: 15
 --- !u!1001 &1054231947
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -73,6 +73,4 @@ public class VoteManager : MonoBehaviourPunCallbacks
         //TODO : 고스트가 되는 기능
         return;
     }
-
-    
 }
