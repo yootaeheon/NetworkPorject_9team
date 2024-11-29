@@ -33,13 +33,15 @@ public class PlayerDataContainer : MonoBehaviourPun
         LobbyScene.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
         LobbyScene.Instance.OnPlayerLeftRoomEvent += SetExitPlayerData;
     }
+    /// <summary>
+    /// 플레이어 데이터 세팅
+    /// </summary>
     public void SetPlayerData(int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
 
         StartCoroutine(SetPlayerDataRoutine(actorNumber, playerName, type, Rcolor, Gcolor, Bcolor, isGhost));
 
     }
-
     IEnumerator SetPlayerDataRoutine(int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
         yield return 0.1f.GetDelay();
@@ -47,6 +49,9 @@ public class PlayerDataContainer : MonoBehaviourPun
         photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, actorNumber, playerName, type, Rcolor, Gcolor, Bcolor, isGhost);
     }
 
+    /// <summary>
+    /// 입장 플레이어 데이터 세팅
+    /// </summary>
     private void SetEnterPlayerData(Player newPlayer)
     {
         StartCoroutine(SetEnterPlayerDataRoutine(newPlayer));
@@ -69,6 +74,9 @@ public class PlayerDataContainer : MonoBehaviourPun
            data.IsGhost);
     }
 
+    /// <summary>
+    /// 퇴장 플레이어 세팅
+    /// </summary>
     private void SetExitPlayerData(Player exitPlayer)
     {
         StartCoroutine(SetExitPlayerDataRoutine(exitPlayer));
@@ -77,7 +85,7 @@ public class PlayerDataContainer : MonoBehaviourPun
     IEnumerator SetExitPlayerDataRoutine(Player exitPlayer)
     {
         yield return 0.1f.GetDelay();
-        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        int actorNumber = exitPlayer.ActorNumber;
         PlayerData data = GetPlayerData(actorNumber);
         photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, actorNumber, "None", PlayerType.Goose, Color.white.r, Color.white.g, Color.white.b, true);
     }
