@@ -8,9 +8,11 @@ public class SoundManager : BaseMission
 {
     public static SoundManager Instance { get; private set; }
 
-    [SerializeField] private AudioMixer _audioMixer; 
+    [SerializeField] private AudioMixer _audioMixer;
+    [SerializeField] private Slider _masterSlider;
     [SerializeField] private Slider _sfxSlider;
     [SerializeField] private Slider _bgmSlider;
+
 
     private AudioSource _sfxSource;
     private AudioSource _bgmSource;
