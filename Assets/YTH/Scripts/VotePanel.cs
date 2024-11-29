@@ -79,21 +79,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
         CountTime();
     }
 
-    public override void OnConnectedToMaster()
-    {
-        RoomOptions options = new RoomOptions();
-        options.MaxPlayers = 8;
-        options.IsVisible = false;
-
-        PhotonNetwork.JoinOrCreateRoom(RoomName, options, TypedLobby.Default);
-    }
-
-    public override void OnJoinedRoom()
-    {
-        SpawnPlayerPanel();
-        SetPlayerPanel(_panelList); // 모든 플레이어를 업데이트하게 수정하기
-    }
-
     // 각 플레이어 패널을 세팅하는 함수
     private void SetPlayerPanel(GameObject[] panelList)
     {
