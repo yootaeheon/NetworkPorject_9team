@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Dev/GameScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Dev/VoteScene.unity
+    guid: 3c464f7a03ea62b46bbe845573d84954
   m_configObjects: {}
