@@ -8,7 +8,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/YTH/Scenes/YTH.unity
     guid: ff1bfb89e51fb51418961c9a4a87ab5c
-  - enabled: 1
-    path: Assets/Imports/LJH/Scene/LoadingTestScene.unity
-    guid: f235615d15b38424ab84c964ff161503
   m_configObjects: {}

@@ -79,6 +79,9 @@ MonoBehaviour:
   - RpciconActive
   - RpcSetNicknamePanel
   - RpcSetPlayerData
+  - RpcSetJobs
+  - RpcRandomSpawner
+  - RpcRandomSetjob
   - 
   - 
   - 
