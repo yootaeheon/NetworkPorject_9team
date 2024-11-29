@@ -189,9 +189,10 @@ public class PlayerController : MonoBehaviourPun
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    coroutine = StartCoroutine(PlayMission());
+                    //coroutine = StartCoroutine(PlayMission());
                     // nearCol.gameObject.GetComponent<MissionController>();// randomColor를 인수로 미션  함수 실행시키는거 붙여야 함 
-                    GameFlowManager.Instance.MissionTest();
+                    //GameFlowManager.Instance.MissionTest();
+                    nearCol.gameObject.GetComponent<ActiveMission>().GetMission(randomColor,playerType);
                 }
             }
             else if (nearCol.gameObject.layer == 10) // 사보타지(임포스터만 가능 ) , 미션 함수 가져올 때 인수로 본인 컬러 넘겨줘야함 
@@ -200,9 +201,10 @@ public class PlayerController : MonoBehaviourPun
                 {
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        coroutine = StartCoroutine(PlaySabotage());
+                        //coroutine = StartCoroutine(PlaySabotage());
                         //nearCol.gameObject.GetComponent<SabotageMission>();// randomColor를 인수로 미션  사보타지 실행시키는거 붙여야 함 
-                        GameFlowManager.Instance.SabotageSucc();
+                        //GameFlowManager.Instance.SabotageSucc();
+                        nearCol.gameObject.GetComponent<ActiveMission>().GetMission(randomColor, playerType);
                     }
                 }
             }
@@ -285,13 +287,13 @@ public class PlayerController : MonoBehaviourPun
 
         if (x < 0) // 왼쪽으로 이동 시
         {
-            privDir = new Vector3(1, 1, 1);
+            privDir = new Vector3(0.7f, 0.7f, 0.7f);
             transform.localScale = privDir;
 
         }
         else if (x > 0) // 오른쪽으로 이동 시
         {
-            privDir = new Vector3(-1, 1, 1);
+            privDir = new Vector3(-0.7f, 0.7f, 0.7f);
             transform.localScale = privDir;
 
         }
