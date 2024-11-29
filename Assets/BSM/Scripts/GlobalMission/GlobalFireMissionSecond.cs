@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlobalFireMission : MonoBehaviour
+public class GlobalFireMissionSecond : MonoBehaviour
 {
     private MissionState _missionState;
     private MissionController _missionController;
@@ -36,7 +36,7 @@ public class GlobalFireMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance._firstGlobalFire)
+        if (GameManager.Instance._secondGlobalFire)
         {
             gameObject.SetActive(false);
         }
@@ -51,7 +51,7 @@ public class GlobalFireMission : MonoBehaviour
         if (!_missionState.IsDetect) return;
         if (_missionState.MousePos.x < 400 || _missionState.MousePos.x > 1570) return;
 
-        FireExtinguisher fire = _missionController._searchObj.GetComponent<FireExtinguisher>();
+        FireExtinguisherSecond fire = _missionController._searchObj.GetComponent<FireExtinguisherSecond>();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -98,7 +98,7 @@ public class GlobalFireMission : MonoBehaviour
         Debug.Log("미션 클리어");
         SoundManager.Instance.SFXPlay(_missionState._clips[1]);
         GameManager.Instance.GlobalFire();
-        GameManager.Instance.FirstFire();
+        GameManager.Instance.SecondFire();
         _missionController.MissionCoroutine(0.5f);
     }
 }

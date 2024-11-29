@@ -17,7 +17,10 @@ public class GameManager : MonoBehaviourPun
     
      
     //글로벌 미션 팝업창 종료 변수
-    public bool _globalMission;
+    public bool _globalMissionClear;
+    public bool _firstGlobalFire;
+    public bool _secondGlobalFire;
+    public int _globalFireCount = 2;
 
 
     //테스트용
@@ -45,9 +48,10 @@ public class GameManager : MonoBehaviourPun
 
     private void Update()
     {
-        Debug.Log($"남은 미션 :{_clearMissionScore}"); ;
+        Debug.Log($"남은 미션 :{_clearMissionScore}");
+        Debug.Log($"불끄기 횟수 :{_globalFireCount} / GlobalMission{_globalMissionClear}");
     }
-
+     
     /// <summary>
     /// 각 클라이언트에서 미션 클리어 시마다 점수 증가
     /// </summary>
@@ -69,6 +73,53 @@ public class GameManager : MonoBehaviourPun
     }
 
     /// <summary>
+    /// 불끄기 미션 개수
+    /// </summary>
+    public void GlobalFire()
+    {
+        photonView.RPC(nameof(FireCountSync), RpcTarget.AllViaServer, 1);
+    }
+
+    public void FirstFire()
+    {
+        photonView.RPC(nameof(FirstFireRPC), RpcTarget.AllViaServer, true);
+    }
+
+    [PunRPC]
+    public void FirstFireRPC(bool value)
+    {
+        _firstGlobalFire = value; 
+    }
+
+    public void SecondFire()
+    {
+        photonView.RPC(nameof(SecondFireRPC), RpcTarget.AllViaServer, true);
+    }
+
+    [PunRPC]
+    public void SecondFireRPC(bool value)
+    {
+        _secondGlobalFire = value;
+    }
+
+
+
+    /// <summary>
+    /// 불끄기 미션 카운트 동기화
+    /// </summary>
+    /// <param name="value"></param>
+    [PunRPC]
+    public void FireCountSync(int value)
+    {
+        _globalFireCount -= value;
+
+        if(_globalFireCount < 1)
+        {
+            photonView.RPC(nameof(GlobalMissionRPC), RpcTarget.AllViaServer, true);
+        } 
+    }
+
+    /// <summary>
     /// 각 클라이언트에서 사보타지 능력 사용한 미션 클리어 여부
     /// </summary>
     public void CompleteGlobalMission()
@@ -83,7 +134,7 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void GlobalMissionRPC(bool value)
     {
-        _globalMission = value;
+        _globalMissionClear = value;
 
     }
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireExtinguisher : MonoBehaviour
+public class FireExtinguisherSecond : MonoBehaviour
 {
 
     [SerializeField] private GameObject _powder;
@@ -14,23 +14,19 @@ public class FireExtinguisher : MonoBehaviour
     [SerializeField] private GameObject _fire3;
 
 
-    private (float, float) _fire1PosX = (-396f, -471f);
-    private (float, float) _fire1PosY = (-79f, -40f);
+    private (float, float) _fire1PosX = (-180f, -60f);
+    private (float, float) _fire1PosY = (-34f, 65f);
 
-    private (float, float) _fire2PosX = (-110f, -1f);
-    private (float, float) _fire2PosY = (-40f, 30f);
+    private (float, float) _fire2PosX = (285f, 385f);
+    private (float, float) _fire2PosY = (109f, 223f);
 
-    private (float, float) _fire3PosX = (293f, 400f);
-    private (float, float) _fire3PosY = (-180f, -90f);
+    private (float, float) _fire3PosX = (342f, 390f);
+    private (float, float) _fire3PosY = (-41f, 5f);
      
     private Animator _powderAnim; 
     private RectTransform _rect;
     private RectTransform _fireExtinguisher;
     private Coroutine _burnCo;
-
-    RectTransform fire1Rect;
-    RectTransform fire2Rect;
-    RectTransform fire3Rect;
 
     private float _elapsedTime;
     private int _burnHash;
@@ -59,16 +55,12 @@ public class FireExtinguisher : MonoBehaviour
         _powderAnim = _powder.GetComponent<Animator>();
         _rect = _powder.GetComponent<RectTransform>();
         _fireExtinguisher = GetComponent<RectTransform>();
-        fire1Rect = _fire1.GetComponent<RectTransform>();
-        fire2Rect = _fire2.GetComponent<RectTransform>();
-        fire3Rect = _fire3.GetComponent<RectTransform>();
-
     }
 
     private void OnEnable()
     {
         _elapsedTime = 0;
-        _fireExtinguisher.anchoredPosition = new Vector2(55f, -147f);
+        _fireExtinguisher.anchoredPosition = new Vector2(-319f, -147f);
 
         _fire1.SetActive(true);
         _fire2.SetActive(true);
@@ -94,8 +86,8 @@ public class FireExtinguisher : MonoBehaviour
     public void FireCheck()
     {
         (float, float) _rectPos = (_rect.anchoredPosition.x, _rect.anchoredPosition.y);
-  
-        if (_rectPos.Item1 > _fire1PosX.Item2 && _rectPos.Item1 < _fire1PosX.Item1
+ 
+        if(_rectPos.Item1 > _fire1PosX.Item1 && _rectPos.Item1 < _fire1PosX.Item2
             && _rectPos.Item2 >_fire1PosY.Item1 && _rectPos.Item2 < _fire1PosY.Item2)
         {
             _elapsedTime += Time.deltaTime;
