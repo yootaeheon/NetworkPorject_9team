@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,11 +18,27 @@ public class TestUI : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            GameUI.ShowGameStart(PlayerType.Goose);
+            GameUI.ShowGameStart(PlayerType.Goose, Random.ColorHSV());
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            GameUI.ShowGameStart(PlayerType.Duck);
+            GameUI.ShowGameStart(PlayerType.Duck, Random.ColorHSV());
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            GameUI.ShowReport(Random.ColorHSV(), Random.ColorHSV());
+        }
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            GameUI.ShowEmergency(Random.ColorHSV());
+        }
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            GameUI.ShowVoteResult(Random.ColorHSV(), PhotonNetwork.LocalPlayer.NickName, PlayerType.Goose);
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            GameUI.ShowVoteResult(Random.ColorHSV(), PhotonNetwork.LocalPlayer.NickName, PlayerType.Duck);
         }
     }
 }

@@ -9,6 +9,13 @@ public class PlayerVentUsable : MonoBehaviourPun
     private PlayerController _player;
     private Vent _vent;
 
+    bool _isClickButton;
+
+    private void Start()
+    {
+        GameUI.Player.EnterVentButton.onClick.AddListener(() => { _isClickButton = true; });
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (photonView.IsMine == false) 
@@ -47,8 +54,10 @@ public class PlayerVentUsable : MonoBehaviourPun
         while (true)
         {
             // 벤트에서 왼쪽 쉬프트 클릭시
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (Input.GetKeyDown(KeyCode.LeftShift) || _isClickButton == true )
             {
+                _isClickButton = false;
+
                 Vent vent = collision.GetComponent<Vent>();
                 if (vent == null)
                     yield break;
@@ -97,8 +106,10 @@ public class PlayerVentUsable : MonoBehaviourPun
         {
             yield return null;
             // 벤트 나오기
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (Input.GetKeyDown(KeyCode.LeftShift) || _isClickButton == true)
             {
+                _isClickButton = false;
+
                 ExitVent();
                 _enterVentRoutine = null;
                 yield break;

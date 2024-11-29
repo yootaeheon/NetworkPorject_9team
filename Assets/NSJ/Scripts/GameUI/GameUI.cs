@@ -29,10 +29,10 @@ public class GameUI : MonoBehaviour
     /// <summary>
     /// 직업선정 UI 세팅하면서 활성화
     /// </summary>
-    public static void ShowGameStart(PlayerType type)
+    public static void ShowGameStart(PlayerType type,Color color)
     {
-        GameStart.gameObject.SetActive(true);
-        GameStart.SetUI(type);
+        GameStart.SetActive(true);
+        GameStart.SetUI(type, color);
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class GameUI : MonoBehaviour
     /// </summary>
     public static void ShowPlayer(PlayerType type)
     {
-        Player.gameObject.SetActive(true);
+        Player.SetActive(true);
         Player.SetUI(type);
     }
 
@@ -50,7 +50,7 @@ public class GameUI : MonoBehaviour
     public static void ShowReport(Color reporterColor, Color corpseColor)
     {
         Report.SetColor(reporterColor, corpseColor);
-        Report.gameObject.SetActive(true);
+        Report.SetActive(true);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public class GameUI : MonoBehaviour
     public static void ShowEmergency(Color playerColor)
     {
         Emergency.SetColor(playerColor);
-        Emergency.gameObject.SetActive(true);
+        Emergency.SetActive(true);
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ public class GameUI : MonoBehaviour
     public static void ShowVoteResult(Color playerColro, string name, PlayerType type)
     {
         VoteResult.SetUI(playerColro, name, type);
-        VoteResult.gameObject.SetActive(true);
+        VoteResult.SetActive(true);
     }
 
     private void InitSingleTon()

@@ -10,9 +10,19 @@ namespace GameUIs
         [SerializeField] private float _duration;
 
         private Image _playerArm => GetUI<Image>("PlayerArmImage");
-        private void OnEnable()
+
+        private void Awake()
         {
-            StartCoroutine(DurationRoutine());
+            Bind();
+        }
+
+        public void SetActive(bool value)
+        {
+            GetUI("EmergencyCallUI").SetActive(value);
+            if (value == true)
+            {
+                StartCoroutine(DurationRoutine());
+            }
         }
 
         public void SetColor(Color playerColor)
@@ -26,7 +36,7 @@ namespace GameUIs
         IEnumerator DurationRoutine()
         {
             yield return _duration.GetDelay();
-            gameObject.SetActive(false);
+            GetUI("EmergencyCallUI").SetActive(false);
         }
     }
 

@@ -13,12 +13,19 @@ namespace GameUIs
         private Image _playerImage => GetUI<Image>("Goose");
         private TMP_Text _nameText => GetUI<TMP_Text>("NameText");
         private TMP_Text _jobText => GetUI<TMP_Text>("JobText");
-        private void OnEnable()
+        private void Awake()
         {
-            StartCoroutine(DurationRoutine());
+            Bind();
         }
 
-
+        public void SetActive(bool value)
+        {
+            GetUI("VoteResultUI").SetActive(value);
+            if (value)
+            {
+                StartCoroutine(DurationRoutine());
+            }
+        }
         public void SetUI(Color playerColor, string name, PlayerType type)
         {
             _playerImage.color = playerColor;
@@ -34,7 +41,7 @@ namespace GameUIs
         IEnumerator DurationRoutine()
         {
             yield return _duration.GetDelay();
-            gameObject.SetActive(false);
+            GetUI("VoteResultUI").SetActive(false);
         }
     }
 }

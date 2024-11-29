@@ -12,9 +12,18 @@ namespace GameUIs
 
         private Image _reporter => GetUI<Image>("PlayerHeadImage");
         private Image _corpse => GetUI<Image>("PlayerCorpseImage");
-        private void OnEnable()
+        private void Awake()
         {
-            StartCoroutine(DurationRoutine());
+            Bind();
+        }
+
+        public void SetActive(bool value)
+        {
+            GetUI("CorpseReportUI").SetActive(value);
+            if (value == true)
+            {
+                StartCoroutine(DurationRoutine());
+            }
         }
 
         /// <summary>
@@ -34,7 +43,7 @@ namespace GameUIs
         IEnumerator DurationRoutine()
         {
             yield return _duration.GetDelay();
-            gameObject.SetActive(false);
+            GetUI("CorpseReportUI").SetActive(false);
         }
     }
 }
