@@ -9,9 +9,6 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class LobbyScene : MonoBehaviourPunCallbacks
 {
     public static LobbyScene Instance;
-    public static GameObject Loading { get { return Instance._popUp.Loading; } }
-    public static GameObject Option { get { return Instance._popUp.Option; } }
-  
     public static bool IsLoginCancel { get { return  Instance._isLoginCancel; } set { Instance._isLoginCancel = value; } }
     public static bool IsJoinRoomCancel { get { return Instance._isJoinRoomCancel; } set { Instance._isJoinRoomCancel = value; } }
 
@@ -54,17 +51,9 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     private static GameObject s_loadingPanel { get { return Instance._panelStruct.LoadingPanel;} }
     private static GameObject s_optionPanel { get { return Instance._panelStruct.OptionPanel;} }
 
-    private GameObject[] _panels = new GameObject[(int)Panel.Size];
+    private List<GameObject> _panels = new List<GameObject>((int)Panel.Size);
     private GameObject _curPanel;
     private static GameObject s_curPanel { get { return Instance._curPanel; } }
-
-    [System.Serializable]
-    struct PopUpUI
-    {
-        public GameObject Loading;
-        public GameObject Option;
-    }
-    [SerializeField] PopUpUI _popUp;
 
     private bool _isLoginCancel;
     private bool _isJoinRoomCancel;
@@ -79,6 +68,15 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     private void Start()
     {
         SubscribesEvent();
+
+        Debug.Log(1);
+        if (OptionPanel.Instance != null)
+        {
+           
+            _panelStruct.OptionPanel = OptionPanel.Instance.gameObject;
+            _panels.Add(OptionPanel.Instance.gameObject);
+        }
+
         InitPanel();
     }
 
@@ -203,7 +201,6 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         yield return null;
         OnRoomListUpdateEvent?.Invoke(roomList);
         // ∑Œ∫Ò∆–≥Œ »£≠ÅΩ√ ¿Ã∫•∆Æ ±∏µ∂Ω√∞£¿ª ¿ß«— 1«¡∑π¿” ¥ ¥¬ ƒ⁄∑Á∆æ
-        // ¡®¿Â ∂« ƒ⁄∑Á∆æ¿Ãæﬂ. æ∆æ∆ ƒ⁄∑Á∆æ ≥™¿« Ω≈, ≥™¿« ∫˚.
     }
 
 
@@ -214,7 +211,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// </summary>
     public static void ActivateLoadingBox(bool isActive)
     { 
-        Loading.SetActive(isActive);
+        s_loadingPanel.SetActive(isActive);
     }
 
     /// <summary>
@@ -223,7 +220,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="isActive"></param>
     public static void ActivateOptionBox(bool isActive)
     {
-        Option.SetActive(isActive);
+        s_optionPanel.SetActive(isActive);
     }
 
     /// <summary>
@@ -232,8 +229,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="panel"></param>
     private void ChangePanel(Panel panel)
     {
-
-        for (int i = 0; i < _panels.Length; i++)
+        for (int i = 0; i < _panels.Count; i++)
         {
             if (i == (int)panel) // ∏≈∞≥∫ØºˆøÕ ¿œƒ°«œ¥¬ ∆–≥Œ¿Ã∏È »∞º∫»≠
             {
@@ -315,15 +311,15 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// </summary>
     private void Init()
     {
-        _panels[(int)Panel.Login] = s_loginPanel;
-        _panels[(int)Panel.Main] = s_mainPanel;
-        _panels[(int)Panel.Lobby] = s_lobbyPanel;
-        _panels[(int)Panel.Room] = s_roomPanel;
-        _panels[(int)Panel.Loading] = s_loadingPanel;
-        _panels[(int)Panel.Option] = s_optionPanel;
+        _panels.Add(s_loginPanel);
+        _panels.Add(s_mainPanel);
+        _panels.Add(s_lobbyPanel);
+        _panels.Add(s_roomPanel);
+        _panels.Add(s_loadingPanel);
+        //_panels[(int)Panel.Option] = s_optionPanel;
 
-        ActivateLoadingBox(false);
-        ActivateOptionBox(false);
+        //ActivateLoadingBox(false);
+        //ActivateOptionBox(false);
 
         PhotonNetwork.AutomaticallySyncScene = true;
     }

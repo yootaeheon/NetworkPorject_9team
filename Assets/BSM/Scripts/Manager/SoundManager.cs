@@ -48,7 +48,7 @@ public class SoundManager : BaseMission
         _loopSfxSource = GetMissionComponent<AudioSource>("LoopSFX");
         _sfxSlider.onValueChanged.AddListener(SetVolumeSFX);
         _bgmSlider.onValueChanged.AddListener(SetVolumeBGM);
-        _masterSlider.onValueChanged.AddListener(SetVolumeMaster);
+        //_masterSlider.onValueChanged.AddListener(SetVolumeMaster);
     }
 
     /// <summary>

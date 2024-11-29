@@ -68,7 +68,6 @@ public class SceneChanger : MonoBehaviourPun
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

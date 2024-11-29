@@ -34,8 +34,15 @@ public class OptionQuitBox : BaseUI
     /// </summary>
     private void ClearQuitBox()
     {
-        // 방에 있을때는 메인 메뉴 버튼이 나오도록
-        if (PhotonNetwork.InRoom)
+      
+        // 게임중일때(로비씬이 아닌경우
+        if(LobbyScene.Instance == null )
+        {
+            ChangeButton(ButtonType.MainMenu);
+            _quitText.SetText("게임에서 나갑니까?".GetText());
+        }
+               // 방에 있을때는 메인 메뉴 버튼이 나오도록
+        else if (PhotonNetwork.InRoom)
         {
             ChangeButton(ButtonType.MainMenu);
             _quitText.SetText("돌아가시겠습니까?".GetText());
@@ -78,6 +85,18 @@ public class OptionQuitBox : BaseUI
 #endif
     }
 
+    private void ClickMainMenu()
+    {
+        if (LobbyScene.Instance == null)
+        {
+            LeaveGame();
+        }
+        else
+        {
+            ChangeMainmenu();
+        }
+    }
+
     /// <summary>
     /// 메인 메뉴 이동
     /// 방떠나기
@@ -93,6 +112,13 @@ public class OptionQuitBox : BaseUI
         PhotonNetwork.LeaveRoom();     
     }
 
+    private void LeaveGame()
+    {
+        // 방떠나기
+        PhotonNetwork.LeaveRoom();
+        SceneChanger.LoadLevel(0);
+    }
+
     private void Init()
     {
         _buttons[(int)ButtonType.Quit] = _gameQuitButton;
@@ -101,6 +127,6 @@ public class OptionQuitBox : BaseUI
     private void SubscribeEvent()
     {
         GetUI<Button>("GameQuitButton").onClick.AddListener(GameQuit);
-        GetUI<Button>("MainMenuButton").onClick.AddListener(ChangeMainmenu);
+        GetUI<Button>("MainMenuButton").onClick.AddListener(ClickMainMenu);
     }
 }
