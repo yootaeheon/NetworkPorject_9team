@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
-    public const string RoomName = "playerpaneltest";
+   // public const string RoomName = "playerpaneltest";
     public static VoiceManager Instance { get; private set; }
 
     [SerializeField] PlayerController _controller;
@@ -22,25 +22,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     private const byte LIVING_GROUP = 1;
     private const byte DEAD_GROUP = 2;
-
-    public override void OnEnable()
-    {
-        // _speaker = GetComponent<Speaker>();
-        //// _voiceView = GetComponent<PhotonVoiceView>();
-        //
-        // if (_voiceView != null && PunVoiceClient.Instance != null)
-        // {
-        //     // Recorder와 Speaker 초기화 확인
-        //     if (!_voiceView.IsRecording )
-        //     {
-        //         Debug.LogWarning("Recorder 제대로 설정 X.");
-        //     }
-        //     if (!_voiceView.IsSpeaking)
-        //     {
-        //         Debug.LogWarning("Speaker가 제대로 설정 X.");
-        //     }
-        // }
-    }
+   
     private void Awake()
     {
         if (Instance == null)
@@ -56,44 +38,47 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         //TODO : 플레이어컨트롤러 겟컴포넌트로 참조 시킬 것
     }
 
-    void Start()
-    {
-        if (!PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
-    }
+  //  void Start()
+  //  {
+  //      if (!PhotonNetwork.IsConnected)
+  //      {
+  //          PhotonNetwork.ConnectUsingSettings();
+  //      }
+  //  }
 
     private void Update()
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
+        //IsSpeakingImageEnable();
+       // FindAndLogConnectedSpeakers();
 
-        Invoke("IsSpeakingImageEnable", 3f);
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SetVoiceChannel(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            SetVoiceChannel(false);
-        }
+       // Invoke("IsSpeakingImageEnable", 3f);
+
+        // if (Input.GetKeyDown(KeyCode.Q))
+        // {
+        //     SetVoiceChannel(true);
+        // }
+        // else if (Input.GetKeyDown(KeyCode.W))
+        // {
+        //     SetVoiceChannel(false);
+        // }
     }
 
-    public override void OnConnectedToMaster()
-    {
-        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InLobby)
-        {
-            PhotonNetwork.JoinLobby();
-        }
-    }
+    // public override void OnConnectedToMaster()
+    // {
+    //     if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InLobby)
+    //     {
+    //         PhotonNetwork.JoinLobby();
+    //     }
+    // }
 
-    public override void OnJoinedLobby()
-    {
-        Util.GetDelay(3f);
-        Debug.Log("방 입장 중  ` ` ` ");
-        PhotonNetwork.JoinRoom(RoomName);
-    }
+    //  public override void OnJoinedLobby()
+    //  {
+    //      Util.GetDelay(3f);
+    //      Debug.Log("방 입장 중  ` ` ` ");
+    //      PhotonNetwork.JoinRoom(RoomName);
+    //  }
 
 
     public override void OnJoinedRoom()
@@ -122,7 +107,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     }
 
 
-   public void IsSpeakingImageEnable(int index)
+   public void IsSpeakingImageEnable()
    {
         _speakingSigns[PhotonNetwork.LocalPlayer.ActorNumber-1].enabled = _voiceViews[PhotonNetwork.LocalPlayer.ActorNumber - 1].IsSpeaking;
    }

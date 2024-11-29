@@ -1,4 +1,5 @@
 using Photon.Pun;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +15,24 @@ public class SceneChanger : MonoBehaviourPun
     {
         _photonView = GetComponent<PhotonView>();
         InitSingleTon();
+    }
+
+    /// <summary>
+    /// Æ÷Åæ LoadLevel
+    /// </summary>
+    /// <param name="scene"></param>
+    public static void LoadLevel(int scene)
+    {
+        PhotonNetwork.LoadLevel(scene);
+    }
+
+    /// <summary>
+    /// Æ÷Åæ LoadLevel
+    /// </summary>
+    /// <param name="scene"></param>
+    public static void LoadLevel(string scene)
+    {
+        PhotonNetwork.LoadLevel(scene);
     }
 
     /// <summary>
