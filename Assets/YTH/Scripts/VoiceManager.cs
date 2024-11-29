@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
@@ -14,8 +15,8 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
-    [SerializeField] GameObject[] _speakingSigns;
-   // [SerializeField] PhotonVoiceView[] _voiceViews;
+    [SerializeField] Image[] _speakingSigns;
+    [SerializeField] PhotonVoiceView[] _voiceViews;
 
     private Speaker _speaker;
 
@@ -66,6 +67,8 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
+
+        Invoke("IsSpeakingImageEnable", 3f);
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -118,15 +121,24 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         }
     }
 
-    //public void IsSpeakingImageEnable(int index)
-    //{
-    //    if (_recorder.IsCurrentlyTransmitting) // 포톤보이스뷰.isSpeaking 으로 수정해야함 각가 플레이어가 포톤보이스뷰 들고있어야할듯
-    //    {
-    //        _image[].SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        _image.SetActive(false);
-    //    }
-    //}
+
+   public void IsSpeakingImageEnable(int index)
+   {
+        _speakingSigns[PhotonNetwork.LocalPlayer.ActorNumber-1].enabled = _voiceViews[PhotonNetwork.LocalPlayer.ActorNumber - 1].IsSpeaking;
+   }
+
+    public void FindAndLogConnectedSpeakers()
+    {
+        // Scene에 있는 모든 Speaker를 검색
+        Speaker[] speakers = FindObjectsOfType<Speaker>();
+
+        int index = 0;
+        foreach (var speaker in speakers)
+        {
+            // Speaker에 연결된 PhotonVoiceView 가져오기
+            PhotonVoiceView voiceView = speaker.GetComponentInParent<PhotonVoiceView>();
+            _voiceViews[index] = voiceView;
+            index++;
+        }
+    }
 }

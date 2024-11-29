@@ -36,6 +36,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] TMP_Text _nickNameText; // 각 플레이어 닉네임 텍스트
 
+    [SerializeField] TMP_Text _stateText;   
+
     [SerializeField] GameObject _votePanel; // 투표창 전체 패널
 
     [SerializeField] GameObject _playerPanel; // 각 플레이어 패널
@@ -161,6 +163,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
         if (_voteData.ReportTimeCount <= 0) // 리포트 타임 종료 시 투표, 스킵 버튼 활성화
         {
+            _stateText.text = "VOTE!";
             foreach (Button button in _voteButtons)
             {
                 button.interactable = true;
