@@ -358,6 +358,6 @@ public class PlayerController : MonoBehaviourPun
     [PunRPC]
     private void RpcSetJobs() 
     {
-        playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.ActorNumber-1);
+        //playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.ActorNumber-1);
     }
 }
