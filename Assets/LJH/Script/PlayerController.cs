@@ -238,10 +238,6 @@ public class PlayerController : MonoBehaviourPun
     }
     IEnumerator switchGhost()
     {
-
-        Debug.Log(photonView.ViewID);
-        Debug.Log(isGhost);
-
         photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false);
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
         yield return new WaitForSeconds(1f);
