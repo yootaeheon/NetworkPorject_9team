@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -78,16 +79,11 @@ public class VotePanel : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InLobby)
-        {
-            PhotonNetwork.JoinLobby();
-        }
-    }
-    public override void OnJoinedLobby()
-    {
-        Util.GetDelay(3f);
-        Debug.Log("방 입장 중  ` ` ` ");
-        PhotonNetwork.JoinRoom(RoomName);
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = 8;
+        options.IsVisible = false; // 비공개 방
+
+        PhotonNetwork.JoinOrCreateRoom(RoomName, options, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
