@@ -14,7 +14,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
-    //[SerializeField] GameObject _image;
+    [SerializeField] GameObject[] _speakingSigns;
    // [SerializeField] PhotonVoiceView[] _voiceViews;
 
     private Speaker _speaker;

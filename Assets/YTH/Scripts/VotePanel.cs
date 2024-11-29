@@ -64,16 +64,17 @@ public class VotePanel : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
         }
+
+        // 투표씬 입장 시 투표 여부 false로 초기화
+        for (int i = 0; i < 12; i++)
+        {
+            playerData[i].DidVote = false;
+        }
     }
 
     private void Update()
     {
         CountTime();
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SpawnSkipAnonymImage();
-        }
     }
 
     public override void OnConnectedToMaster()
@@ -88,12 +89,11 @@ public class VotePanel : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         SpawnPlayerPanel();
-        SetPlayerPanel(PhotonNetwork.LocalPlayer); // 모든 플레이어를 업데이트하게 수정하기
-        // 투표 씬 입장 때마다 모든 플레이어 _playerData.DidVote == false 해주기 (게임방식에 따라서 )
+        SetPlayerPanel(_panelList); // 모든 플레이어를 업데이트하게 수정하기
     }
 
     // 각 플레이어 패널을 세팅하는 함수
-    private void SetPlayerPanel(Player player)
+    private void SetPlayerPanel(GameObject[] panelList)
     {
         // _nickNameText.text = player.NickName; // 닉네임 불러오기
         //TODO : _characterImage = ""; // 캐릭터 이미지 불러오기
@@ -143,7 +143,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
         {
             for (int j = 0; j < index; j++)
             {
-                //TODO : 득표수만큼 활성화
+                //TODO : 득표수만큼 활성화, 2차원 배열 사용
             }
         }
     }
@@ -154,7 +154,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
         foreach (Button button in _voteButtons)
         {
             button.interactable = false;
-            _skipButton.interactable = false ;
+            _skipButton.interactable = false;
         }
 
         _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime 수정 필요 시 수정
@@ -164,7 +164,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             foreach (Button button in _voteButtons)
             {
                 button.interactable = true;
-                _skipButton.interactable= true ;
+                _skipButton.interactable = true;
             }
             _reportTimeCountSlider.gameObject.SetActive(false); // 추후 수정할 것
             _voteData.VoteTimeCount -= (float)Time.deltaTime;
@@ -178,6 +178,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
         }
     }
 
+    // 투표 버튼 비활성화 함수
     public void DisableButton()
     {
         foreach (var button in _voteButtons)
