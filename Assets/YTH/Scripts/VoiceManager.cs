@@ -94,6 +94,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     // 플레이어 컨트롤에서 호출할 것
     public void SetVoiceChannel(bool isGhost)
     {
+        // IsGhohst 변경 시 이벤트로 하는게 좋을듯
         // 살아있음 => 그룹 1 사용
         if (!_controller.isGhost)
         {
