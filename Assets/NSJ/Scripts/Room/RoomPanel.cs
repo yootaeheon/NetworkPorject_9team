@@ -38,6 +38,13 @@ public class RoomPanel : BaseUI
     private void OnEnable()
     {
         ChangeBox(Box.Room);
+        PlayerNumbering.OnPlayerNumberingChanged += UpdateChangeRoom;
+    }
+
+    private void OnDisable()
+    {
+        PlayerNumbering.OnPlayerNumberingChanged -= UpdateChangeRoom;
+       
     }
 
     /// <summary>
@@ -47,7 +54,9 @@ public class RoomPanel : BaseUI
     {
         // TODO : 게임씬 전환
         Debug.Log("게임 시작!");
-        SceneChanger.LoadScene("Test1", LoadSceneMode.Additive);
+        //SceneChanger.LoadScene("GameScene", LoadSceneMode.Single);
+       //PhotonNetwork.LoadLevel("GameScene");
+       GameLoadingScene.Instance.GameStart();
     }
 
     /// <summary>
@@ -124,6 +133,8 @@ public class RoomPanel : BaseUI
             GetUI("RoomReadyButtonBox").SetActive(true);
         }
     }
+
+
 
     /// <summary>
     ///  플레이어 프로퍼티 변경에 따른 업데이트
@@ -306,7 +317,6 @@ public class RoomPanel : BaseUI
     // 이벤트 구독
     private void SubscribesEvent()
     {
-        PlayerNumbering.OnPlayerNumberingChanged += UpdateChangeRoom;
         LobbyScene.Instance.OnMasterClientSwitchedEvent += UpdateMasterClientSwitch;
         LobbyScene.Instance.OnPlayerPropertiesUpdateEvent += UpdatePlayerProperty;
 

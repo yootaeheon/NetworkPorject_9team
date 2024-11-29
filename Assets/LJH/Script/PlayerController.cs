@@ -5,6 +5,8 @@ using Photon;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine.Rendering.Universal;
+using Photon.Pun.UtilityScripts;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -49,16 +51,17 @@ public class PlayerController : MonoBehaviourPun
         // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
-        playerType = PlayerType.Duck;
+        
 
 
         // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯   
         randomColor = new Color(Random.value, Random.value, Random.value, 1f);
-        photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
+        SettingColor(randomColor.r, randomColor.g, randomColor.b);
 
-
+        PlayerDataContainer.Instance.SetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, playerType, randomColor.r, randomColor.g, randomColor.b, false);
 
     }
+    
     private void Update()
     {
 
@@ -70,7 +73,10 @@ public class PlayerController : MonoBehaviourPun
         FindNearObject();
 
     }
-
+    public void SettingColor(float r, float g , float b) 
+    {
+        photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, r,g,b);
+    }
     // r 신고 , e 상호작용 , space 살인 
     // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
     // 신고가 되면 시체도 사라져야 함 
@@ -104,8 +110,6 @@ public class PlayerController : MonoBehaviourPun
                         }
                         else
                             nearCol = col;
-
-
                     }
                 }
 
@@ -178,7 +182,12 @@ public class PlayerController : MonoBehaviourPun
 
                     nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제, 씬 재진입이면 필요없을지도 
 
-                    GameFlowManager.Instance.ReportingOn();
+
+                    //GameFlowManager.Instance.ReportingOn();
+
+                    //SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive); 
+                    SceneChanger.LoadLevel("Votescene");
+
                 }
             }
             else if (nearCol.gameObject.layer == gameObject.layer)
@@ -189,9 +198,7 @@ public class PlayerController : MonoBehaviourPun
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    //coroutine = StartCoroutine(PlayMission());
-                    // nearCol.gameObject.GetComponent<MissionController>();// randomColor를 인수로 미션  함수 실행시키는거 붙여야 함 
-                    //GameFlowManager.Instance.MissionTest();
+
                     nearCol.gameObject.GetComponent<ActiveMission>().GetMission(randomColor,playerType);
                 }
             }
@@ -201,9 +208,7 @@ public class PlayerController : MonoBehaviourPun
                 {
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        //coroutine = StartCoroutine(PlaySabotage());
-                        //nearCol.gameObject.GetComponent<SabotageMission>();// randomColor를 인수로 미션  사보타지 실행시키는거 붙여야 함 
-                        //GameFlowManager.Instance.SabotageSucc();
+
                         nearCol.gameObject.GetComponent<ActiveMission>().GetMission(randomColor, playerType);
                     }
                 }
@@ -235,40 +240,19 @@ public class PlayerController : MonoBehaviourPun
         yield return 1f.GetDelay();
 
     }
-    IEnumerator PlayMission()
-    {
-
-        Debug.Log("미션!");
-
-        yield return 1f.GetDelay();
-
-    }
-    IEnumerator PlaySabotage()
-    {
-
-        Debug.Log("사보타지!");
-
-        yield return 1f.GetDelay();
-
-    }
-
-
-
+    
     public void Die()
     {
         StartCoroutine(switchGhost());
     }
     IEnumerator switchGhost()
     {
-
-        Debug.Log(photonView.ViewID);
-        Debug.Log(isGhost);
-
         photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false);
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
         yield return new WaitForSeconds(1f);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
         gameObject.GetComponent<BoxCollider2D>().enabled = false;  // 나중에 맵 보고 충돌 바꾸는걸로 해결하는게 나을듯
+        PlayerDataContainer.Instance.UpdatePlayerGhostList(PhotonNetwork.LocalPlayer.ActorNumber);
     }
 
 
@@ -364,5 +348,17 @@ public class PlayerController : MonoBehaviourPun
         body.color = color;
         GhostRender.color = color;
         CorpRender.color = color;
+    }
+
+
+    public void SetJobs()
+    {
+        Debug.Log("직업변경");
+        photonView.RPC("RpcSetJobs", RpcTarget.All);
+    }
+    [PunRPC]
+    private void RpcSetJobs() 
+    {
+        //playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.ActorNumber-1);
     }
 }
