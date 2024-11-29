@@ -1,8 +1,6 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,7 +34,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] TMP_Text _nickNameText; // 각 플레이어 닉네임 텍스트
 
-    [SerializeField] TMP_Text _stateText;   
+    [SerializeField] TMP_Text _stateText;
 
     [SerializeField] GameObject _votePanel; // 투표창 전체 패널
 
@@ -65,7 +63,12 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        SpawnPlayerPanelRoutine();
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+
+     
 
         // 투표씬 입장 시 투표 여부 false로 초기화
         //for (int i = 0; i < 12; i++)
@@ -73,9 +76,30 @@ public class VotePanel : MonoBehaviourPunCallbacks
         //    _playerData[i].DidVote = false;
         //}
     }
+    public override void OnConnectedToMaster()
+    {
+        if (PhotonNetwork.IsConnectedAndReady && !PhotonNetwork.InLobby)
+        {
+            PhotonNetwork.JoinLobby();
+        }
+    }
+    public override void OnJoinedLobby()
+    {
+        Util.GetDelay(3f);
+        Debug.Log("방 입장 중  ` ` ` ");
+        PhotonNetwork.JoinRoom(RoomName);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        SpawnPlayerPanel();
+    }
+
 
     private void Update()
     {
+        Debug.Log(PhotonNetwork.NetworkClientState);
+
         CountTime();
     }
 
@@ -146,7 +170,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             button.interactable = false;
             _skipButton.interactable = false;
         }
-     
+
 
         _voteData.ReportTimeCount -= (float)Time.deltaTime; // Time.deltaTime 수정 필요 시 수정
         _reportTimeCountSlider.value = _voteData.ReportTimeCount;
@@ -182,7 +206,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
         _skipButton.enabled = false;
     }
 
-    IEnumerator SpawnPlayerPanelRoutine ()
+    IEnumerator SpawnPlayerPanelRoutine()
     {
         yield return 2f.GetDelay();
         SpawnPlayerPanel();
