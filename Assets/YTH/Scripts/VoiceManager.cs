@@ -68,16 +68,16 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
 
-        Invoke("IsSpeakingImageEnable", 3f);
+       // Invoke("IsSpeakingImageEnable", 3f);
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SetVoiceChannel(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            SetVoiceChannel(false);
-        }
+       // if (Input.GetKeyDown(KeyCode.Q))
+       // {
+       //     SetVoiceChannel(true);
+       // }
+       // else if (Input.GetKeyDown(KeyCode.W))
+       // {
+       //     SetVoiceChannel(false);
+       // }
     }
 
     public override void OnConnectedToMaster()
