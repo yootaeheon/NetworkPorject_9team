@@ -42,6 +42,9 @@ public class SoundManager : BaseMission
 
     private void SetObject()
     {
+        if (_bgmSlider == null || _sfxSlider == null || _masterSlider == null) return;
+
+
         _sfxSource = GetMissionComponent<AudioSource>("SFX");
         _bgmSource = GetMissionComponent<AudioSource>("BGM");
         _masterSource = GetMissionComponent<AudioSource>("Master");

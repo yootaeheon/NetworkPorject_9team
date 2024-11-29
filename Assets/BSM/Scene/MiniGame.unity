@@ -2893,6 +2893,10 @@ PrefabInstance:
       propertyPath: _sfxSlider
       value: 
       objectReference: {fileID: 617952126}
+    - target: {fileID: 4629633774358409727, guid: 8110e3a249dcbbc45bdd68062fb9f7cb, type: 3}
+      propertyPath: _masterSlider
+      value: 
+      objectReference: {fileID: 617952126}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8110e3a249dcbbc45bdd68062fb9f7cb, type: 3}
 --- !u!1001 &4740690215934871910
