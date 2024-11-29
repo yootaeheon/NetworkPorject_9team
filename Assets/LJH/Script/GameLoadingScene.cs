@@ -34,21 +34,21 @@ public class GameLoadingScene : MonoBehaviourPun
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P)) 
-        {
-            SceneChanger.LoadScene("LoadingTestScene",UnityEngine.SceneManagement.LoadSceneMode.Single);
-            isOnGame = true;
-            StartCoroutine(Delaying());
-        }
+        
     }
 
-
+    public void GameStart() 
+    {
+        SceneChanger.LoadLevel(1);
+        isOnGame = true;
+        StartCoroutine(Delaying());
+    }
 
     IEnumerator Delaying() 
     {
         yield return 2f.GetDelay();
         
-        RandomSpawner(); // 스 지정 및 소환 
+        RandomSpawner(); // 스폰 지정 및 소환 
         PlayerDataContainer.Instance.RandomSetjob(); // 랜덤 직업 설정 
         player.GetComponent<PlayerController>().SettingColor(color.r, color.g, color.b);  // 일단 보류 색 보존이 안됨 
         player.GetComponent<PlayerController>().SetJobs(); 

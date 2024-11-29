@@ -55,7 +55,8 @@ public class RoomPanel : BaseUI
         // TODO : 게임씬 전환
         Debug.Log("게임 시작!");
         //SceneChanger.LoadScene("GameScene", LoadSceneMode.Single);
-        PhotonNetwork.LoadLevel("GameScene");
+       //PhotonNetwork.LoadLevel("GameScene");
+       GameLoadingScene.Instance.GameStart();
     }
 
     /// <summary>
