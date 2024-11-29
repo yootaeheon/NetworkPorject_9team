@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviourPun
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {

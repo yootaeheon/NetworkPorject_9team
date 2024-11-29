@@ -68,7 +68,10 @@ public class VotePanel : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
         }
-
+        else
+        {
+            SpawnPlayerPanel();
+        }
      
 
         // 투표씬 입장 시 투표 여부 false로 초기화

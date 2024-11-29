@@ -30,11 +30,17 @@ public class PlayerSpawner : MonoBehaviourPun
     /// </summary>
     private void SpawnPlayer()
     {
+        StartCoroutine(SpawnPlayerRoutine());
+    }
+
+    IEnumerator SpawnPlayerRoutine()
+    {
+        yield return null;
         // 랜덤위치 결정
         Vector2 randomPos = new Vector2(Random.Range(-8, 8), Random.Range(1, 4));
 
         // 해당 랜덤 위치에 스폰
-        GameObject playerInstance = PhotonNetwork.Instantiate("LJH_Player",randomPos, Quaternion.identity);
+        GameObject playerInstance = PhotonNetwork.Instantiate("LJH_Player", randomPos, Quaternion.identity);
         GameObject namePanel = PhotonNetwork.Instantiate("NamePanel", randomPos, Quaternion.identity);
         // 본인 플레이어 캐싱
         _myPlayer = playerInstance.GetComponent<PlayerController>();

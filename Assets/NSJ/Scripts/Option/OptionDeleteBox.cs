@@ -157,7 +157,13 @@ public class OptionDeleteBox : BaseUI
     }
     private void SubscribeEvent()
     {
-        GetUI<Button>("DeleteButton").onClick.AddListener(()=>ChangeBox(Box.Confirm));
+        GetUI<Button>("DeleteButton").onClick.AddListener(()=> 
+        {
+            if (LobbyScene.Instance != null)
+            {
+                ChangeBox(Box.Confirm);
+            }
+        });
         _confirmEmailInput.onValueChanged.AddListener(ActivateConfirmButton);
         _confirmPasswordInput.onValueChanged.AddListener(ActivateConfirmButton);
         GetUI<Button>("ConfirmButton").onClick.AddListener(ConfirmEmail);
