@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,6 +42,8 @@ public class GlobalLifeSupportMission : MonoBehaviour
     [SerializeField] private List<Chips> _waitSlots = new List<Chips>(9);
     [SerializeField] private List<GameObject> _rightSlots = new List<GameObject>(9);
 
+    private List<GameObject> _returnSlots = new List<GameObject>();
+
     private bool[] _emptyArr = new bool[9];
 
     private MissionController _missionController;
@@ -48,7 +51,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
     private Vector2 _tempVector;
     private int _randIndex;
-    private bool moveCheck;
+    private bool nullCheck;
     private bool compareCheck;
 
     private RectTransform _emptyRect;
@@ -90,31 +93,52 @@ public class GlobalLifeSupportMission : MonoBehaviour
     private void OnDisable()
     {
         OnCheckedSlot -= CompareSlot;
-        //우측 슬롯 오브젝트 다시 대기 슬롯 자식들로 하나씩 배치
-        //
-
-
-
-        if (_waitSlots.Count >= 9) return;
 
         for (int i = 0; i < _rightSlots.Count; i++)
         {
             if (_rightSlots[i].transform.childCount != 0)
-            {  
-                _waitSlots.Add(_rightSlots[i].transform.GetChild(0).GetComponent<Chips>());
-
+            {
                 for (int j = 0; j < _emptyArr.Length; j++)
                 {
                     if (!_emptyArr[j])
                     {
-                        _rightSlots[i].transform.GetChild(0).SetParent(_waitSlots[j].transform);
-                        _emptyRect = _rightSlots[i].transform.GetChild(0).GetComponent<RectTransform>();
-                        _emptyRect.anchoredPosition = new Vector2(0, 0);
+                        //비어있는 요소에 추가
+                        _waitSlots[j] = _rightSlots[i].transform.GetChild(0).GetComponent<Chips>();
+
+                        //자식이 없는 슬롯을 찾아야 하는데
+                        //_rightSlots[i].transform.GetChild(0).SetParent(_waitSlots[j].transform);
+
+                        //_emptyRect = _rightSlots[i].transform.GetChild(0).GetComponent<RectTransform>();
+                        //_emptyRect.anchoredPosition = new Vector2(0, 0);
+
+                        _emptyArr[j] = true;
+                        break;
                     }
+                }
+            }
+        }
+
+        for(int i = 0; i < _rightSlots.Count; i++)
+        {
+            if (_rightSlots[i].transform.childCount != 0)
+            {
+                for (int j = 0; j < _returnSlots.Count; j++)
+                {
+                    if (_returnSlots[j].transform.childCount != 0) continue;
+                     
+                    _rightSlots[i].transform.GetChild(0).SetParent(_returnSlots[j].transform);
+                    _emptyRect = _returnSlots[j].transform.GetChild(0).GetComponent<RectTransform>();
+                    _emptyRect.anchoredPosition = new Vector2(0, 0);
 
                 }
+
             } 
-        }  
+        }
+
+
+
+
+
     }
 
 
@@ -223,6 +247,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
                 if (_compareSlotObj.transform.childCount == 0)
                 {
+                    _returnSlots.Add(_waitObj.transform.parent.parent.gameObject);
                     _waitObj.transform.parent.SetParent(_compareSlotObj.transform);
 
                     RectTransform child = _waitObj.GetComponent<RectTransform>();
@@ -235,11 +260,13 @@ public class GlobalLifeSupportMission : MonoBehaviour
                     _waitObj.GetComponent<Image>().raycastTarget = false;
                     _compareSlotObj.GetComponent<Image>().raycastTarget = false;
 
-                    int index = _waitSlots.IndexOf(chip);
-                    Debug.Log(index);
-                    _emptyArr[index] = false;
 
-                    _waitSlots.Remove(chip); 
+
+                    int index = _waitSlots.IndexOf(chip); 
+                    _emptyArr[index] = false;
+                    _waitSlots[index] = null;
+
+                    //_waitSlots.Remove(chip); 
                     SoundManager.Instance.SFXPlay(_missionState._clips[0]);
 
                 }
@@ -257,11 +284,26 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
             _waitObj.transform.localScale = new Vector2(1, 1);
             _waitObj = null;
+            
+            for(int i = 0; i < _waitSlots.Count; i++)
+            { 
+                nullCheck = _waitSlots[i] == null ? true : false;
 
-            if (_waitSlots.Count < 1)
+                if (!nullCheck)
+                {
+                    break;
+                } 
+            }
+
+            if(nullCheck)
             {
                 OnCheckedSlot?.Invoke(this, EventArgs.Empty);
             }
+
+            //if (_waitSlots.Count < 1)
+            //{
+            //    OnCheckedSlot?.Invoke(this, EventArgs.Empty);
+            //}
         } 
     }
 
