@@ -22,7 +22,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject[] _panelAnonymImage; // 2차원 배열 이용하여 구현 계획
 
-    [SerializeField] VoteScenePlayerData[] playerData;
+    [SerializeField] VoteScenePlayerData[] _playerData;
 
     [SerializeField] Button[] _voteButtons; // 투표하기 위한 버튼들
 
@@ -65,18 +65,13 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
+        SpawnPlayerPanelRoutine();
 
         // 투표씬 입장 시 투표 여부 false로 초기화
         for (int i = 0; i < 12; i++)
         {
-            playerData[i].DidVote = false;
+            _playerData[i].DidVote = false;
         }
-
-        SpawnPlayerPanelRoutine();
     }
 
     private void Update()
@@ -102,6 +97,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SpawnPlayerPanelRPC(int index)
     {
+        Debug.Log("11111111111111111111111111111");
         _panelList[index].SetActive(true);
         _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(index); });
     }
