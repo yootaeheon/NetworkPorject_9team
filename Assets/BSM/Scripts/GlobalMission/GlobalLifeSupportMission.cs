@@ -8,36 +8,6 @@ using UnityEngine.UI;
 public class GlobalLifeSupportMission : MonoBehaviour
 {
 
-
-    //우측 슬롯에 하나씩 추가될 때마다(List의 Count) 이용해서 다 채웠으면 (LeftSlot == RightSlot.Count)
-    //Bool 변수 False > True
-    //Bool 변수가 바꼈으면 Event 호출 event EventHandler
-    //각 요소마다 칩 타입 비교 진행
-
-    //왼쪽 슬롯 리스트
-    //왼쪽 칩 리스트
-
-    //오른쪽 슬롯 리스트
-
-    //상, 하 대기 슬롯 리스트
-    //오른쪽 슬롯에 넣을 칩 리스트
-
-
-    //칩들이 어떤 타입인지 가지고 있고, 그 타입을 이용해서 오른쪽 슬롯이랑 리스트 비교해가면 될듯
-
-    //OnEnable
-    //왼쪽 슬롯에 있는 칩들 리스트에 집어넣고
-    //순서 셔플
-    //그리고 첫 번째부터 Position 배치
-
-    //각 슬롯 1 ~ 9 번째 칸 마다 Position을 잡아줄 빈 게임 오브젝트 배치
-
-    //오른쪽 슬롯
-    //각 칩들 클릭 후 드래그하면 그 슬롯에 배치
-    //배치가 다 끝났을 경우 왼쪽 슬롯과 0번째부터 8번째 까지 타입 비교
-
-    //모든 요소의 타입이 같으면 미션 Clear
-    //하나라도 다를 경우 Fail
     [SerializeField] private List<Chips> _leftSlots = new List<Chips>(9);
     [SerializeField] private List<Chips> _waitSlots = new List<Chips>(9);
     [SerializeField] private List<GameObject> _rightSlots = new List<GameObject>(9);
@@ -77,7 +47,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
     private void OnEnable()
     {
-        for(int i = 0; i < _emptyArr.Length; i++)
+        for (int i = 0; i < _emptyArr.Length; i++)
         {
             _emptyArr[i] = true;
         }
@@ -87,7 +57,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
         //리스트 순서 셔플
         LeftSlotShuffle();
-        WaitSlotShuffle(); 
+        WaitSlotShuffle();
     }
 
     private void OnDisable()
@@ -104,13 +74,6 @@ public class GlobalLifeSupportMission : MonoBehaviour
                     {
                         //비어있는 요소에 추가
                         _waitSlots[j] = _rightSlots[i].transform.GetChild(0).GetComponent<Chips>();
-
-                        //자식이 없는 슬롯을 찾아야 하는데
-                        //_rightSlots[i].transform.GetChild(0).SetParent(_waitSlots[j].transform);
-
-                        //_emptyRect = _rightSlots[i].transform.GetChild(0).GetComponent<RectTransform>();
-                        //_emptyRect.anchoredPosition = new Vector2(0, 0);
-
                         _emptyArr[j] = true;
                         break;
                     }
@@ -118,21 +81,24 @@ public class GlobalLifeSupportMission : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < _rightSlots.Count; i++)
+        for (int i = 0; i < _rightSlots.Count; i++)
         {
             if (_rightSlots[i].transform.childCount != 0)
             {
                 for (int j = 0; j < _returnSlots.Count; j++)
                 {
                     if (_returnSlots[j].transform.childCount != 0) continue;
-                     
+
+                    _rightSlots[i].GetComponent<Image>().raycastTarget = true;
                     _rightSlots[i].transform.GetChild(0).SetParent(_returnSlots[j].transform);
+
+                    _returnSlots[j].transform.GetChild(0).GetChild(0).GetComponent<Image>().raycastTarget = true;
                     _emptyRect = _returnSlots[j].transform.GetChild(0).GetComponent<RectTransform>();
                     _emptyRect.anchoredPosition = new Vector2(0, 0);
-
+                    break;
                 }
 
-            } 
+            }
         }
 
 
@@ -168,10 +134,10 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
             //이전 위치의 Rect
             RectTransform prevRect = _leftSlots[i].transform.parent.GetComponent<RectTransform>();
-            
+
             //다음 위치의 Rect
-            RectTransform nextRect = _leftSlots[_randIndex].transform.parent.GetComponent<RectTransform>(); 
-            
+            RectTransform nextRect = _leftSlots[_randIndex].transform.parent.GetComponent<RectTransform>();
+
             //위치 교환
             _tempVector = prevRect.anchoredPosition;
             prevRect.anchoredPosition = nextRect.anchoredPosition;
@@ -183,7 +149,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
             _leftSlots[_randIndex] = tempElement;
         }
 
-        
+
     }
 
     /// <summary>
@@ -197,7 +163,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
             if (i == _randIndex)
             {
-                while (i != _randIndex) _randIndex = UnityEngine.Random.Range(0, 9); 
+                while (i != _randIndex) _randIndex = UnityEngine.Random.Range(0, 9);
             }
 
             RectTransform prevRect = _waitSlots[i].transform.parent.GetComponent<RectTransform>();
@@ -213,7 +179,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
             _waitSlots[i] = _waitSlots[_randIndex];
             _waitSlots[_randIndex] = tempElement;
         }
-         
+
     }
 
     /// <summary>
@@ -229,16 +195,16 @@ public class GlobalLifeSupportMission : MonoBehaviour
             {
                 _waitObj = _missionController._searchObj;
                 _waitObj.transform.localScale = new Vector2(0.8f, 0.8f);
-            } 
+            }
         }
         else if (Input.GetMouseButton(0))
         {
             if (_waitObj == null) return;
-             
+
             _waitObj.transform.position = _missionState.MousePos;
         }
         else if (Input.GetMouseButtonUp(0))
-        { 
+        {
             _compareSlotObj = _missionController._searchObj.gameObject;
 
             if (_compareSlotObj.CompareTag("RightSlot"))
@@ -255,14 +221,14 @@ public class GlobalLifeSupportMission : MonoBehaviour
                     Chips chip = _waitObj.transform.parent.GetComponent<Chips>();
 
 
-                    child.anchoredPosition = new Vector2(0,0);
+                    child.anchoredPosition = new Vector2(0, 0);
                     parent.anchoredPosition = new Vector2(0, 0);
                     _waitObj.GetComponent<Image>().raycastTarget = false;
                     _compareSlotObj.GetComponent<Image>().raycastTarget = false;
 
 
 
-                    int index = _waitSlots.IndexOf(chip); 
+                    int index = _waitSlots.IndexOf(chip);
                     _emptyArr[index] = false;
                     _waitSlots[index] = null;
 
@@ -279,23 +245,23 @@ public class GlobalLifeSupportMission : MonoBehaviour
             {
                 if (_waitObj == null) return;
 
-                _waitObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0); 
+                _waitObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             }
 
             _waitObj.transform.localScale = new Vector2(1, 1);
             _waitObj = null;
-            
-            for(int i = 0; i < _waitSlots.Count; i++)
-            { 
+
+            for (int i = 0; i < _waitSlots.Count; i++)
+            {
                 nullCheck = _waitSlots[i] == null ? true : false;
 
                 if (!nullCheck)
                 {
                     break;
-                } 
+                }
             }
 
-            if(nullCheck)
+            if (nullCheck)
             {
                 OnCheckedSlot?.Invoke(this, EventArgs.Empty);
             }
@@ -304,20 +270,17 @@ public class GlobalLifeSupportMission : MonoBehaviour
             //{
             //    OnCheckedSlot?.Invoke(this, EventArgs.Empty);
             //}
-        } 
+        }
     }
 
 
 
     private void CompareSlot(object sender, EventArgs args)
     {
-        
-        for(int i = 0; i < _leftSlots.Count; i++)
+
+        for (int i = 0; i < _leftSlots.Count; i++)
         {
             Chips child = _rightSlots[i].transform.GetChild(0).GetComponent<Chips>();
-
-            Debug.Log($"left {_leftSlots[i]._chipType} // right:{child._chipType}");
-
 
             if (_leftSlots[i]._chipType == child._chipType)
             {
@@ -327,13 +290,15 @@ public class GlobalLifeSupportMission : MonoBehaviour
             {
                 compareCheck = false;
                 break;
-            } 
+            }
         }
 
         if (compareCheck)
         {
+            Debug.Log("미션 클리어");
+
             MissionClear();
-        }  
+        }
     }
 
     private void MissionClear()
@@ -342,5 +307,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
         GameManager.Instance.CompleteGlobalMission();
         _missionController.MissionCoroutine(0.5f);
     }
+
+}
 
 }
