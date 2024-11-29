@@ -69,7 +69,6 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     {
         SubscribesEvent();
 
-        Debug.Log(1);
         if (OptionPanel.Instance != null)
         {
            

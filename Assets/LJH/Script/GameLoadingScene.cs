@@ -47,8 +47,9 @@ public class GameLoadingScene : MonoBehaviourPun
     IEnumerator Delaying() 
     {
         yield return 2f.GetDelay();
-        
+
         RandomSpawner(); // 스폰 지정 및 소환 
+        yield return null;
         PlayerDataContainer.Instance.RandomSetjob(); // 랜덤 직업 설정 
         player.GetComponent<PlayerController>().SettingColor(color.r, color.g, color.b);  // 일단 보류 색 보존이 안됨 
         player.GetComponent<PlayerController>().SetJobs(); 

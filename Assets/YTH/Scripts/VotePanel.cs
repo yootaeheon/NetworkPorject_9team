@@ -210,4 +210,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
         yield return 2f.GetDelay();
         SpawnPlayerPanel();
     }
+
+
 }

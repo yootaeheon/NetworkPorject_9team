@@ -89,9 +89,9 @@ public class PlayerDataContainer : MonoBehaviourPun
     private void RpcRandomSetjob() 
     {
         int count = 0;
-        for (int i = 0; i < playerDataArray.Length; i++) 
+        for (int i = 0; i < playerDataArray.Length; i++)
         {
-            if (playerDataArray[i].IsGhost == false) 
+            if (playerDataArray[i].IsGhost == false)
             {
                 count++;
             }
@@ -101,6 +101,10 @@ public class PlayerDataContainer : MonoBehaviourPun
             int x = Random.Range(0, count);
             playerDataArray[x].Type = PlayerType.Duck;
         }
-    }
 
+        int index = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+        PlayerType type =playerDataArray[index].Type;
+        Color color = playerDataArray[index].PlayerColor;
+        GameUI.ShowGameStart(type, color);
+    }
 }

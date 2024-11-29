@@ -185,8 +185,8 @@ public class PlayerController : MonoBehaviourPun
 
                     //GameFlowManager.Instance.ReportingOn();
 
-                    //SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive); 
-                    SceneChanger.LoadLevel("Votescene");
+                    SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive); 
+                    //SceneChanger.LoadLevel("Votescene");
 
                 }
             }

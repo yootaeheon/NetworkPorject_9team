@@ -1,7 +1,5 @@
 using Photon.Pun;
-using System;
-using System.Reflection;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,6 +48,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
     public void GetVoteResult()
     {
         // 최다 득표자 찾는 기능
+        bool isKick = false;
         int top = -1;
         int top2 = -1;
         int playerIndex = -1;
@@ -59,20 +58,34 @@ public class VoteManager : MonoBehaviourPunCallbacks
             if (_voteCounts[i] > top)
             {
                 top = _voteCounts[i];
-                playerIndex = i;  
+                playerIndex = i;
+
+                isKick = true;
             }
             else if (_voteCounts[i] == top)
             {
                 top2 = _voteCounts[i];
                 Debug.Log("동점표로 없던 일~");
+                isKick = false;
                 return;
             }
         }
         Debug.Log($"{_voteData.SkipCount}표 기권!");
         Debug.Log($"{playerIndex}번 플레이어 당선 {top}표 : 추방됩니다");
+
+
+        PlayerData playerData =  PlayerDataContainer.Instance.GetPlayerData(playerIndex);
+        StartCoroutine(ShowVoteResultRoutine(playerData.PlayerColor, playerData.PlayerName,playerData.Type));
+
         //TODO : 고스트가 되는 기능
         return;
     }
 
-    
+    IEnumerator ShowVoteResultRoutine(Color playerColor , string name, PlayerType type)
+    {
+        yield return 3f.GetDelay();
+        GameUI.ShowVoteResult(playerColor, name, type);
+        yield return 7f.GetDelay();
+        SceneChanger.UnLoadScene("VoteScene");
+    }
 }
