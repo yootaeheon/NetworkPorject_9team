@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class GlobalLifeSupportMission : MonoBehaviour
 {
+
+
+    //우측 슬롯에 하나씩 추가될 때마다(List의 Count) 이용해서 다 채웠으면 (LeftSlot == RightSlot.Count)
+    //Bool 변수 False > True
+    //Bool 변수가 바꼈으면 Event 호출 event EventHandler
+    //각 요소마다 칩 타입 비교 진행
+
     //왼쪽 슬롯 리스트
     //왼쪽 칩 리스트
 
@@ -34,7 +41,6 @@ public class GlobalLifeSupportMission : MonoBehaviour
     private Vector2 temp;
 
     [SerializeField] private List<RectTransform> _leftSlots = new List<RectTransform>(9);
-    [SerializeField] private List<GameObject> _temps = new List<GameObject>(9);
 
     private void Awake()
     {
@@ -48,19 +54,21 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
         _missionState.MissionName = "생명 유지 장치 재설정하기";
     }
-
-    
-
+     
     private void OnEnable()
     {
         //리스트 순서 셔플
         LeftSlotShuffle();
-
-
-
+        WaitSlotShuffle();
+         
     }
 
 
+    private void Update()
+    {
+        _missionController.PlayerInput();
+        SelectChip();
+    }
 
     /// <summary>
     /// 왼쪽 슬롯 셔플 기능
@@ -91,5 +99,23 @@ public class GlobalLifeSupportMission : MonoBehaviour
             _leftSlots[rand] = tempRect; 
         }
     }
+
+    /// <summary>
+    /// 대기 슬롯 셔플 기능
+    /// </summary>
+    private void WaitSlotShuffle()
+    {
+
+    }
+
+    /// <summary>
+    /// 칩 선택 후 이동 기능
+    /// </summary>
+    private void SelectChip()
+    {
+        if (!_missionState.IsDetect) return;
+
+    }
+
 
 }

@@ -6368,16 +6368,6 @@ MonoBehaviour:
   - {fileID: 1457476902}
   - {fileID: 1156483739}
   - {fileID: 541734812}
-  _temps:
-  - {fileID: 1449239642}
-  - {fileID: 1952977664}
-  - {fileID: 1927594023}
-  - {fileID: 1581174968}
-  - {fileID: 1848917438}
-  - {fileID: 523450156}
-  - {fileID: 1457476901}
-  - {fileID: 1156483738}
-  - {fileID: 541734811}
 --- !u!224 &6387638703829327779 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 649917178171291575, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
