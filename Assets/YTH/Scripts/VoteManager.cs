@@ -12,12 +12,12 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     [SerializeField] VoteScenePlayerData[] _playerData;
 
-    public int[] _voteCounts; // °¢ ÇÃ·¹ÀÌ¾îÀÇ(ActorNumber¿Í ¿¬°áµÈ ÀÎµ¦½º ¹øÈ£)ÀÇ µæÇ¥¼ö¸¦ ¹è¿­·Î ÀúÀå
+    public int[] _voteCounts; // ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½(ActorNumberï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½È£)ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     [SerializeField] Button[] _voteButtons;
 
-    // IsDead == false && DidVote == false ÀÏ¶§¸¸ ½ºÅµ °¡´ÉÇÏ°Ô Á¶°Ç Ãß°¡
-    public void Vote(int index) // ÇÃ·¹ÀÌ¾î ÆÐ³ÎÀ» ´­·¯ ÅõÇ¥
+    // IsDead == false && DidVote == false ï¿½Ï¶ï¿½ï¿½ï¿½ ï¿½ï¿½Åµ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
+    public void Vote(int index) // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
     {
         photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
         _votePanel.DisableButton();
@@ -27,11 +27,11 @@ public class VoteManager : MonoBehaviourPunCallbacks
     public void VotePlayerRPC(int index)
     {
         _voteCounts[index]++;
-        Debug.Log($"{index}¹ø ÇÃ·¹ÀÌ¾î µæÇ¥¼ö {_voteCounts[index]} ");
+        Debug.Log($"{index}ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ {_voteCounts[index]} ");
     }
 
-    // IsDead == false && DidVote == false ÀÏ¶§¸¸ ½ºÅµ °¡´ÉÇÏ°Ô Á¶°Ç Ãß°¡
-    public void OnClickSkip() // ½ºÅµ ¹öÆ° ´©¸¦ ½Ã
+    // IsDead == false && DidVote == false ï¿½Ï¶ï¿½ï¿½ï¿½ ï¿½ï¿½Åµ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
+    public void OnClickSkip() // ï¿½ï¿½Åµ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     {
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
         _votePanel.DisableButton();
@@ -41,13 +41,13 @@ public class VoteManager : MonoBehaviourPunCallbacks
     public void OnClickSkipRPC()
     {
         _voteData.SkipCount++;
-        Debug.Log($" ½ºÅµ ¼ö : {_voteData.SkipCount}");
+        Debug.Log($" ï¿½ï¿½Åµ ï¿½ï¿½ : {_voteData.SkipCount}");
     }
 
-    // ÅõÇ¥ Á¾·á ÈÄ Áý°è ±â´É
+    // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     public void GetVoteResult()
     {
-        // ÃÖ´Ù µæÇ¥ÀÚ Ã£´Â ±â´É
+        // ï¿½Ö´ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½
         bool isKick = false;
         int top = -1;
         int top2 = -1;
@@ -65,22 +65,22 @@ public class VoteManager : MonoBehaviourPunCallbacks
             else if (_voteCounts[i] == top)
             {
                 top2 = _voteCounts[i];
-                Debug.Log("µ¿Á¡Ç¥·Î ¾ø´ø ÀÏ~");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½~");
                 isKick = false;
                 return;
             }
         }
-        Debug.Log($"{_voteData.SkipCount}Ç¥ ±â±Ç!");
-        Debug.Log($"{playerIndex}¹ø ÇÃ·¹ÀÌ¾î ´ç¼± {top}Ç¥ : Ãß¹æµË´Ï´Ù");
+        Debug.Log($"{_voteData.SkipCount}Ç¥ ï¿½ï¿½ï¿½!");
+        Debug.Log($"{playerIndex}ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ç¼± {top}Ç¥ : ï¿½ß¹ï¿½Ë´Ï´ï¿½");
 
 
         PlayerData playerData =  PlayerDataContainer.Instance.GetPlayerData(playerIndex);
         StartCoroutine(ShowVoteResultRoutine(playerData.PlayerColor, playerData.PlayerName,playerData.Type));
 
-        //TODO : °í½ºÆ®°¡ µÇ´Â ±â´É
+        //TODO : ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½
         return;
     }
-
+    
     IEnumerator ShowVoteResultRoutine(Color playerColor , string name, PlayerType type)
     {
         yield return 3f.GetDelay();
