@@ -90,10 +90,10 @@ MonoBehaviour:
   - RPCSetPlayerToOrigin
   - RPCSetPlayerToNewPlayer
   - RPCSetPlayerProperty
-  - 
-  - 
-  - 
-  - 
+  - RPCLoadScene
+  - RPCUnLoadScene
+  - Test
+  - RPCSetParent
   - 
   - 
   - SpawnSkipAnonymImageRPC

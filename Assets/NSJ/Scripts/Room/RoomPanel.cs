@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RoomPanel : BaseUI
@@ -46,6 +47,7 @@ public class RoomPanel : BaseUI
     {
         // TODO : 게임씬 전환
         Debug.Log("게임 시작!");
+        SceneChanger.LoadScene("Test1", LoadSceneMode.Additive);
     }
 
     /// <summary>
@@ -94,6 +96,14 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void UpdatePlayerCount()
     {
+        if (_roomPlayerCountText == null)
+        {
+            Debug.LogError(_roomPlayerCountText);
+        }
+        else if (PhotonNetwork.CurrentRoom == null)
+        {
+            Debug.LogError(PhotonNetwork.CurrentRoom);
+        }
         _roomPlayerCountText.SetText($"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}".GetText());
     }
 
@@ -129,7 +139,7 @@ public class RoomPanel : BaseUI
     /// 모두 레디 했는지 체크
     /// </summary>
     private void CheckAllReady()
-    {    
+    {
         if (PhotonNetwork.IsMasterClient == false)
             return;
 
@@ -264,17 +274,21 @@ public class RoomPanel : BaseUI
             PhotonNetwork.LocalPlayer.NickName = BackendManager.User.NickName; // 닉네임을 저장된 유저닉네임으로 변경
         }
 
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.IsMasterClient == true)
+            {
+                // 누구의 방 텍스트 설정
+                _roomTitleText.SetText($"{player.NickName}의 방".GetText());
+                break;
+            }
+        }
 
-        // 누구의 방 텍스트 설정
-        _roomTitleText.SetText($"{PhotonNetwork.LocalPlayer.NickName}의 방".GetText());
 
         // 방 코드 설정
         _roomCodeText.text = $"{PhotonNetwork.CurrentRoom.Name}";
         _roomCodeText.contentType = TMP_InputField.ContentType.Standard;
         _roomCodeActiveText.text = HIDETEXT;
-
-        // 플레이어 카운트 설정
-        UpdatePlayerCount();
 
         // 플레이어 초기 레디 설정
         OffReady();
