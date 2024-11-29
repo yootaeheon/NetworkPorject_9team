@@ -50,12 +50,12 @@ public class PlayerController : MonoBehaviourPun
         // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
-        playerType = PlayerType.Duck;
+        
 
 
         // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯   
         randomColor = new Color(Random.value, Random.value, Random.value, 1f);
-        photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
+        SettingColor(randomColor.r, randomColor.g, randomColor.b);
 
         PlayerDataContainer.Instance.SetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, playerType, randomColor.r, randomColor.g, randomColor.b, false);
 
@@ -72,7 +72,10 @@ public class PlayerController : MonoBehaviourPun
         FindNearObject();
 
     }
-
+    public void SettingColor(float r, float g , float b) 
+    {
+        photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, r,g,b);
+    }
     // r 신고 , e 상호작용 , space 살인 
     // 주변 오브젝트 탐색(미니게임 , 사보타지 , 시체 , 긴급회의 , 다른 플레이어) 탐색된 오브젝트에 따라 다른 행동이 가능하게
     // 신고가 되면 시체도 사라져야 함 
@@ -178,7 +181,7 @@ public class PlayerController : MonoBehaviourPun
 
                     nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제, 씬 재진입이면 필요없을지도 
 
-                    GameFlowManager.Instance.ReportingOn();
+                    //GameFlowManager.Instance.ReportingOn();
                 }
             }
             else if (nearCol.gameObject.layer == gameObject.layer)
@@ -339,5 +342,17 @@ public class PlayerController : MonoBehaviourPun
         body.color = color;
         GhostRender.color = color;
         CorpRender.color = color;
+    }
+
+
+    public void SetJobs()
+    {
+        Debug.Log("직업변경");
+        photonView.RPC("RpcSetJobs", RpcTarget.All);
+    }
+    [PunRPC]
+    private void RpcSetJobs() 
+    {
+        playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.ActorNumber-1);
     }
 }
