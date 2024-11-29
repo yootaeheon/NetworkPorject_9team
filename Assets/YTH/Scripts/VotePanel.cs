@@ -69,14 +69,13 @@ public class VotePanel : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();
         }
 
-     
-
         // 투표씬 입장 시 투표 여부 false로 초기화
         //for (int i = 0; i < 12; i++)
         //{
         //    _playerData[i].DidVote = false;
         //}
     }
+
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions();
@@ -90,7 +89,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         SpawnPlayerPanel();
     }
-
 
     private void Update()
     {
@@ -122,14 +120,11 @@ public class VotePanel : MonoBehaviourPunCallbacks
         _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(index); });
     }
 
-
     //투표 종료 후 스킵 수 만큼 익명 이미지 생성
     private void SpawnSkipAnonymImage()
     {
         photonView.RPC("SpawnSkipAnonymImageRPC", RpcTarget.All, _voteData.SkipCount);
     }
-
-
 
     [PunRPC]
     public void SpawnSkipAnonymImageRPC(int index)

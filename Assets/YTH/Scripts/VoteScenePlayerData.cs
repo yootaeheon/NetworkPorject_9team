@@ -20,6 +20,7 @@ public class VoteScenePlayerData : MonoBehaviourPun, IPunObservable
     [SerializeField] private bool _isReporter; // 신고자 여부
     public bool IsReporter { get { return _isReporter; } set { _isReporter = value; } }
 
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
