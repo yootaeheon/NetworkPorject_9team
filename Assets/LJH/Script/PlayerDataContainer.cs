@@ -1,8 +1,6 @@
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -37,31 +35,52 @@ public class PlayerDataContainer : MonoBehaviourPun
     }
     public void SetPlayerData(int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
+
+        StartCoroutine(SetPlayerDataRoutine(actorNumber, playerName, type, Rcolor, Gcolor, Bcolor, isGhost));
+
+    }
+
+    IEnumerator SetPlayerDataRoutine(int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
+    {
+        yield return 0.1f.GetDelay();
+
         photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, actorNumber, playerName, type, Rcolor, Gcolor, Bcolor, isGhost);
     }
 
     private void SetEnterPlayerData(Player newPlayer)
     {
+        StartCoroutine(SetEnterPlayerDataRoutine(newPlayer));
+    }
+
+    IEnumerator SetEnterPlayerDataRoutine(Player newPlayer)
+    {
+        yield return 0.1f.GetDelay();
+
         int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
         PlayerData data = GetPlayerData(actorNumber);
-
-        photonView.RPC(nameof(RpcSetEnterPlayerData), RpcTarget.AllBuffered, 
-            newPlayer,
-            actorNumber, 
-            data.PlayerName,
-            data.Type, 
-            data.PlayerColor.r,
-            data.PlayerColor.g,
-            data.PlayerColor.b,
-            data.IsGhost);
+        photonView.RPC(nameof(RpcSetEnterPlayerData), RpcTarget.AllBuffered,
+           newPlayer,
+           actorNumber,
+           data.PlayerName,
+           data.Type,
+           data.PlayerColor.r,
+           data.PlayerColor.g,
+           data.PlayerColor.b,
+           data.IsGhost);
     }
+
     private void SetExitPlayerData(Player exitPlayer)
     {
+        StartCoroutine(SetExitPlayerDataRoutine(exitPlayer));
+    }
+
+    IEnumerator SetExitPlayerDataRoutine(Player exitPlayer)
+    {
+        yield return 0.1f.GetDelay();
         int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
         PlayerData data = GetPlayerData(actorNumber);
         photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, actorNumber, "None", PlayerType.Goose, Color.white.r, Color.white.g, Color.white.b, true);
     }
-
 
     public PlayerData GetPlayerData(int actorNumber)
     {
@@ -94,6 +113,8 @@ public class PlayerDataContainer : MonoBehaviourPun
         int index = actorNumber - 1;
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
 
+        Debug.Log("¼Â µð¹ö±ë");
+        Debug.Log(playerDataArray[index]);
 
         if (playerDataArray[index] == null)
         {
@@ -118,7 +139,8 @@ public class PlayerDataContainer : MonoBehaviourPun
         int index = actorNumber - 1;
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
 
-
+        Debug.Log("¿£ÅÍ µð¹ö±ë");
+        Debug.Log(playerDataArray[index]);
         if (playerDataArray[index] == null)
         {
             playerDataArray[index] = new PlayerData(playerName, type, color, isGhost);
@@ -135,7 +157,7 @@ public class PlayerDataContainer : MonoBehaviourPun
 
 
     [PunRPC]
-    private void RpcRandomSetjob() 
+    private void RpcRandomSetjob()
     {
         int count = 0;
         for (int i = 0; i < playerDataArray.Length; i++)
@@ -152,7 +174,7 @@ public class PlayerDataContainer : MonoBehaviourPun
         }
 
         int index = PhotonNetwork.LocalPlayer.ActorNumber - 1;
-        PlayerType type =playerDataArray[index].Type;
+        PlayerType type = playerDataArray[index].Type;
         Color color = playerDataArray[index].PlayerColor;
         GameUI.ShowGameStart(type, color);
     }
