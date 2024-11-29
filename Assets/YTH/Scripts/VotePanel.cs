@@ -68,10 +68,10 @@ public class VotePanel : MonoBehaviourPunCallbacks
         SpawnPlayerPanelRoutine();
 
         // 투표씬 입장 시 투표 여부 false로 초기화
-        for (int i = 0; i < 12; i++)
-        {
-            _playerData[i].DidVote = false;
-        }
+        //for (int i = 0; i < 12; i++)
+        //{
+        //    _playerData[i].DidVote = false;
+        //}
     }
 
     private void Update()
