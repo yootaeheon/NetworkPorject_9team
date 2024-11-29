@@ -1864,7 +1864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1764886402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2019,7 +2019,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1858569800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2271,7 +2271,7 @@ PrefabInstance:
     - target: {fileID: 691681831772421329, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: _missionPrefab
       value: 
-      objectReference: {fileID: 5882136194558093333}
+      objectReference: {fileID: 6387638703100032308}
     - target: {fileID: 691681831772421330, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3186,11 +3186,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
---- !u!1 &5882136194558093333 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 649917178171291572, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
-  m_PrefabInstance: {fileID: 5882136194558093332}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6387638702645230874 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1667966939900412129, guid: 34a8ab154660caa489b484e2694fd25f, type: 3}
