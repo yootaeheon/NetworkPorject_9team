@@ -32,12 +32,31 @@ public class PlayerDataContainer : MonoBehaviourPun
             playerDataArray[i] = new PlayerData("None", PlayerType.Goose, Color.white, true);
         }
 
+        LobbyScene.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
     }
 
     public void SetPlayerData(int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
         photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, actorNumber, playerName, type, Rcolor, Gcolor, Bcolor, isGhost);
     }
+
+    private void SetEnterPlayerData(Player newPlayer)
+    {
+        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        PlayerData data = GetPlayerData(actorNumber);
+
+        photonView.RPC(nameof(RpcSetEnterPlayerData), RpcTarget.AllBuffered, 
+            newPlayer,
+            actorNumber, 
+            data.PlayerName,
+            data.Type, 
+            data.PlayerColor.r,
+            data.PlayerColor.g,
+            data.PlayerColor.b,
+            data.IsGhost);
+    }
+
+
     public PlayerData GetPlayerData(int actorNumber)
     {
         return playerDataArray[actorNumber - 1];
@@ -65,6 +84,30 @@ public class PlayerDataContainer : MonoBehaviourPun
     [PunRPC]
     private void RpcSetPlayerData(int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
+
+        int index = actorNumber - 1;
+        Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
+
+
+        if (playerDataArray[index] == null)
+        {
+            playerDataArray[index] = new PlayerData(playerName, type, color, isGhost);
+        }
+        else
+        {
+
+            playerDataArray[index].PlayerName = playerName;
+            playerDataArray[index].Type = type;
+            playerDataArray[index].PlayerColor = color;
+            playerDataArray[index].IsGhost = isGhost;
+        }
+    }
+
+    [PunRPC]
+    private void RpcSetEnterPlayerData(Player enterPlayer, int actorNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
+    {
+        if (enterPlayer != PhotonNetwork.LocalPlayer)
+            return;
 
         int index = actorNumber - 1;
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);

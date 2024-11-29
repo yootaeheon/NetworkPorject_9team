@@ -25,8 +25,8 @@ public class DontDestroySingleTon : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            gameLoadingScene = PhotonNetwork.Instantiate("GameLoadingScene", Vector3.zero, Quaternion.identity);
-            playerDataContainer = PhotonNetwork.Instantiate("PlayerDataContainer", Vector3.zero, Quaternion.identity);
+            gameLoadingScene = PhotonNetwork.InstantiateRoomObject("GameLoadingScene", Vector3.zero, Quaternion.identity);
+            playerDataContainer = PhotonNetwork.InstantiateRoomObject("PlayerDataContainer", Vector3.zero, Quaternion.identity);
         }
     }
 
