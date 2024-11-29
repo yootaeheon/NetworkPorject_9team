@@ -10,6 +10,7 @@ public class PlayerSpawner : MonoBehaviourPun
 {
     [SerializeField] PlayerReadyUI _readyUI;
     private PlayerController _myPlayer;
+    private UiFollowingPlayer _myNamePanel;
 
     private void Start()
     {
@@ -34,8 +35,11 @@ public class PlayerSpawner : MonoBehaviourPun
 
         // 해당 랜덤 위치에 스폰
         GameObject playerInstance = PhotonNetwork.Instantiate("LJH_Player",randomPos, Quaternion.identity);
+        GameObject namePanel = PhotonNetwork.Instantiate("NamePanel", randomPos, Quaternion.identity);
         // 본인 플레이어 캐싱
         _myPlayer = playerInstance.GetComponent<PlayerController>();
+        _myNamePanel = namePanel.GetComponent<UiFollowingPlayer>();
+        _myNamePanel.setTarget(playerInstance);
         SetPlayerToOrigin();
     }
 
@@ -44,8 +48,9 @@ public class PlayerSpawner : MonoBehaviourPun
     /// </summary>
     private void SetPlayerToOrigin()
     {
-        int id = _myPlayer.photonView.ViewID;
-        photonView.RPC(nameof(RPCSetPlayerToOrigin), RpcTarget.All, id, PhotonNetwork.LocalPlayer);
+        int playerId = _myPlayer.photonView.ViewID;
+        int namePanelID = _myNamePanel.photonView.ViewID;
+        photonView.RPC(nameof(RPCSetPlayerToOrigin), RpcTarget.All, playerId,namePanelID, PhotonNetwork.LocalPlayer);
     }
 
     /// <summary>
@@ -53,8 +58,9 @@ public class PlayerSpawner : MonoBehaviourPun
     /// </summary>
     private void SetPlayerToNewPlayer(Player newPlayer)
     {
-        int id = _myPlayer.photonView.ViewID;
-        photonView.RPC(nameof(RPCSetPlayerToNewPlayer), RpcTarget.All, id, PhotonNetwork.LocalPlayer, newPlayer);
+        int playerID = _myPlayer.photonView.ViewID;
+        int namePanelID = _myNamePanel.photonView.ViewID;
+        photonView.RPC(nameof(RPCSetPlayerToNewPlayer), RpcTarget.All, playerID, namePanelID, PhotonNetwork.LocalPlayer, newPlayer);
     }
 
 
@@ -62,35 +68,37 @@ public class PlayerSpawner : MonoBehaviourPun
     /// 원래 있던 플레이어들에게 본인 플레이어 동기화 RPC
     /// </summary>
     [PunRPC]
-    private void RPCSetPlayerToOrigin(int id, Player player)
+    private void RPCSetPlayerToOrigin(int playerId, int namePanelID, Player player)
     {
-        PhotonView playerView = PhotonView.Find(id);
-        SetPlayer(playerView, player);
+        PhotonView playerView = PhotonView.Find(playerId);
+        PhotonView namePanelView = PhotonView.Find(namePanelID);
+        SetPlayer(playerView, namePanelView,player);
     }
 
     /// <summary>
     ///  새로 들어온 플레이어에게 본인 플레이어 동기화 RPC
     /// </summary>
     [PunRPC]
-    private void RPCSetPlayerToNewPlayer(int id, Player player, Player newPlayer)
+    private void RPCSetPlayerToNewPlayer(int playerId, int namePanelID, Player player, Player newPlayer)
     {
         // 새로운 플레이어가 본인이 아니면 함수를 돌리지 않음
         if (newPlayer != PhotonNetwork.LocalPlayer)
             return;
-        PhotonView playerView = PhotonView.Find(id);
-        SetPlayer(playerView, player);
+        PhotonView playerView = PhotonView.Find(playerId);
+        PhotonView namePanelView = PhotonView.Find(namePanelID);
+        SetPlayer(playerView, namePanelView, player);
     }
 
     /// <summary>
     /// 플레이어 설정
     /// </summary>
-    private void SetPlayer(PhotonView photonView, Player player)
+    private void SetPlayer(PhotonView playerView,PhotonView namePanelView, Player player)
     {
-        TMP_Text nickNameText = photonView.GetComponentInChildren<TMP_Text>();
-        //nickNameText.SetText(player.NickName);
+        TMP_Text nickNameText = namePanelView.GetComponentInChildren<TMP_Text>();
+        nickNameText.SetText(player.NickName);
 
         // 레디 UI 설정
-        PlayerReadyUI readyUI = Instantiate(_readyUI, photonView.transform);
+        PlayerReadyUI readyUI = Instantiate(_readyUI, namePanelView.transform);
         if (player.IsMasterClient == true)
         {
             readyUI.ChangeImage(PlayerReadyUI.Image.Master);
@@ -117,8 +125,9 @@ public class PlayerSpawner : MonoBehaviourPun
         if (player != PhotonNetwork.LocalPlayer)
             return;
 
-        int id = _myPlayer.photonView.ViewID;
-        photonView.RPC(nameof(RPCSetPlayerProperty), RpcTarget.All, id, player);
+        int playerId = _myPlayer.photonView.ViewID;
+        int namePanelID = _myNamePanel.photonView.ViewID;
+        photonView.RPC(nameof(RPCSetPlayerProperty), RpcTarget.All, playerId, namePanelID, player);
     }
 
     /// <summary>
@@ -129,19 +138,21 @@ public class PlayerSpawner : MonoBehaviourPun
         if (newMaster != PhotonNetwork.LocalPlayer)
             return;
 
-        int id = _myPlayer.photonView.ViewID;
-        photonView.RPC(nameof(RPCSetPlayerProperty), RpcTarget.All, id, newMaster);
+        int playerId = _myPlayer.photonView.ViewID;
+        int namePanelID = _myNamePanel.photonView.ViewID;
+        photonView.RPC(nameof(RPCSetPlayerProperty), RpcTarget.All, playerId, namePanelID, newMaster);
     }
 
     [PunRPC]
-    private void RPCSetPlayerProperty(int id, Player player)
+    private void RPCSetPlayerProperty(int playerId, int namePanelID,Player player)
     {
-        PhotonView playerView = PhotonView.Find(id);
+        PhotonView playerView = PhotonView.Find(playerId);
+        PhotonView namePanelView = PhotonView.Find(namePanelID);
 
-        PlayerReadyUI readyUI = playerView.GetComponentInChildren<PlayerReadyUI>();
+        PlayerReadyUI readyUI = namePanelView.GetComponentInChildren<PlayerReadyUI>();
         if (player.IsMasterClient == true)
         {
-            readyUI.ChangeImage(PlayerReadyUI.Image.Master);
+            readyUI.ChangeImage(PlayerReadyUI.Image.Master);    
         }
         else
         {
