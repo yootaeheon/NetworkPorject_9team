@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Chips : MonoBehaviour
 {
-    [SerializeField] private ChipType _chipType;
+    [field:SerializeField] public ChipType _chipType { get; set; }
 
-    
+    [field: HideInInspector] public bool IsMove { get; set; }
 
 }
