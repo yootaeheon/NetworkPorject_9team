@@ -3097,10 +3097,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BilliardsMission
       objectReference: {fileID: 0}
-    - target: {fileID: 9040304968191844654, guid: 3d4ece215e2043743b448a293a4736a2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9040304968191844655, guid: 3d4ece215e2043743b448a293a4736a2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

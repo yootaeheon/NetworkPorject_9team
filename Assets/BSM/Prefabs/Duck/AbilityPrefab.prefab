@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1738847256832173397}
   - component: {fileID: 1738847256832173395}
   - component: {fileID: 1738847256832173396}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 1738847257095452729}
   - component: {fileID: 1738847257095452730}
   - component: {fileID: 1738847257095452731}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Life
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 1738847257170431786}
   - component: {fileID: 1738847257170431784}
   - component: {fileID: 1738847257170431785}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 1738847257341480586}
   - component: {fileID: 1738847257341480587}
   - component: {fileID: 1738847257341480588}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 1738847257967487458}
   - component: {fileID: 1738847257967487456}
   - component: {fileID: 1738847257967487457}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -661,7 +661,7 @@ GameObject:
   - component: {fileID: 1738847258351713505}
   - component: {fileID: 1738847258351713506}
   - component: {fileID: 1738847258351713507}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Breaker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -780,7 +780,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4598464094770681925}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: MissionObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -820,7 +820,7 @@ GameObject:
   - component: {fileID: 4598464095340828374}
   - component: {fileID: 4598464095340828372}
   - component: {fileID: 4598464095340828373}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -894,7 +894,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4598464095382328173}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Watch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -936,7 +936,7 @@ GameObject:
   - component: {fileID: 4598464096884037604}
   - component: {fileID: 4598464096884037610}
   - component: {fileID: 4598464096884037611}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1014,7 +1014,7 @@ GameObject:
   - component: {fileID: 7454712156121486543}
   - component: {fileID: 7454712156121486542}
   - component: {fileID: 7046979030678994284}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: AbilityPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1028,7 +1028,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7454712156121486537}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1120,7 +1120,7 @@ GameObject:
   - component: {fileID: 7454712156435764398}
   - component: {fileID: 7454712156435764392}
   - component: {fileID: 7454712156435764399}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: BGImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1197,7 +1197,7 @@ GameObject:
   - component: {fileID: 7454712156849483979}
   - component: {fileID: 7454712156849483978}
   - component: {fileID: 7454712156849483977}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: MissionCloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}

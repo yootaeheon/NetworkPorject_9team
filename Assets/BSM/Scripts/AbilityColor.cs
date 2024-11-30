@@ -13,4 +13,10 @@ public class AbilityColor : MonoBehaviour
         _controller = GetComponent<MissionController>();
         _controller.GetMissionObj<Image>("Arm").color = MissionState.PlayerColor; 
     }
+
+    public void GetColor(Color color)
+    {
+        _controller.GetMissionObj<Image>("Arm").color = color;
+    }
+
 }
