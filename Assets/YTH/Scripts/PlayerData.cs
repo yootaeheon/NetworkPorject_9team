@@ -11,11 +11,10 @@ public class PlayerData
     public Color PlayerColor;
     public bool IsGhost; 
     public bool IsNone;
-
     public PlayerData(string playerName, PlayerType type, Color color, bool isGhost)
     {
         PlayerName = playerName;
-        Type = type;
+
         PlayerColor = color;
         IsGhost = isGhost;
         IsNone = true;

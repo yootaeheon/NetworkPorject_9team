@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] Animator feetAnim;
 
 
-
+    private int _playerNumber;
     private Vector3 privPos;
     private Vector3 privDir;
     [SerializeField] float threshold = 0.001f;
@@ -70,20 +70,33 @@ public class PlayerController : MonoBehaviourPun
         StartCoroutine(SetPlayerDataRoutine());
        
     }
-
+    /// <summary>
+    /// 플레이어 데이터 세팅
+    /// </summary>
     IEnumerator SetPlayerDataRoutine()
     {
         while (true)
         {
-            if (PhotonNetwork.LocalPlayer.GetPlayerNumber() != -1)
+            int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+            if (playerNumber != -1)
             {
-                PlayerDataContainer.Instance.SetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber(), PhotonNetwork.LocalPlayer.NickName, playerType, randomColor.r, randomColor.g, randomColor.b, false);
+                photonView.RPC(nameof(RPCSetPlayerNumber), RpcTarget.All, playerNumber);
+                PlayerDataContainer.Instance.SetPlayerData(playerNumber, PhotonNetwork.LocalPlayer.NickName, playerType, randomColor.r, randomColor.g, randomColor.b, false);
                 yield break;
             }
             yield return null;
         }
     }
-    
+
+    /// <summary>
+    /// 플레이어컨트롤러에 플레이어 넘버 RPC캐싱
+    /// </summary>
+    [PunRPC]
+    private void RPCSetPlayerNumber(int playerNumber)
+    {
+        _playerNumber = playerNumber;
+    }
+
     private void Update()
     {
 
@@ -292,7 +305,7 @@ public class PlayerController : MonoBehaviourPun
         yield return new WaitForSeconds(1f);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
         gameObject.GetComponent<BoxCollider2D>().enabled = false;  // 나중에 맵 보고 충돌 바꾸는걸로 해결하는게 나을듯
-        PlayerDataContainer.Instance.UpdatePlayerGhostList(PhotonNetwork.LocalPlayer.ActorNumber);
+        PlayerDataContainer.Instance.UpdatePlayerGhostList(_playerNumber);
     }
 
 

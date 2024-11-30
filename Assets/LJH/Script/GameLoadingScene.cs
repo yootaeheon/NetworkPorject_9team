@@ -11,6 +11,9 @@ public class GameLoadingScene : MonoBehaviourPun
     // ≈ı«•æ¿ ¿¸»Ø
     [SerializeField] Transform[] SpawnPoints;
 
+    private GameObject player;
+    public static GameObject MyPlayer { get { return Instance.player; } }
+    private Color color;
 
     private bool isOnGame= false;
 
@@ -60,8 +63,7 @@ public class GameLoadingScene : MonoBehaviourPun
     {
         photonView.RPC("RpcRandomSpawner", RpcTarget.All);
     }
-    private GameObject player;
-    private Color color;
+
     private void spawnPlayer(Vector3 Pos) 
     {
         player = PhotonNetwork.Instantiate("LJH_Player", Pos, Quaternion.identity);
