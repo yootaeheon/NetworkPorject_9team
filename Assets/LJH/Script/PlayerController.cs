@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
 
+    [Header("Duck User 어빌리티 능력 팝업창")]
+    [SerializeField] private GameObject _abilityObject;
 
     private int _playerNumber;
     private Vector3 privPos;
@@ -106,8 +108,23 @@ public class PlayerController : MonoBehaviourPun
         Move();
         MoveCheck();
         FindNearObject();
-
+        DuckAbilityInteraction();
     }
+
+    /// <summary>
+    /// 어빌리티 팝업창 오픈 기능
+    /// </summary>
+    private void DuckAbilityInteraction()
+    {
+        if (playerType.Equals(PlayerType.Duck))
+        {
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                _abilityObject.SetActive(true); 
+            }
+        }
+    }
+
     public void SettingColor(float r, float g , float b) 
     {
         photonView.RPC("RpcSetColors", RpcTarget.AllBuffered, r,g,b);
