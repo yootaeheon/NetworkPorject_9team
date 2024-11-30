@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviourPun
 
 
     private SabotageType _useAbility;
-    public SabotageType UserAbility { get; set; }
+    public SabotageType UserAbility { get { return _useAbility; } }
 
 
     private bool _sabotageFire;
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviourPun
 
     private void Update()
     {
-        Debug.Log($"현재 능력 보유 상태 : fire : {_sabotageFire}, Life:{_sabotageLife}, br{_sabotageBreaker}");
+        Debug.Log($"현재 사용 능력 :{UserAbility}");
     }
 
     private void DuckFireAbilityInvoke()

@@ -249,11 +249,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &153101572 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6181625166117724659, guid: cc3d3872beeeff146a0c0b13dfc76063, type: 3}
-  m_PrefabInstance: {fileID: 967421630397049769}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &243107797
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1894,6 +1889,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216077165}
   m_CullTransparentMesh: 1
+--- !u!1 &1228067619 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8528253426488589520, guid: bdca30b83cf5be240b7929b8fa31ddb3, type: 3}
+  m_PrefabInstance: {fileID: 3386428470534679834}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1475678685
 GameObject:
   m_ObjectHideFlags: 0
@@ -2744,7 +2744,7 @@ PrefabInstance:
     - target: {fileID: 691681831772421329, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: _missionPrefab
       value: 
-      objectReference: {fileID: 153101572}
+      objectReference: {fileID: 1228067619}
     - target: {fileID: 691681831772421330, guid: 0c7b8289c8a966f438be9d9830b56f78, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3096,6 +3096,10 @@ PrefabInstance:
     - target: {fileID: 9040304968191844654, guid: 3d4ece215e2043743b448a293a4736a2, type: 3}
       propertyPath: m_Name
       value: BilliardsMission
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040304968191844654, guid: 3d4ece215e2043743b448a293a4736a2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9040304968191844655, guid: 3d4ece215e2043743b448a293a4736a2, type: 3}
       propertyPath: m_Pivot.x
