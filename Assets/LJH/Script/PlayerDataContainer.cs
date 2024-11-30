@@ -7,10 +7,13 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class PlayerDataContainer : MonoBehaviourPun
 {
+    [SerializeField] public int GooseCount = 0;
+    [SerializeField] public int DuckCount = 0;
     [SerializeField] public PlayerData[] playerDataArray;
 
     private int MaxPlayers = 15;
     public static PlayerDataContainer Instance;
+
 
     private void Start()
     {
@@ -89,7 +92,30 @@ public class PlayerDataContainer : MonoBehaviourPun
         PlayerData data = GetPlayerData(playerNumber);
         photonView.RPC(nameof(RpcSetExitPlayerData), RpcTarget.AllBuffered, playerNumber, "None", PlayerType.Goose, Color.white.r, Color.white.g, Color.white.b, true);
     }
+    public void SetPlayerTypeCounts()
+    {
+        Debug.Log("타입별 카운팅");
+        Debug.Log($"{PhotonNetwork.PlayerList.Length}현재 방 인원");
+        GooseCount = 0;
+        DuckCount = 0;
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (playerDataArray[i].IsGhost == false)
+            {
+                if (playerDataArray[i].Type == PlayerType.Goose)
+                {
+                    GooseCount++;
+                }
+                else
+                {
+                    DuckCount++;
+                }
 
+            }
+
+        }
+
+    }
     public PlayerData GetPlayerData(int playerNumber)
     {
         return playerDataArray[playerNumber];
@@ -101,6 +127,7 @@ public class PlayerDataContainer : MonoBehaviourPun
     public void RandomSetjob()
     {
         photonView.RPC(nameof(RpcRandomSetjob), RpcTarget.MasterClient);
+
     }
 
     public void UpdatePlayerGhostList(int playerNumber)
