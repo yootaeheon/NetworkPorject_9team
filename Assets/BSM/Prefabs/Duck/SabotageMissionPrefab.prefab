@@ -3740,6 +3740,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wrongClip: {fileID: 8300000, guid: 66dc565443d2389458dfc2cd7bf4b1ba, type: 3}
+  _sabotageType: 3
 --- !u!114 &6181625166117724661
 MonoBehaviour:
   m_ObjectHideFlags: 0

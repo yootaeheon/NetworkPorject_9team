@@ -36,7 +36,7 @@ public class GlobalFireMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance._firstGlobalFire)
+        if (GameManager.Instance.FirstGlobalFire)
         {
             gameObject.SetActive(false);
         }
