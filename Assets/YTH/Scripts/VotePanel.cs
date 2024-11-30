@@ -120,7 +120,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SpawnPlayerPanelRPC(int index)
     {
-        Debug.Log("11111111111111111111111111111");
         _panelList[index].SetActive(true);
         _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(index); });
     }

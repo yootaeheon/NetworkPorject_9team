@@ -20,7 +20,11 @@ namespace GameUIs
 
         private void Awake()
         {
-            Bind();
+            Bind();           
+        }
+        private void Start()
+        {
+            SetActive(false);
         }
 
         public void SetActive(bool value)

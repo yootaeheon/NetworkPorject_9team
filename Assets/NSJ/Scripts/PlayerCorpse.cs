@@ -33,7 +33,8 @@ public class PlayerCorpse : MonoBehaviour
             // 투표씬 진입 시
             if (VoteScene.Instance != null)
             {
-                DeleteCorpse();
+                yield return 1f.GetDelay();
+               DeleteCorpse();
             }
             yield return 0.1f.GetDelay();
         }
@@ -50,7 +51,8 @@ public class PlayerCorpse : MonoBehaviour
             _lifeRoutine = null;
         }
 
-        Destroy(gameObject);
+        ReportingObject reportingObject = GetComponent<ReportingObject>();
+        reportingObject.Reporting();
     }
 
 }
