@@ -27,7 +27,7 @@ public class GlobalBreakerMission : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.Instance.UserAbility.Equals(SabotageType.BlackOut))
+        if (!GameManager.Instance.CurAbility.Equals(SabotageType.BlackOut))
         {
             gameObject.SetActive(false);
         }

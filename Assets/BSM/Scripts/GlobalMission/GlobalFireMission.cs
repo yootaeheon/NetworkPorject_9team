@@ -36,7 +36,7 @@ public class GlobalFireMission : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.Instance.UserAbility.Equals(SabotageType.Fire))
+        if (!GameManager.Instance.CurAbility.Equals(SabotageType.Fire))
         {
             gameObject.SetActive(false);
         }

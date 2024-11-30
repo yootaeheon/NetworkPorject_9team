@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviourPun
     public int GlobalFireCount = 2;
 
 
-    private SabotageType _useAbility;
-    public SabotageType UserAbility { get { return _useAbility; } }
+    private SabotageType UseAbility;
+    public SabotageType CurAbility;
 
 
     private bool _sabotageFire;
@@ -101,25 +101,25 @@ public class GameManager : MonoBehaviourPun
 
     private void Update()
     {
-        Debug.Log($"현재 사용 능력 :{UserAbility}");
+        Debug.Log($"현재 사용 능력 :{UseAbility}");
     }
 
     private void DuckFireAbilityInvoke()
     {
-        _useAbility = SabotageType.Fire; 
-        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, _useAbility);
+        UseAbility = SabotageType.Fire; 
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, UseAbility);
     }
 
     private void DuckLifeAbilityInvoke()
     {
-        _useAbility = SabotageType.OxygenBlock;
-        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, _useAbility);
+        UseAbility = SabotageType.OxygenBlock;
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, UseAbility);
     }
 
     private void DuckBreakerAbilityInvoke()
     {
-        _useAbility = SabotageType.BlackOut;
-        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, _useAbility);
+        UseAbility = SabotageType.BlackOut;
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, UseAbility);
     }
      
     /// <summary>
@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void DuckAbilityRPC(bool value, SabotageType type)
     {
-        
+        CurAbility = type;
 
         switch (type)
         {
@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviourPun
 
         }
 
-        _useAbility = SabotageType.None;
+        UseAbility = SabotageType.None;
         yield break;
     }
 

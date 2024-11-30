@@ -118,7 +118,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.Instance.UserAbility.Equals(SabotageType.OxygenBlock))
+        if (!GameManager.Instance.CurAbility.Equals(SabotageType.OxygenBlock))
         {
             gameObject.SetActive(false);
         }
