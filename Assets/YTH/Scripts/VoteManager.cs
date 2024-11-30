@@ -1,7 +1,9 @@
+using GameUIs;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -68,7 +70,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
                 top2 = _voteCounts[i];
                 Debug.Log("동점표로 없던 일~");
                 isKick = false;
-                return;
+                break;
             }
         }
         Debug.Log($"{_voteData.SkipCount}표 기권!");
@@ -83,19 +85,22 @@ public class VoteManager : MonoBehaviourPunCallbacks
         else
         {
             //TODO: 동점 시 아무도 안쫓겨나는 컷 씬
+            StartCoroutine(ShowVoteSkipRoutine());
         }
 
 
         //TODO : 고스트가 되는 기능
 
-        // 최다 득표자가 본인일때
-        if (playerIndex == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+        if (isKick == true)
         {
-            PlayerController myController = GameLoadingScene.MyPlayer.GetComponent<PlayerController>();
-            // 사망
-            myController.Die();
+            // 최다 득표자가 본인일때
+            if (playerIndex == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+            {
+                PlayerController myController = GameLoadingScene.MyPlayer.GetComponent<PlayerController>();
+                // 사망
+                myController.Die();
+            }
         }
-        return;
     }
 
     /// <summary>
@@ -104,15 +109,23 @@ public class VoteManager : MonoBehaviourPunCallbacks
     IEnumerator ShowVoteResultRoutine(Color playerColor, string name, PlayerType type)
     {
         yield return 3f.GetDelay();
-        GameUI.ShowVoteResult(playerColor, name, type);
+        GameUI.ShowVoteKick(playerColor, name, type);
         yield return 7f.GetDelay();
-        SceneChanger.UnLoadScene("VoteScene");
+
+        //if (PhotonNetwork.IsMasterClient == true)
+        //{
+            SceneChanger.UnLoadScene("VoteScene");
+        //}
     }
     IEnumerator ShowVoteSkipRoutine()
     {
         yield return 3f.GetDelay();
-        // 스킵 컷씬
+        GameUI.ShowVoteSkip();
         yield return 7f.GetDelay();
-        SceneChanger.UnLoadScene("VoteScene");
+
+        //if (PhotonNetwork.IsMasterClient == true)
+        //{
+            SceneChanger.UnLoadScene("VoteScene");
+        //}
     }
 }

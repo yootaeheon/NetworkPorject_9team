@@ -13,7 +13,8 @@ public class GameUI : MonoBehaviour
     public static EmergencyUI Emergency { get { return Instance._emergencyUI; } }  
     public static GameStartUI GameStart { get { return Instance._gameStartUI; } }
     public static PlayerUI Player { get { return Instance._playerUI; } }
-    public static VoteResultUI VoteResult { get { return Instance._voteResultUI; } }  
+    public static VoteResultUI VoteResult { get { return Instance._voteResultUI; } }
+
 
     [SerializeField] ReportUI _reportUI;
     [SerializeField] EmergencyUI _emergencyUI;
@@ -64,12 +65,20 @@ public class GameUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ÅõÇ¥ °á°ú È°¼ºÈ­
+    /// Ãß¹æ ÄÆ¾À È°¼ºÈ­
     /// </summary>
-    public static void ShowVoteResult(Color playerColro, string name, PlayerType type)
+    public static void ShowVoteKick(Color playerColor, string name, PlayerType type)
     {
-        VoteResult.SetUI(playerColro, name, type);
-        VoteResult.SetActive(true);
+        VoteResult.SetUI(playerColor, name, type);
+        VoteResult.SetActiveKick(true);
+    }
+    /// <summary>
+    /// ½ºÅµ ÄÆ¾À È°¼ºÈ­
+    /// </summary>
+    /// <param name="result"></param>
+    public static void ShowVoteSkip()
+    {
+        VoteResult.SetActiveSkip(true);
     }
 
     private void InitSingleTon()

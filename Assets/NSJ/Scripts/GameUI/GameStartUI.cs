@@ -18,6 +18,10 @@ namespace GameUIs
         {
             Bind();
         }
+        private void Start()
+        {
+            SetActive(false);
+        }
 
         public void SetActive(bool value)
         {
