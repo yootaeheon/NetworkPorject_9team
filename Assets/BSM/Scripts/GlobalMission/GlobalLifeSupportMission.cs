@@ -118,6 +118,16 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
     private void Update()
     {
+        if (!GameManager.Instance.UserAbility.Equals(SabotageType.OxygenBlock))
+        {
+            gameObject.SetActive(false);
+        }
+
+        if (GameManager.Instance.GlobalMissionClear)
+        {
+            gameObject.SetActive(false);
+        }
+
         _missionController.PlayerInput();
         SelectChip();
     }

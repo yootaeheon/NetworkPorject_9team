@@ -73,6 +73,11 @@ public class ReactorChargingMission : MonoBehaviour
     private Coroutine _beepCo;
     private void Update()
     {
+        if (GameManager.Instance.GlobalMissionState)
+        {
+            gameObject.SetActive(false);
+        }
+
         _missionController.PlayerInput();
         LeverPress();
         ChargeEnergy();

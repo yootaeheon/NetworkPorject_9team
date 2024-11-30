@@ -35,8 +35,13 @@ public class GlobalFireMissionSecond : MonoBehaviour
     }
 
     private void Update()
-    {
-        if (GameManager.Instance._secondGlobalFire)
+    { 
+        if (!GameManager.Instance.UserAbility.Equals(SabotageType.Fire))
+        {
+            gameObject.SetActive(false);
+        }
+
+        if (GameManager.Instance.SecondGlobalFire)
         {
             gameObject.SetActive(false);
         }

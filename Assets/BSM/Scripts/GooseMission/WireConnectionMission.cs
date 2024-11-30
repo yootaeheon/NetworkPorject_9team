@@ -70,11 +70,13 @@ public class WireConnectionMission : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.GlobalMissionState)
+        {
+            gameObject.SetActive(false);
+        }
+         
         _missionController.PlayerInput();
         WireConnection();
-
-        if (_missionController._searchObj != null)
-            Debug.Log(_missionController._searchObj.name);
     }
 
     /// <summary>

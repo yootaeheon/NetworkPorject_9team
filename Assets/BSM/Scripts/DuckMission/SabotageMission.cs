@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class SabotageMission : MonoBehaviour
 {
     [SerializeField] private AudioClip _wrongClip;
-    public SabotageType _sabotageType;
+    public SabotageType SabotageType;
 
     private MissionState _missionState;
     private MissionController _missionController;
@@ -83,38 +83,36 @@ public class SabotageMission : MonoBehaviour
         }
     }
 
-
-    /// <summary>
-    /// 어떤 사보타지 미션인지 종류를 어떻게?
-    /// 프리팹 마다 배치해두니까
-    /// 여기서 Type을 설정해두고 클리어 했을 때 타입에 맞는 보상을 지급?
-    /// Player한테 어떤 값을 넘겨줘야할지
-    /// </summary>
-
-    public bool SabotageClearReward()
-    {
-        return true;
-    }
-
-
     /// <summary>
     /// 비밀번호 비교 기능 및 Text 설정
     /// </summary>
     private void ComparePassword(object sender, EventArgs args)
-    { 
+    {
         if (_codeText.text.Equals(_inputText.text))
         {
-            //오리 Player 사보타지 능력 획득
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
-            Debug.Log("사보타지 미션 성공");
             _inputText.text = "성공!";
             _inputText.color = Color.green;
             _inputText.alignment = TextAlignmentOptions.Center;
             _inputText.fontSize = 70;
+
+            switch (SabotageType)
+            {
+                case SabotageType.Fire:
+                    GameManager.Instance.SabotageFire = true;
+                    break;
+
+                case SabotageType.BlackOut:
+                    GameManager.Instance.SabotageBreaker = true;
+                    break;
+
+                case SabotageType.OxygenBlock:
+                    GameManager.Instance.SabotageLife = true;
+                    break;
+            } 
         }
         else
         {
-            Debug.Log("사보타지 미션 실패");
             SoundManager.Instance.SFXPlay(_wrongClip);
             _inputText.text = "실패";
             _inputText.color = Color.red;
@@ -123,5 +121,5 @@ public class SabotageMission : MonoBehaviour
         }
 
         _missionController.MissionCoroutine(1f);
-    } 
+    }
 }

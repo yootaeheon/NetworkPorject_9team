@@ -8,10 +8,16 @@ public class GameManager : MonoBehaviourPun
 {
     [Header("사보타지 능력 사용 관련 변수")]
     [SerializeField] private AudioClip _sirenClip;
+    [SerializeField] private AudioClip _bgmClip;
     [SerializeField] private Image _sirenPanelImage;
+    [SerializeField] private Button _fireBtn;
+    [SerializeField] private Button _lifeBtn;
+    [SerializeField] private Button _breakerBtn;
+
+
     public bool GlobalMissionState;
 
-    public static GameManager Instance { get; private set; } 
+    public static GameManager Instance { get; private set; }
 
     [SerializeField] public Slider _missionScoreSlider;
 
@@ -20,21 +26,65 @@ public class GameManager : MonoBehaviourPun
 
 
     [Header("글로벌 미션 팝업창 종료 조건 변수")]
-    public bool _globalMissionClear;
-    public bool _firstGlobalFire;
-    public bool _secondGlobalFire;
-    public int _globalFireCount = 2;
+    public bool GlobalMissionClear = true;
+
+    [Header("불 지르기 미션 클리어 조건")]
+    public bool FirstGlobalFire;
+    public bool SecondGlobalFire;
+    public int GlobalFireCount = 2;
 
 
+    private SabotageType _useAbility;
+    public SabotageType UserAbility { get { return _useAbility; } }
 
-    //테스트용
-    public int _myScore = 0;
 
-    //각 글로벌 미션에서 클리어 했을 시 사용할 변수 목록 필요
+    private bool _sabotageFire;
+    public bool SabotageFire
+    {
+        get { return _sabotageFire; }
+
+        set
+        {
+            _sabotageFire = value;
+            _fireBtn.interactable = _sabotageFire;
+        }
+    }
+
+    private bool _sabotageLife;
+    public bool SabotageLife
+    {
+        get
+        {
+            return _sabotageLife;
+        }
+        set
+        {
+            _sabotageLife = value;
+            _lifeBtn.interactable = _sabotageLife;
+        }
+    }
+
+
+    private bool _sabotageBreaker;
+    public bool SabotageBreaker
+    {
+        get
+        {
+            return _sabotageBreaker;
+        }
+        set
+        {
+            _sabotageBreaker = value;
+            _breakerBtn.interactable = _sabotageBreaker;
+        }
+    }
 
     private void Awake()
     {
         SetSingleton();
+        _fireBtn.onClick.AddListener(DuckFireAbilityInvoke);
+        _lifeBtn.onClick.AddListener(DuckLifeAbilityInvoke);
+        _breakerBtn.onClick.AddListener(DuckBreakerAbilityInvoke); 
     }
 
     private void SetSingleton()
@@ -42,7 +92,6 @@ public class GameManager : MonoBehaviourPun
         if (Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -52,35 +101,71 @@ public class GameManager : MonoBehaviourPun
 
     private void Update()
     {
-        Debug.Log($"남은 미션 :{_clearMissionScore}");
-        Debug.Log($"불끄기 횟수 :{_globalFireCount} / GlobalMission{_globalMissionClear}");
+        Debug.Log($"현재 사용 능력 :{UserAbility}");
+    }
 
-        if (GlobalMissionState)
-        {
-            GlobalMissionInvoke();
-            SoundManager.Instance.BGMPlay(_sirenClip);
-        }
-        else
-        {
-            _sirenPanelImage.gameObject.SetActive(false);
-        }
+    private void DuckFireAbilityInvoke()
+    {
+        _useAbility = SabotageType.Fire; 
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, _useAbility);
+    }
 
+    private void DuckLifeAbilityInvoke()
+    {
+        _useAbility = SabotageType.OxygenBlock;
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, _useAbility);
+    }
+
+    private void DuckBreakerAbilityInvoke()
+    {
+        _useAbility = SabotageType.BlackOut;
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, _useAbility);
     }
      
-
-
-
-    public void GlobalMissionInvoke()
+    /// <summary>
+    /// Duck 유저 사보타지 능력 기능 동기화
+    /// </summary>
+    public void DuckAbilityInvoke()
     {
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true);
+    }
+
+    [PunRPC]
+    public void DuckAbilityRPC(bool value, SabotageType type)
+    {
+        
+
+        switch (type)
+        {
+            case SabotageType.Fire:
+                SabotageFire = false;
+                break;
+
+            case SabotageType.BlackOut:
+                SabotageBreaker = false;
+                break;
+
+            case SabotageType.OxygenBlock:
+                SabotageLife = false;
+                break;
+        }
+        Debug.Log($"발동된 능력 :{type}");
+
+        GlobalMissionClear = false;
+        GlobalMissionState = value;
         SoundManager.Instance.BGMPlay(_sirenClip);
         StartCoroutine(SirenCoroutine());
     }
 
+    /// <summary>
+    /// 사이렌 점멸 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator SirenCoroutine()
     {
-        float value = 0f; 
+        float value = 0f;
 
-        while (!_globalMissionClear)
+        while (!GlobalMissionClear)
         {
             if (!_sirenPanelImage.gameObject.activeSelf)
             {
@@ -90,8 +175,8 @@ public class GameManager : MonoBehaviourPun
             Color alpha = _sirenPanelImage.color;
             value = alpha.a;
 
-            if(alpha.a > 0f)
-            { 
+            if (alpha.a > 0f)
+            {
                 while (true)
                 {
                     value -= Time.deltaTime * 0.5f;
@@ -101,11 +186,11 @@ public class GameManager : MonoBehaviourPun
                     if (_sirenPanelImage.color.a < 0f) break;
 
                     yield return null;
-                } 
-            } 
-            
+                }
+            }
 
-            if(alpha.a < 0f)
+
+            if (alpha.a < 0f)
             {
 
                 while (true)
@@ -122,19 +207,18 @@ public class GameManager : MonoBehaviourPun
 
         }
 
-      
-
+        _useAbility = SabotageType.None;
         yield break;
     }
 
+    //------ 거위들이 깨야할 미션
 
     /// <summary>
     /// 각 클라이언트에서 미션 클리어 시마다 점수 증가
     /// </summary>
     public void AddMissionScore()
     {
-        _myScore++;
-        photonView.RPC(nameof(MissionTotalScore), RpcTarget.AllViaServer, 1); 
+        photonView.RPC(nameof(MissionTotalScore), RpcTarget.AllViaServer, 1);
     }
 
     /// <summary>
@@ -144,7 +228,7 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void MissionTotalScore(int score)
     {
-        _clearMissionScore += score; 
+        _clearMissionScore += score;
         _missionScoreSlider.value = (float)_clearMissionScore / (float)_totalMissionScore;
     }
 
@@ -164,7 +248,7 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void FirstFireRPC(bool value)
     {
-        _firstGlobalFire = value; 
+        FirstGlobalFire = value;
     }
 
     public void SecondFire()
@@ -175,9 +259,9 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void SecondFireRPC(bool value)
     {
-        _secondGlobalFire = value;
+        SecondGlobalFire = value;
     }
-     
+
     /// <summary>
     /// 불끄기 미션 카운트 동기화
     /// </summary>
@@ -185,12 +269,12 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void FireCountSync(int value)
     {
-        _globalFireCount -= value;
+        GlobalFireCount -= value;
 
-        if(_globalFireCount < 1)
+        if (GlobalFireCount < 1)
         {
             photonView.RPC(nameof(GlobalMissionRPC), RpcTarget.AllViaServer, true);
-        } 
+        }
     }
 
     /// <summary>
@@ -202,14 +286,16 @@ public class GameManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// 사보타지 미션 클리어 여부 동기화
+    /// 사보타지 능력 미션 클리어 여부 동기화
     /// </summary>
     /// <param name="value"></param>
     [PunRPC]
     public void GlobalMissionRPC(bool value)
     {
-        _globalMissionClear = value;
+        GlobalMissionClear = value;
         GlobalMissionState = false;
+        _sirenPanelImage.gameObject.SetActive(false);
+        SoundManager.Instance.BGMPlay(_bgmClip);
     }
 
 }

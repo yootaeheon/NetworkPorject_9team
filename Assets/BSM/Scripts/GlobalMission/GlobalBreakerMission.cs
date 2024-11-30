@@ -27,8 +27,14 @@ public class GlobalBreakerMission : MonoBehaviour
 
     private void Update()
     {
+        if (!GameManager.Instance.UserAbility.Equals(SabotageType.BlackOut))
+        {
+            gameObject.SetActive(false);
+        }
+
+
         //클라이언트에서 미션을 클리어 했을 경우 모든 클라이언트 미션 팝업창 비활성화
-        if (GameManager.Instance._globalMissionClear)
+        if (GameManager.Instance.GlobalMissionClear)
         {
             gameObject.SetActive(false);
         }
