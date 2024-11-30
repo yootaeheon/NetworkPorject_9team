@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -111,10 +112,10 @@ public class VoteManager : MonoBehaviourPunCallbacks
         GameUI.ShowVoteKick(playerColor, name, type);
         yield return 7f.GetDelay();
 
-        if (PhotonNetwork.IsMasterClient == true)
-        {
+        //if (PhotonNetwork.IsMasterClient == true)
+        //{
             SceneChanger.UnLoadScene("VoteScene");
-        }
+        //}
     }
     IEnumerator ShowVoteSkipRoutine()
     {
@@ -122,9 +123,9 @@ public class VoteManager : MonoBehaviourPunCallbacks
         GameUI.ShowVoteSkip();
         yield return 7f.GetDelay();
 
-        if (PhotonNetwork.IsMasterClient == true)
-        {
+        //if (PhotonNetwork.IsMasterClient == true)
+        //{
             SceneChanger.UnLoadScene("VoteScene");
-        }
+        //}
     }
 }

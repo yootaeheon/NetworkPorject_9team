@@ -1,23 +1,28 @@
+using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerCorpse : MonoBehaviour
+public class PlayerCorpse : MonoBehaviourPun
 {
     Coroutine _lifeRoutine;
     private void OnEnable()
     {
-        if( _lifeRoutine == null )
+        if (photonView.IsMine == false)
+            return;
+
+        if (_lifeRoutine == null)
         {
             _lifeRoutine = StartCoroutine(LifeRoutine());
         }
     }
     private void OnDisable()
     {
-        if(_lifeRoutine != null)
+        if (photonView.IsMine == false)
+            return;
+
+        if (_lifeRoutine != null)
         {
-            StopCoroutine( _lifeRoutine );
+            StopCoroutine(_lifeRoutine);
             _lifeRoutine = null;
         }
     }
@@ -33,8 +38,7 @@ public class PlayerCorpse : MonoBehaviour
             // 투표씬 진입 시
             if (VoteScene.Instance != null)
             {
-                yield return 1f.GetDelay();
-               DeleteCorpse();
+                DeleteCorpse();         
             }
             yield return 0.1f.GetDelay();
         }
@@ -51,8 +55,10 @@ public class PlayerCorpse : MonoBehaviour
             _lifeRoutine = null;
         }
 
-        ReportingObject reportingObject = GetComponent<ReportingObject>();
-        reportingObject.Reporting();
+        //ReportingObject reportingObject = GetComponent<ReportingObject>();
+        //reportingObject.Reporting();
+
+        //gameObject.SetActive(false);
     }
 
 }
