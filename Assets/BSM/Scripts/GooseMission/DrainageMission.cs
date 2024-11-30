@@ -66,6 +66,11 @@ public class DrainageMission : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.GlobalMissionState)
+        {
+            gameObject.SetActive(false);
+        }
+
         _missionController.PlayerInput();
         CleaningHole();
     }

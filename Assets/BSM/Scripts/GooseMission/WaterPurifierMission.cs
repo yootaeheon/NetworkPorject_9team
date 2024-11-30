@@ -62,6 +62,11 @@ public class WaterPurifierMission : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.GlobalMissionState)
+        {
+            gameObject.SetActive(false);
+        }
+
         SelectCordObj();
         FollowCableToCord(); 
     }
