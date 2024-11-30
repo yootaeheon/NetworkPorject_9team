@@ -2059,7 +2059,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1764886402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2171,6 +2171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sirenClip: {fileID: 8300000, guid: cc0ab89a2502d224c897b62701d1851a, type: 3}
+  _bgmClip: {fileID: 8300000, guid: 631d1380612d4e340b1405c89e864b20, type: 3}
   _sirenPanelImage: {fileID: 2081257556}
   GlobalMissionState: 0
   _missionScoreSlider: {fileID: 255364787}
@@ -2212,13 +2213,14 @@ GameObject:
   - component: {fileID: 1858569801}
   - component: {fileID: 1858569800}
   - component: {fileID: 1858569802}
+  - component: {fileID: 1858569803}
   m_Layer: 0
   m_Name: TestGameScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1858569800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2253,9 +2255,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858569799}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9fc4a3a2a09cb2d4695efc8e6fbb7f8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1858569803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858569799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2644fc15c2f61cf43a9135951465509b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1859942321

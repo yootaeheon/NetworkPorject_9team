@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviourPun
 {
     [Header("사보타지 능력 사용 관련 변수")]
     [SerializeField] private AudioClip _sirenClip;
+    [SerializeField] private AudioClip _bgmClip;
     [SerializeField] private Image _sirenPanelImage;
     public bool GlobalMissionState;
 
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviourPun
 
 
     [Header("글로벌 미션 팝업창 종료 조건 변수")]
-    public bool _globalMissionClear;
+    public bool _globalMissionClear = true;
     public bool _firstGlobalFire;
     public bool _secondGlobalFire;
     public int _globalFireCount = 2;
@@ -54,27 +55,23 @@ public class GameManager : MonoBehaviourPun
     {
         Debug.Log($"남은 미션 :{_clearMissionScore}");
         Debug.Log($"불끄기 횟수 :{_globalFireCount} / GlobalMission{_globalMissionClear}");
-
-        if (GlobalMissionState)
-        {
-            GlobalMissionInvoke();
-            SoundManager.Instance.BGMPlay(_sirenClip);
-        }
-        else
-        {
-            _sirenPanelImage.gameObject.SetActive(false);
-        }
-
+         
     }
-     
+      
+    public void DuckAbilityInvoke()
+    { 
+        photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true);
+    }
 
-
-
-    public void GlobalMissionInvoke()
+    [PunRPC]
+    public void DuckAbilityRPC(bool value)
     {
+        _globalMissionClear = false;
+        GlobalMissionState = value;
         SoundManager.Instance.BGMPlay(_sirenClip);
         StartCoroutine(SirenCoroutine());
     }
+
 
     private IEnumerator SirenCoroutine()
     {
@@ -121,12 +118,11 @@ public class GameManager : MonoBehaviourPun
             }
 
         }
-
-      
-
+         
         yield break;
     }
 
+    //------ 거위들이 깨야할 미션
 
     /// <summary>
     /// 각 클라이언트에서 미션 클리어 시마다 점수 증가
@@ -147,7 +143,7 @@ public class GameManager : MonoBehaviourPun
         _clearMissionScore += score; 
         _missionScoreSlider.value = (float)_clearMissionScore / (float)_totalMissionScore;
     }
-
+     
     /// <summary>
     /// 불끄기 미션 개수
     /// </summary>
@@ -192,7 +188,7 @@ public class GameManager : MonoBehaviourPun
             photonView.RPC(nameof(GlobalMissionRPC), RpcTarget.AllViaServer, true);
         } 
     }
-
+     
     /// <summary>
     /// 각 클라이언트에서 사보타지 능력 사용한 미션 클리어 여부
     /// </summary>
@@ -202,7 +198,7 @@ public class GameManager : MonoBehaviourPun
     }
 
     /// <summary>
-    /// 사보타지 미션 클리어 여부 동기화
+    /// 사보타지 능력 미션 클리어 여부 동기화
     /// </summary>
     /// <param name="value"></param>
     [PunRPC]
@@ -210,6 +206,8 @@ public class GameManager : MonoBehaviourPun
     {
         _globalMissionClear = value;
         GlobalMissionState = false;
+        _sirenPanelImage.gameObject.SetActive(false);
+        SoundManager.Instance.BGMPlay(_bgmClip);
     }
 
 }
