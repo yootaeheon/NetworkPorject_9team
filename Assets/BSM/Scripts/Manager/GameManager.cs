@@ -133,6 +133,8 @@ public class GameManager : MonoBehaviourPun
     [PunRPC]
     public void DuckAbilityRPC(bool value, SabotageType type)
     {
+        
+
         switch (type)
         {
             case SabotageType.Fire:
