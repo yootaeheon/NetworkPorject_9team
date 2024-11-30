@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class SabotageMission : MonoBehaviour
 {
     [SerializeField] private AudioClip _wrongClip;
+    public SabotageType _sabotageType;
 
     private MissionState _missionState;
     private MissionController _missionController;
@@ -89,6 +90,11 @@ public class SabotageMission : MonoBehaviour
     /// 여기서 Type을 설정해두고 클리어 했을 때 타입에 맞는 보상을 지급?
     /// Player한테 어떤 값을 넘겨줘야할지
     /// </summary>
+
+    public bool SabotageClearReward()
+    {
+        return true;
+    }
 
 
     /// <summary>

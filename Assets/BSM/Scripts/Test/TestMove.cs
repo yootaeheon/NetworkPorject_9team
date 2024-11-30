@@ -7,8 +7,8 @@ public class TestMove : MonoBehaviour
 {
     [SerializeField] private float _movSpeed;
     [SerializeField] private GameObject _tempMission;
-    
 
+    private PlayerType _playType = PlayerType.Goose;
     private Rigidbody2D _rb;
     private Color color;
 
@@ -32,9 +32,8 @@ public class TestMove : MonoBehaviour
                  
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    PlayerType type = PlayerType.Goose;
                     color = new Color(0.5f, 1, 1, 1);
-                    mission.GetMission(color,type); 
+                    mission.GetMission(color,_playType); 
                 }
 
             }
@@ -43,6 +42,10 @@ public class TestMove : MonoBehaviour
 
         PlayerInput();
 
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            GameManager.Instance.GlobalMissionState = true;
+        }
 
     }
 

@@ -11,6 +11,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
     [SerializeField] private List<Chips> _leftSlots = new List<Chips>(9);
     [SerializeField] private List<Chips> _waitSlots = new List<Chips>(9);
     [SerializeField] private List<GameObject> _rightSlots = new List<GameObject>(9);
+    [SerializeField] private AudioClip _failCilp;
 
     private List<GameObject> _returnSlots = new List<GameObject>();
 
@@ -63,13 +64,16 @@ public class GlobalLifeSupportMission : MonoBehaviour
     private void OnDisable()
     {
         OnCheckedSlot -= CompareSlot;
-
+        
+        //요소 추가 반복문
         for (int i = 0; i < _rightSlots.Count; i++)
         {
+            //오른쪽 슬롯에 배치된 오브젝트가 있다면
             if (_rightSlots[i].transform.childCount != 0)
             {
                 for (int j = 0; j < _emptyArr.Length; j++)
-                {
+                {   
+                    //대기열 체크 배열에서 false를 만나면
                     if (!_emptyArr[j])
                     {
                         //비어있는 요소에 추가
@@ -81,30 +85,34 @@ public class GlobalLifeSupportMission : MonoBehaviour
             }
         }
 
+
+
         for (int i = 0; i < _rightSlots.Count; i++)
         {
+            //오른쪽 슬롯에 배치된 오브젝트가 있다면
             if (_rightSlots[i].transform.childCount != 0)
             {
                 for (int j = 0; j < _returnSlots.Count; j++)
-                {
+                { 
                     if (_returnSlots[j].transform.childCount != 0) continue;
 
+                    //raycast 설정 변경
                     _rightSlots[i].GetComponent<Image>().raycastTarget = true;
+                    
+                    //하이어라키 오브젝트 위치 변경
                     _rightSlots[i].transform.GetChild(0).SetParent(_returnSlots[j].transform);
 
+                    //raycast 설정 변경
                     _returnSlots[j].transform.GetChild(0).GetChild(0).GetComponent<Image>().raycastTarget = true;
+                    
+                    //이동 후 화면상 위치 재설정
                     _emptyRect = _returnSlots[j].transform.GetChild(0).GetComponent<RectTransform>();
                     _emptyRect.anchoredPosition = new Vector2(0, 0);
                     break;
                 }
 
             }
-        }
-
-
-
-
-
+        } 
     }
 
 
@@ -207,32 +215,37 @@ public class GlobalLifeSupportMission : MonoBehaviour
         {
             _compareSlotObj = _missionController._searchObj.gameObject;
 
+            //놓은 곳이 오른쪽 슬롯인지
             if (_compareSlotObj.CompareTag("RightSlot"))
             {
                 if (_waitObj == null) return;
 
+                //아무것도 배치되어 있지 않은 슬롯인지 검사
                 if (_compareSlotObj.transform.childCount == 0)
                 {
+                    //대기열로 돌아갈 오브젝트 위치 저장
                     _returnSlots.Add(_waitObj.transform.parent.parent.gameObject);
+
+                    //오른쪽 슬롯으로 이동
                     _waitObj.transform.parent.SetParent(_compareSlotObj.transform);
 
                     RectTransform child = _waitObj.GetComponent<RectTransform>();
                     RectTransform parent = _waitObj.transform.parent.GetComponent<RectTransform>();
                     Chips chip = _waitObj.transform.parent.GetComponent<Chips>();
 
-
+                    //슬롯 이동 후 위치 재설정
                     child.anchoredPosition = new Vector2(0, 0);
                     parent.anchoredPosition = new Vector2(0, 0);
                     _waitObj.GetComponent<Image>().raycastTarget = false;
                     _compareSlotObj.GetComponent<Image>().raycastTarget = false;
-
-
-
+                     
+                    //대기열로 돌아갈 인덱스
                     int index = _waitSlots.IndexOf(chip);
+                    
+                    //배열의 몇 번째 인덱스에서 빠졌는지 저장
                     _emptyArr[index] = false;
                     _waitSlots[index] = null;
-
-                    //_waitSlots.Remove(chip); 
+                     
                     SoundManager.Instance.SFXPlay(_missionState._clips[0]);
 
                 }
@@ -251,8 +264,9 @@ public class GlobalLifeSupportMission : MonoBehaviour
             _waitObj.transform.localScale = new Vector2(1, 1);
             _waitObj = null;
 
+            //미션 클리어 여부 조건 검사
             for (int i = 0; i < _waitSlots.Count; i++)
-            {
+            { 
                 nullCheck = _waitSlots[i] == null ? true : false;
 
                 if (!nullCheck)
@@ -264,17 +278,16 @@ public class GlobalLifeSupportMission : MonoBehaviour
             if (nullCheck)
             {
                 OnCheckedSlot?.Invoke(this, EventArgs.Empty);
-            }
-
-            //if (_waitSlots.Count < 1)
-            //{
-            //    OnCheckedSlot?.Invoke(this, EventArgs.Empty);
-            //}
+            } 
         }
     }
 
 
-
+    /// <summary>
+    /// 왼쪽, 오른쪽 슬롯이 서로 동일하게 배치되었는지 검사
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
     private void CompareSlot(object sender, EventArgs args)
     {
 
@@ -299,6 +312,10 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
             MissionClear();
         }
+        else
+        {
+            MissionFail();
+        }
     }
 
     private void MissionClear()
@@ -306,6 +323,14 @@ public class GlobalLifeSupportMission : MonoBehaviour
         SoundManager.Instance.SFXPlay(_missionState._clips[1]);
         GameManager.Instance.CompleteGlobalMission();
         _missionController.MissionCoroutine(0.5f);
+    }
+
+    private void MissionFail()
+    {
+        SoundManager.Instance.SFXPlay(_failCilp);
+        _missionController.MissionCoroutine(0.5f);
+
+
     }
 
 }

@@ -140,13 +140,10 @@ public class WaterPurifierMission : MonoBehaviour
 
     private void IncreaseTotalScore()
     {
-        //Player의 타입을 받아 올 수 있으면 좋음
-        PlayerType type = PlayerType.Goose;
+        PlayerType type = _missionState.MyPlayerType;
 
         if (type.Equals(PlayerType.Goose))
         {
-            //전체 미션 점수 증가
-            //미션 점수 동기화 필요 > 어디서 가져올건지
             GameManager.Instance.AddMissionScore();
         }
     }

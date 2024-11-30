@@ -6,7 +6,10 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPun
 {
-    //테스트용 코드
+    [Header("사보타지 능력 사용 관련 변수")]
+    [SerializeField] private AudioClip _sirenClip;
+    [SerializeField] private Image _sirenPanelImage;
+    public bool GlobalMissionState;
 
     public static GameManager Instance { get; private set; } 
 
@@ -14,13 +17,14 @@ public class GameManager : MonoBehaviourPun
 
     private int _totalMissionScore = 30;
     private int _clearMissionScore = 0;
-    
-     
-    //글로벌 미션 팝업창 종료 변수
+
+
+    [Header("글로벌 미션 팝업창 종료 조건 변수")]
     public bool _globalMissionClear;
     public bool _firstGlobalFire;
     public bool _secondGlobalFire;
     public int _globalFireCount = 2;
+
 
 
     //테스트용
@@ -50,8 +54,80 @@ public class GameManager : MonoBehaviourPun
     {
         Debug.Log($"남은 미션 :{_clearMissionScore}");
         Debug.Log($"불끄기 횟수 :{_globalFireCount} / GlobalMission{_globalMissionClear}");
+
+        if (GlobalMissionState)
+        {
+            GlobalMissionInvoke();
+            SoundManager.Instance.BGMPlay(_sirenClip);
+        }
+        else
+        {
+            _sirenPanelImage.gameObject.SetActive(false);
+        }
+
     }
      
+
+
+
+    public void GlobalMissionInvoke()
+    {
+        SoundManager.Instance.BGMPlay(_sirenClip);
+        StartCoroutine(SirenCoroutine());
+    }
+
+    private IEnumerator SirenCoroutine()
+    {
+        float value = 0f; 
+
+        while (!_globalMissionClear)
+        {
+            if (!_sirenPanelImage.gameObject.activeSelf)
+            {
+                _sirenPanelImage.gameObject.SetActive(true);
+            }
+
+            Color alpha = _sirenPanelImage.color;
+            value = alpha.a;
+
+            if(alpha.a > 0f)
+            { 
+                while (true)
+                {
+                    value -= Time.deltaTime * 0.5f;
+
+                    _sirenPanelImage.color = new Color(1f, 0, 0, value);
+
+                    if (_sirenPanelImage.color.a < 0f) break;
+
+                    yield return null;
+                } 
+            } 
+            
+
+            if(alpha.a < 0f)
+            {
+
+                while (true)
+                {
+                    value += Time.deltaTime * 0.5f;
+
+                    _sirenPanelImage.color = new Color(1f, 0, 0, value);
+
+                    if (_sirenPanelImage.color.a > 0.43f) break;
+
+                    yield return null;
+                }
+            }
+
+        }
+
+      
+
+        yield break;
+    }
+
+
     /// <summary>
     /// 각 클라이언트에서 미션 클리어 시마다 점수 증가
     /// </summary>
@@ -101,9 +177,7 @@ public class GameManager : MonoBehaviourPun
     {
         _secondGlobalFire = value;
     }
-
-
-
+     
     /// <summary>
     /// 불끄기 미션 카운트 동기화
     /// </summary>
@@ -135,7 +209,7 @@ public class GameManager : MonoBehaviourPun
     public void GlobalMissionRPC(bool value)
     {
         _globalMissionClear = value;
-
+        GlobalMissionState = false;
     }
 
 }
