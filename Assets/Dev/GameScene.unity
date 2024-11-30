@@ -20442,7 +20442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wrongClip: {fileID: 8300000, guid: 66dc565443d2389458dfc2cd7bf4b1ba, type: 3}
-  SabotageType: 1
+  SabotageType: 2
 --- !u!224 &873999091651585675
 RectTransform:
   m_ObjectHideFlags: 0
@@ -32054,7 +32054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wrongClip: {fileID: 8300000, guid: 66dc565443d2389458dfc2cd7bf4b1ba, type: 3}
-  SabotageType: 1
+  SabotageType: 3
 --- !u!1 &7500350390496147083
 GameObject:
   m_ObjectHideFlags: 0
