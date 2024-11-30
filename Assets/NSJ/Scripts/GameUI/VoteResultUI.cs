@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +7,8 @@ namespace GameUIs
 {
     public class VoteResultUI : BaseUI
     {
+        public enum Result { Kick, Skip }
+
         [SerializeField] private float _duration;
 
         private Image _playerImage => GetUI<Image>("Goose");
@@ -16,14 +17,29 @@ namespace GameUIs
         private void Awake()
         {
             Bind();
+
+        }
+        private void Start()
+        {
+            SetActiveKick(false) ;
+            SetActiveSkip(false);
         }
 
-        public void SetActive(bool value)
+        public void SetActiveKick(bool value)
         {
-            GetUI("VoteResultUI").SetActive(value);
+            GetUI("VoteKickUI").SetActive(value);
             if (value)
             {
-                StartCoroutine(DurationRoutine());
+                StartCoroutine(DurationKickRoutine());
+            }
+        }
+
+        public void SetActiveSkip(bool value)
+        {
+            GetUI("VoteSkipUI").SetActive(value);
+            if (value)
+            {
+                StartCoroutine(DurationSkipRoutine());
             }
         }
         public void SetUI(Color playerColor, string name, PlayerType type)
@@ -31,17 +47,26 @@ namespace GameUIs
             _playerImage.color = playerColor;
             _nameText.SetText($"{name}는 더 아름다운 세상으로 떠났습니다.");
 
-            string jobText = type == PlayerType.Goose ? "오리가 아니었" : "오리였"; 
+            string jobText = type == PlayerType.Goose ? "오리가 아니었" : "오리였";
             _jobText.SetText($"그는 {jobText}습니다.");
         }
 
         /// <summary>
         /// 지속시간동안만 나타남
         /// </summary>
-        IEnumerator DurationRoutine()
+        IEnumerator DurationKickRoutine()
         {
             yield return _duration.GetDelay();
-            GetUI("VoteResultUI").SetActive(false);
+            GetUI("VoteKickUI").SetActive(false);
+        }
+
+        /// <summary>
+        /// 지속시간동안만 나타남
+        /// </summary>
+        IEnumerator DurationSkipRoutine()
+        {
+            yield return _duration.GetDelay();
+            GetUI("VoteSkipUI").SetActive(false);
         }
     }
 }

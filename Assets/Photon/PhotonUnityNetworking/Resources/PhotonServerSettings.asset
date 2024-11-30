@@ -87,11 +87,11 @@ MonoBehaviour:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - RPCDelete
+  - RPCUnLoadSceneString
+  - RPCUnLoadSceneInt
+  - RPCLoadSceneString
+  - RPCLoadSceneInt
   - RPCVent
   - RPCSetPlayerToOrigin
   - RPCSetPlayerToNewPlayer

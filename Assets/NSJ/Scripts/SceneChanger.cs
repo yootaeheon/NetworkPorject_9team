@@ -40,7 +40,14 @@ public class SceneChanger : MonoBehaviourPun
     /// </summary>
     public static void LoadScene(string scene, LoadSceneMode loadSceneMode)
     {
-        PhotonView.RPC(nameof(RPCLoadScene), RpcTarget.AllViaServer, scene, (int)loadSceneMode);
+        PhotonView.RPC(nameof(RPCLoadSceneString), RpcTarget.All, scene, (int)loadSceneMode);
+    }
+    /// <summary>
+    /// 네트워크 씬 로드
+    /// </summary>
+    public static void LoadScene(int scene,LoadSceneMode loadSceneMode)
+    {
+        PhotonView.RPC(nameof(RPCLoadSceneInt), RpcTarget.All, scene, (int)loadSceneMode);
     }
     /// <summary>
     /// 네트워크 씬 언로드
@@ -48,16 +55,34 @@ public class SceneChanger : MonoBehaviourPun
     /// <param name="scene"></param>
     public static void UnLoadScene(string scene)
     {
-        PhotonView.RPC(nameof(RPCUnLoadScene), RpcTarget.AllViaServer, scene);
+        PhotonView.RPC(nameof(RPCUnLoadSceneString), RpcTarget.All, scene);
+    }
+    /// <summary>
+    /// 네트워크 씬 언로드
+    /// </summary>
+    /// <param name="scene"></param>
+    public static void UnLoadScene(int scene)
+    {
+        PhotonView.RPC(nameof(RPCUnLoadSceneInt), RpcTarget.All, scene);
     }
 
     [PunRPC]
-    public void RPCLoadScene(string scene, int loadSceneMode)
+    public void RPCLoadSceneString(string scene, int loadSceneMode)
     {
         SceneManager.LoadSceneAsync(scene, (LoadSceneMode)loadSceneMode);
     }
     [PunRPC]
-    public void RPCUnLoadScene(string scene)
+    public void RPCLoadSceneInt(int scene, int loadSceneMode)
+    {
+        SceneManager.LoadSceneAsync(scene, (LoadSceneMode)loadSceneMode);
+    }
+    [PunRPC]
+    public void RPCUnLoadSceneString(string scene)
+    {
+        SceneManager.UnloadSceneAsync(scene);
+    }
+    [PunRPC]
+    public void RPCUnLoadSceneInt(int scene)
     {
         SceneManager.UnloadSceneAsync(scene);
     }
