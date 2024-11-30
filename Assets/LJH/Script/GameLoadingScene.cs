@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,9 @@ public class GameLoadingScene : MonoBehaviourPun
     // 투표씬 전환
     [SerializeField] Transform[] SpawnPoints;
 
+    private GameObject player;
+    public static GameObject MyPlayer { get { return Instance.player; } }
+    private Color color;
 
     private bool isOnGame= false;
 
@@ -50,21 +54,20 @@ public class GameLoadingScene : MonoBehaviourPun
 
         RandomSpawner(); // 스폰 지정 및 소환 
         yield return null;
+
         PlayerDataContainer.Instance.RandomSetjob(); // 랜덤 직업 설정 
-        player.GetComponent<PlayerController>().SettingColor(color.r, color.g, color.b);  // 일단 보류 색 보존이 안됨 
-        player.GetComponent<PlayerController>().SetJobs(); 
+        photonView.RPC(nameof(RpcSyncPlayerData), RpcTarget.AllBuffered);
     }
 
     private void RandomSpawner()   
     {
         photonView.RPC("RpcRandomSpawner", RpcTarget.All);
     }
-    private GameObject player;
-    private Color color;
+
     private void spawnPlayer(Vector3 Pos) 
     {
         player = PhotonNetwork.Instantiate("LJH_Player", Pos, Quaternion.identity);
-        color = PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber).PlayerColor;
+        color = PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerColor;
         GameObject panel = PhotonNetwork.Instantiate("NamePanel", Pos, Quaternion.identity);
         panel.GetComponent<UiFollowingPlayer>().setTarget(player);
        
@@ -82,5 +85,12 @@ public class GameLoadingScene : MonoBehaviourPun
         int x = Random.Range(0, obj.transform.childCount);
 
         spawnPlayer(SpawnPoints[x].position);
+    }
+
+    [PunRPC]
+    private void RpcSyncPlayerData()
+    {
+        player.GetComponent<PlayerController>().SettingColor(color.r, color.g, color.b);  // 일단 보류 색 보존이 안됨 
+        player.GetComponent<PlayerController>().SetJobs();
     }
 }
