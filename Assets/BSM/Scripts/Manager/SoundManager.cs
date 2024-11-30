@@ -9,6 +9,7 @@ public class SoundManager : BaseMission
 {
     public static SoundManager Instance { get; private set; }
 
+    [Header("Sound Setting UI")]
     [SerializeField] private AudioMixer _audioMixer;
     [SerializeField] private Slider _masterSlider;
     [SerializeField] private Slider _sfxSlider;
