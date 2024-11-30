@@ -51,15 +51,37 @@ public class PlayerController : MonoBehaviourPun
         // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
-        
 
 
-        // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯   
-        randomColor = new Color(Random.value, Random.value, Random.value, 1f);
+
+        // 랜덤 색 설정 , 추후에 색 지정 기능을 넣으면 랜덤 대신 지정 숫자를 보내면 될듯
+        if (LobbyScene.Instance != null)
+        {
+            // 로비씬에서는 랜덤색
+            randomColor = new Color(Random.value, Random.value, Random.value, 1f);
+        }
+        else
+        {
+            // 게임씬에서는 저장되있던 색
+            randomColor = PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerColor;
+        }
         SettingColor(randomColor.r, randomColor.g, randomColor.b);
 
-        PlayerDataContainer.Instance.SetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber, PhotonNetwork.LocalPlayer.NickName, playerType, randomColor.r, randomColor.g, randomColor.b, false);
+        StartCoroutine(SetPlayerDataRoutine());
+       
+    }
 
+    IEnumerator SetPlayerDataRoutine()
+    {
+        while (true)
+        {
+            if (PhotonNetwork.LocalPlayer.GetPlayerNumber() != -1)
+            {
+                PlayerDataContainer.Instance.SetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber(), PhotonNetwork.LocalPlayer.NickName, playerType, randomColor.r, randomColor.g, randomColor.b, false);
+                yield break;
+            }
+            yield return null;
+        }
     }
     
     private void Update()
@@ -184,9 +206,8 @@ public class PlayerController : MonoBehaviourPun
 
 
                     //GameFlowManager.Instance.ReportingOn();
-
-                    SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive); 
-                    //SceneChanger.LoadLevel("Votescene");
+                    // 신고 On, UI 띄우기 및 씬 전환
+                    photonView.RPC(nameof(RPCReport),RpcTarget.All);
 
                 }
             }
@@ -221,6 +242,9 @@ public class PlayerController : MonoBehaviourPun
     }
     IEnumerator Kill(Collider2D col)
     {
+        // 로비씬에서는 킬 금지
+        if (LobbyScene.Instance != null)
+           yield break;
 
         if (col.gameObject != this.gameObject)
         {
@@ -240,7 +264,23 @@ public class PlayerController : MonoBehaviourPun
         yield return 1f.GetDelay();
 
     }
-    
+
+    [PunRPC]
+    private void RPCReport()
+    {
+        StartCoroutine(ReportRoutine());
+    }
+
+    IEnumerator ReportRoutine()
+    {
+        GameUI.ShowReport(body.material.color, Random.ColorHSV());
+        yield return 3f.GetDelay();
+        if (PhotonNetwork.IsMasterClient == true)
+        {
+            SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive);
+        }
+    }
+
     public void Die()
     {
         StartCoroutine(switchGhost());
@@ -354,11 +394,19 @@ public class PlayerController : MonoBehaviourPun
     public void SetJobs()
     {
         Debug.Log("직업변경");
-        photonView.RPC("RpcSetJobs", RpcTarget.All);
+        photonView.RPC("RpcSetJobs", RpcTarget.All, PhotonNetwork.LocalPlayer.GetPlayerNumber());
+       
     }
     [PunRPC]
-    private void RpcSetJobs() 
+    private void RpcSetJobs(int playerNumber) 
     {
-        //playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.ActorNumber-1);
+        playerType = PlayerDataContainer.Instance.GetPlayerJob(playerNumber);
+
+        
+        // 내 플레이어만 해당 UI 실행
+        if (photonView.IsMine == true)
+        {
+            GameUI.ShowPlayer(playerType);
+        }
     }
 }
