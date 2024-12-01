@@ -967,10 +967,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BathroomCleaningMission
       objectReference: {fileID: 0}
-    - target: {fileID: 7285498631669207101, guid: 2b0b4c1369f7f51408519a614c27d2a2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b0b4c1369f7f51408519a614c27d2a2, type: 3}
 --- !u!224 &521973966 stripped
@@ -990,7 +986,7 @@ GameObject:
   - component: {fileID: 588236745}
   - component: {fileID: 588236744}
   m_Layer: 5
-  m_Name: GlobalTaskText
+  m_Name: PersonalTaskText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1038,8 +1034,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uBBF8\uC158 \uB0B4\uC6A9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2882580176906d04bb898816242f011b, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: bd705c060e29c16419f3967347c25679, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
+  m_sharedMaterial: {fileID: -5929784884430080619, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1102,7 +1098,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &588236745
@@ -1754,7 +1750,10 @@ MonoBehaviour:
   - {fileID: 6387638704117385343}
   - {fileID: 6387638702645230878}
   - {fileID: 6387638703829327783}
-  _textList: []
+  _textList:
+  - {fileID: 588236744}
+  - {fileID: 1500343266}
+  - {fileID: 1940323642}
 --- !u!1 &987118089
 GameObject:
   m_ObjectHideFlags: 0
@@ -2904,7 +2903,7 @@ GameObject:
   - component: {fileID: 1500343267}
   - component: {fileID: 1500343266}
   m_Layer: 5
-  m_Name: GlobalTaskText
+  m_Name: PersonalTaskText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2952,8 +2951,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uBBF8\uC158 \uB0B4\uC6A9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2882580176906d04bb898816242f011b, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: bd705c060e29c16419f3967347c25679, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
+  m_sharedMaterial: {fileID: -5929784884430080619, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3016,7 +3015,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1500343267
@@ -3617,7 +3616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1835524041
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3976,7 +3975,7 @@ GameObject:
   - component: {fileID: 1940323643}
   - component: {fileID: 1940323642}
   m_Layer: 5
-  m_Name: GlobalTaskText
+  m_Name: PersonalTaskText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4024,8 +4023,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uBBF8\uC158 \uB0B4\uC6A9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2882580176906d04bb898816242f011b, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: bd705c060e29c16419f3967347c25679, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
+  m_sharedMaterial: {fileID: -5929784884430080619, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4088,7 +4087,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1940323643
@@ -5436,10 +5435,6 @@ PrefabInstance:
     - target: {fileID: 649917178171291572, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
       propertyPath: m_Name
       value: WireConnectionMission
-      objectReference: {fileID: 0}
-    - target: {fileID: 649917178171291572, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 649917178171291575, guid: 1ca937917e5e19e4ba84434030fcfaa3, type: 3}
       propertyPath: m_Pivot.x

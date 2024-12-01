@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class BathroomMission : MonoBehaviour
 {
-     
     private MissionController _missionController;
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(5);
@@ -33,7 +32,6 @@ public class BathroomMission : MonoBehaviour
     { 
         _missionController = GetComponent<MissionController>(); 
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "¸ñ¿åÅÁ Ã»¼ÒÇÏ±â";
     }
 
     /// <summary>

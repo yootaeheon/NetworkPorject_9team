@@ -29,7 +29,6 @@ public class WireConnectionMission : MonoBehaviour
     {
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "연결 경로 변경하기";
     }
 
     private void OnEnable()

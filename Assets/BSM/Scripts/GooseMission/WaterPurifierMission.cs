@@ -44,8 +44,6 @@ public class WaterPurifierMission : MonoBehaviour
     {
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "정수기 수리하기";
-        
     }
  
     private void OnEnable()

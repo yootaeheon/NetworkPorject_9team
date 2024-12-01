@@ -25,8 +25,7 @@ public class PillowMission : MonoBehaviour
     private void Init()
     {
         _missionState = GetComponent<MissionState>();
-        _missionController = GetComponent<MissionController>();
-        _missionState.MissionName = "베개속 두드려 펴기"; 
+        _missionController = GetComponent<MissionController>(); 
     }
 
     private void Start()

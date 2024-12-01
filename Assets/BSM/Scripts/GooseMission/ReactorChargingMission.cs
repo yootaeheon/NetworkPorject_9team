@@ -49,9 +49,6 @@ public class ReactorChargingMission : MonoBehaviour
     {
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "원자로 중심부 충전하기";
-
-        Debug.Log(_missionState.MyPlayerType);
     }
 
     private void OnEnable()

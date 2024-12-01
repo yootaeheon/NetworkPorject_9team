@@ -24,9 +24,9 @@ public class AirLockMission : MonoBehaviour
     private void Init()
     {
         _missionController = GetComponent<MissionController>();
-        _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "에어락 문 검사하기";
-  
+        _missionState = GetComponent<MissionState>(); 
+
+
     }
 
     private void OnEnable()

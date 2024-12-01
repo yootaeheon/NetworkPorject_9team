@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class BilliardsMission : MonoBehaviour
 {
-
     private MissionController _missionController;
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(4);
@@ -30,7 +29,6 @@ public class BilliardsMission : MonoBehaviour
     {
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "당구공 청소하기";
     }
 
     private void OnDisable()

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DrainageMission : MonoBehaviour
 {
+
     private MissionState _missionState;
     private MissionController _missionController;
 
@@ -36,7 +37,6 @@ public class DrainageMission : MonoBehaviour
     {
         _missionState = GetComponent<MissionState>();
         _missionController = GetComponent<MissionController>();
-        _missionState.MissionName = "¸·Èù »þ¿ö ¹è¼ö±¸ ¶Õ±â";
         _commonHash = Animator.StringToHash("CommonClip");
     }
 
