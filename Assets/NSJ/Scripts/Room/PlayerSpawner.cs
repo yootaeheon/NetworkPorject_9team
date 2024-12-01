@@ -14,6 +14,11 @@ public class PlayerSpawner : MonoBehaviourPun
 
     private void Start()
     {
+        if(PhotonNetwork.InRoom == true)
+        {
+            SpawnPlayer();
+        }
+
         SubscribesEvents();
     }
 
@@ -23,6 +28,8 @@ public class PlayerSpawner : MonoBehaviourPun
         LobbyScene.Instance.OnPlayerEnteredRoomEvent += SetPlayerToNewPlayer;
         LobbyScene.Instance.OnPlayerPropertiesUpdateEvent += SetPlayerPropertiesUpdate;
         LobbyScene.Instance.OnMasterClientSwitchedEvent += SetMasterClientSwitched;
+
+        StartCoroutine(SubscribeGameStartEvent());
     }
 
     /// <summary>
@@ -173,6 +180,35 @@ public class PlayerSpawner : MonoBehaviourPun
             }
         }
 
+    }
+
+    IEnumerator SubscribeGameStartEvent()
+    {
+        bool isSubscribe = false;
+
+        while (true)
+        {
+            if (GameLoadingScene.Instance != null)
+            {
+                if (isSubscribe == false)
+                {
+                    GameLoadingScene.Instance.OnStartGameEvent += DestroyMyPlayer;
+                    isSubscribe = true;
+                }
+            }
+            else
+            {
+                isSubscribe = false;
+            }
+
+            yield return null;
+        } 
+    }
+
+    private void DestroyMyPlayer()
+    {
+        PhotonNetwork.Destroy(_myPlayer.gameObject);
+        PhotonNetwork.Destroy(_myNamePanel.gameObject);
     }
 
 }

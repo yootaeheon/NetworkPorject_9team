@@ -14,6 +14,7 @@ public class GameUI : MonoBehaviour
     public static GameStartUI GameStart { get { return Instance._gameStartUI; } }
     public static PlayerUI Player { get { return Instance._playerUI; } }
     public static VoteResultUI VoteResult { get { return Instance._voteResultUI; } }
+    public static GameOverUI GameOver { get { return Instance._gameOverUI; }}
 
 
     [SerializeField] ReportUI _reportUI;
@@ -21,6 +22,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] GameStartUI _gameStartUI;
     [SerializeField] PlayerUI _playerUI;
     [SerializeField] VoteResultUI _voteResultUI;
+    [SerializeField] GameOverUI _gameOverUI;
 
     private void Awake()
     {
@@ -79,6 +81,16 @@ public class GameUI : MonoBehaviour
     public static void ShowVoteSkip()
     {
         VoteResult.SetActiveSkip(true);
+    }
+
+    /// <summary>
+    /// 게임오버 씬 컨트롤
+    /// </summary>
+    /// <param name="active"></param>
+    /// <param name="type"></param>
+    public static void ShowGameOver(bool active, PlayerType type)
+    {
+        GameOver.SetActive(active, type);
     }
 
     private void InitSingleTon()

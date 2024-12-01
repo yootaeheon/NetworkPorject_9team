@@ -2,6 +2,8 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameLoadingScene : MonoBehaviourPun
 {
@@ -16,6 +18,8 @@ public class GameLoadingScene : MonoBehaviourPun
 
     private bool isOnGame = false;
     public static bool IsOnGame { get { return Instance.isOnGame; } set { Instance.isOnGame = value; } }
+
+    public event UnityAction OnStartGameEvent;
 
     public static GameLoadingScene Instance;
     private void Awake()
@@ -37,13 +41,17 @@ public class GameLoadingScene : MonoBehaviourPun
     }
 
     public void GameStart()
-    {
-        SceneChanger.LoadLevel(1);
-        StartCoroutine(Delaying());
+    { 
+        StartCoroutine(GameStartDelaying());
     }
 
-    IEnumerator Delaying()
+    IEnumerator GameStartDelaying()
     {
+        // 게임 시작 전 플레이어 오브젝트 비우기
+        photonView.RPC(nameof(DestroyMyPlayer),RpcTarget.All);
+        // 게임씬으로 씬전환
+        SceneChanger.LoadLevel(1);
+        PhotonNetwork.CurrentRoom.IsOpen = false;
         yield return 2f.GetDelay();
 
         RandomSpawner(); // 스폰 지정 및 소환 
@@ -100,14 +108,14 @@ public class GameLoadingScene : MonoBehaviourPun
         if (GooseNotDead <= DuckNotDead)// 거위의 수가 오리보다 적으면 오리 승리 , 투표가도 못이기니까   or 남은 거위가 없으면
         {
             // 오리승리로 게임 결과 표시 후 로비로 이동
-            Debug.Log("오리 승리");
+            GameUI.ShowGameOver(true, PlayerType.Duck);
             isOnGame = false;
             return true;
         }
         else if (DuckNotDead == 0)  // 오리가 다 죽으면  거위 승리 
         {
             // 거위승리로 게임 결과 표시 후 로비로 이동
-            Debug.Log("거위 승리");
+            GameUI.ShowGameOver(true, PlayerType.Goose);
             isOnGame = false;
             return true;
         }
@@ -121,7 +129,7 @@ public class GameLoadingScene : MonoBehaviourPun
         {
             // 미션완료승리로 게임 결과 표시 후 로비로 이동 
             // 거위 승리
-            Debug.Log("거위 미션 승리");
+            GameUI.ShowGameOver(true, PlayerType.Goose);
             isOnGame = false;
             return true;
         }
@@ -130,6 +138,16 @@ public class GameLoadingScene : MonoBehaviourPun
 
     }
 
+
+    /// <summary>
+    /// 로비(씬)로 돌아가기
+    /// </summary>
+    public static void BackLobby()
+    {
+        SceneChanger.LoadLevel(0);
+        PlayerDataContainer.Instance.ClearPlayerData();
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+    }
 
 
 
@@ -173,5 +191,11 @@ public class GameLoadingScene : MonoBehaviourPun
         // 네트워크 상황이기 때문에 조금 딜레이를 준 후에 수치 계산을 해야할 것 같음
         yield return 0.5f.GetDelay();
         PlayerDataContainer.Instance.SetPlayerTypeCounts();
+    }
+
+    [PunRPC]
+    private void DestroyMyPlayer()
+    {
+        OnStartGameEvent?.Invoke();
     }
 }

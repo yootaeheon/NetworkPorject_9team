@@ -319,16 +319,6 @@ public class PlayerController : MonoBehaviourPun
 
     public void Die()
     {
-        PlayerType type = PlayerDataContainer.Instance.GetPlayerJob(_playerNumber);
-        if (type == PlayerType.Goose)
-        {
-            PlayerDataContainer.Instance.GooseCount--;
-        }
-        else if (type == PlayerType.Duck)
-        {
-            PlayerDataContainer.Instance.DuckCount--;
-        }
-
         StartCoroutine(switchGhost());
     }
     IEnumerator switchGhost()
