@@ -60,11 +60,7 @@ public class GameLoadingScene : MonoBehaviourPun
 
         PlayerDataContainer.Instance.RandomSetjob(); // 랜덤 직업 설정 
 
-        // 로딩 종료
-        LoadingBox.StopLoading();
-
         photonView.RPC(nameof(RpcSyncPlayerData), RpcTarget.AllBuffered);
-
         // 게임 승패 판별 시작
         photonView.RPC(nameof(StartJudgeGameOver), RpcTarget.AllBuffered);
     }
@@ -72,6 +68,9 @@ public class GameLoadingScene : MonoBehaviourPun
     [PunRPC]
     private void StartJudgeGameOver()
     {
+        // 로딩 종료
+        LoadingBox.StopLoading();
+
         StartCoroutine(GameOverRoutine());
     }
     /// <summary>
