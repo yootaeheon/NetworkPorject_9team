@@ -49,7 +49,7 @@ public class GameLoadingScene : MonoBehaviourPun
     {
         // 게임 시작 전 플레이어 오브젝트 비우기
         photonView.RPC(nameof(DestroyMyPlayer),RpcTarget.All);
-        yield return 0.5f.GetDelay();
+        yield return 2f.GetDelay();
         // 게임씬으로 씬전환
         SceneChanger.LoadLevel(1);
         PhotonNetwork.CurrentRoom.IsOpen = false;

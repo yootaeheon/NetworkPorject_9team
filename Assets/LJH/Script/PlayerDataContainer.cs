@@ -233,7 +233,7 @@ public class PlayerDataContainer : MonoBehaviourPun
         {
             playerDataArray[index].IsNone = true;
             playerDataArray[index].PlayerName = playerName;
-            //playerDataArray[ix].Type = type;
+            playerDataArray[index].Type = type;
             playerDataArray[index].PlayerColor = color;
             playerDataArray[index].IsGhost = isGhost;
         }
