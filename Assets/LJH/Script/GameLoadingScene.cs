@@ -47,9 +47,6 @@ public class GameLoadingScene : MonoBehaviourPun
 
     IEnumerator GameStartDelaying()
     {
-        // 로딩 시작
-        LoadingBox.StartLoading();
-
         // 게임 시작 전 플레이어 오브젝트 비우기
         photonView.RPC(nameof(DestroyMyPlayer),RpcTarget.All);
         yield return 2f.GetDelay();
@@ -214,6 +211,8 @@ public class GameLoadingScene : MonoBehaviourPun
     [PunRPC]
     private void DestroyMyPlayer()
     {
+        LoadingBox.StartLoading();
+
         OnStartGameEvent?.Invoke();
     }
 }

@@ -14,8 +14,7 @@ public class PlayerDataContainer : MonoBehaviourPun
     private int MaxPlayers = 15;
     public static PlayerDataContainer Instance;
 
-
-    private void Start()
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -27,15 +26,28 @@ public class PlayerDataContainer : MonoBehaviourPun
             Destroy(gameObject);
         }
 
+    }
+
+    private void Start()
+    {
         // 배열  초기화
         playerDataArray = new PlayerData[MaxPlayers];
         for (int i = 0; i < MaxPlayers; i++)
         {
             playerDataArray[i] = new PlayerData("None", PlayerType.Goose, Color.white, true);
-        }
-
-        SubscribesEventLobbyScene();
+        }       
     }
+
+    private void OnEnable()
+    {
+        SubscribesEventServerCallbacks();
+    }
+
+    private void OnDisable()
+    {
+        UnSubscribesEventServerCallbacks();
+    }
+
     /// <summary>
     /// 플레이어 데이터 세팅
     /// </summary>
@@ -302,15 +314,17 @@ public class PlayerDataContainer : MonoBehaviourPun
         GameLoadingScene.IsOnGame = true;
     }
 
-    /// <summary>
-    /// 로비씬에서의 필요한 이벤트 구독
-    /// </summary>
-    private void SubscribesEventLobbyScene()
+ 
+    private void SubscribesEventServerCallbacks()
     {
         ServerCallback.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
         ServerCallback.Instance.OnPlayerLeftRoomEvent += SetExitPlayerData;
     }
-
+    private void UnSubscribesEventServerCallbacks()
+    {
+        ServerCallback.Instance.OnPlayerEnteredRoomEvent -= SetEnterPlayerData;
+        ServerCallback.Instance.OnPlayerLeftRoomEvent -= SetExitPlayerData;
+    }
     [PunRPC]
     private void RPCClearPlayerData()
     {
