@@ -34,7 +34,7 @@ public class PlayerDataContainer : MonoBehaviourPun
             playerDataArray[i] = new PlayerData("None", PlayerType.Goose, Color.white, true);
         }
 
-        StartCoroutine(SubscribesEventLobbySceneRoutine());
+        SubscribesEventLobbyScene();
     }
     /// <summary>
     /// 플레이어 데이터 세팅
@@ -51,6 +51,15 @@ public class PlayerDataContainer : MonoBehaviourPun
 
         photonView.RPC("RpcSetPlayerData", RpcTarget.AllBuffered, playerNumber, playerName, type, Rcolor, Gcolor, Bcolor, isGhost);
     }
+
+    /// <summary>
+    /// 플레이어 데이터를 다시 초기 세팅으로
+    /// </summary>
+    public void ClearPlayerData()
+    {
+        photonView.RPC(nameof(RPCClearPlayerData),RpcTarget.All);
+    }
+
 
     /// <summary>
     /// 입장 플레이어 데이터 세팅
@@ -92,15 +101,16 @@ public class PlayerDataContainer : MonoBehaviourPun
         PlayerData data = GetPlayerData(playerNumber);
         photonView.RPC(nameof(RpcSetExitPlayerData), RpcTarget.AllBuffered, playerNumber, "None", PlayerType.Goose, Color.white.r, Color.white.g, Color.white.b, true);
     }
+    /// <summary>
+    /// 플레이어 직업별 사람 수 측정
+    /// </summary>
     public void SetPlayerTypeCounts()
     {
-        Debug.Log("타입별 카운팅");
-        Debug.Log($"{PhotonNetwork.PlayerList.Length}현재 방 인원");
         GooseCount = 0;
         DuckCount = 0;
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        for (int i = 0; i <playerDataArray.Length; i++)
         {
-            if (playerDataArray[i].IsGhost == false)
+            if (playerDataArray[i].IsNone == false && playerDataArray[i].IsGhost == false)
             {
                 if (playerDataArray[i].Type == PlayerType.Goose)
                 {
@@ -116,20 +126,36 @@ public class PlayerDataContainer : MonoBehaviourPun
         }
 
     }
+    /// <summary>
+    /// 플레이어 데이터 가져오기
+    /// </summary>
+    /// <param name="playerNumber"></param>
+    /// <returns></returns>
     public PlayerData GetPlayerData(int playerNumber)
     {
         return playerDataArray[playerNumber];
     }
+    /// <summary>
+    /// 플레이어 직업 가져오기
+    /// </summary>
+    /// <param name="playerNumber"></param>
+    /// <returns></returns>
     public PlayerType GetPlayerJob(int playerNumber)
     {
         return playerDataArray[playerNumber].Type;
     }
+    /// <summary>
+    /// 게임의 플레이어들 직업 랜덤 선정
+    /// </summary>
     public void RandomSetjob()
     {
         photonView.RPC(nameof(RpcRandomSetjob), RpcTarget.MasterClient);
 
     }
 
+    /// <summary>
+    /// 플레이어 사망 처리 변경
+    /// </summary>
     public void UpdatePlayerGhostList(int playerNumber)
     {
         photonView.RPC("RpcUpdatePlayerGhostList", RpcTarget.All, playerNumber);
@@ -140,6 +166,8 @@ public class PlayerDataContainer : MonoBehaviourPun
     {
         playerDataArray[playerNumber].IsGhost = true;
     }
+
+
 
     [PunRPC]
     private void RpcSetPlayerData(int playerNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
@@ -193,8 +221,8 @@ public class PlayerDataContainer : MonoBehaviourPun
     [PunRPC]
     private void RpcSetExitPlayerData(int playerNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
-
         int index = playerNumber;
+
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
 
         if (playerDataArray[index] == null)
@@ -203,9 +231,9 @@ public class PlayerDataContainer : MonoBehaviourPun
         }
         else
         {
-            playerDataArray[index].IsNone = false;
+            playerDataArray[index].IsNone = true;
             playerDataArray[index].PlayerName = playerName;
-            //playerDataArray[ix].Type = type;
+            playerDataArray[index].Type = type;
             playerDataArray[index].PlayerColor = color;
             playerDataArray[index].IsGhost = isGhost;
         }
@@ -228,8 +256,17 @@ public class PlayerDataContainer : MonoBehaviourPun
         count = (PhotonNetwork.CurrentRoom.MaxPlayers % 5) != 0 ? PhotonNetwork.CurrentRoom.MaxPlayers / 5 + 1 : PhotonNetwork.CurrentRoom.MaxPlayers / 5;
         for (int i = 0; i < count; i++)
         {
+            int x;
             // 랜덤 인덱스 오리 선정
-            int x = Random.Range(0, PhotonNetwork.CurrentRoom.MaxPlayers);
+            while (true)
+            {
+                x = Random.Range(0, PhotonNetwork.CurrentRoom.MaxPlayers);
+
+                // 만약 선정된 대상이 거위였다면 오리로 바꿈
+                // 오리였다면 다시 뽑음
+                if (playerDataArray[x].Type == PlayerType.Goose)
+                    break;
+            }
             // 정해진 인덱스를 모든 플레이어와 동기화
             photonView.RPC(nameof(RpcSetDuckPlayer), RpcTarget.All, x);
         }
@@ -256,43 +293,36 @@ public class PlayerDataContainer : MonoBehaviourPun
         PlayerType type = playerDataArray[index].Type;
         Color color = playerDataArray[index].PlayerColor;
         GameUI.ShowGameStart(type, color);
+        StartCoroutine(GameStartDelayRoutine());
     }
 
-    IEnumerator SubscribesEventLobbySceneRoutine()
+    IEnumerator GameStartDelayRoutine()
     {
-        // 구독함?
-        bool isSubscribe = false;
+        yield return GameUI.GameStart.Duration.GetDelay();
+        GameLoadingScene.IsOnGame = true;
+    }
 
-        while (true)
+    /// <summary>
+    /// 로비씬에서의 필요한 이벤트 구독
+    /// </summary>
+    private void SubscribesEventLobbyScene()
+    {
+        ServerCallback.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
+        ServerCallback.Instance.OnPlayerLeftRoomEvent += SetExitPlayerData;
+    }
+
+    [PunRPC]
+    private void RPCClearPlayerData()
+    {
+        foreach (PlayerData playerData in playerDataArray)
         {
-            // 구독안했음?
-            if (isSubscribe == false)
+            if (playerData.IsNone == false)
             {
-                //로비씬임?
-                if (LobbyScene.Instance != null)
-                {
-                    // 구독
-                    SubscribesEventLobbyScene();
-                    isSubscribe = true;
-                }
-                yield return null;
-            }
-            // 구독했음?
-            else
-            {
-                // 로비씬 아님?
-                if (LobbyScene.Instance == null)
-                {
-                    // 로비씬가면 다시 구독 ㄱㄱ
-                    isSubscribe = false;
-                }
-                yield return null;
+                // 플레이어 유령상태 해제
+                playerData.IsGhost = false;
+                playerData.Type = PlayerType.Goose;
             }
         }
     }
-    private void SubscribesEventLobbyScene()
-    {
-        LobbyScene.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
-        LobbyScene.Instance.OnPlayerLeftRoomEvent += SetExitPlayerData;
-    }
 }
+ 

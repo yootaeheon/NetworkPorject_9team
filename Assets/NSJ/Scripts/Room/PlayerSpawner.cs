@@ -9,11 +9,16 @@ using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 public class PlayerSpawner : MonoBehaviourPun
 {
     [SerializeField] PlayerReadyUI _readyUI;
-    private PlayerController _myPlayer;
-    private UiFollowingPlayer _myNamePanel;
+   [SerializeField]private PlayerController _myPlayer;
+    [SerializeField] private UiFollowingPlayer _myNamePanel;
 
     private void Start()
     {
+        if(PhotonNetwork.InRoom == true)
+        {
+            SpawnPlayer();
+        }
+
         SubscribesEvents();
     }
 
@@ -23,6 +28,8 @@ public class PlayerSpawner : MonoBehaviourPun
         LobbyScene.Instance.OnPlayerEnteredRoomEvent += SetPlayerToNewPlayer;
         LobbyScene.Instance.OnPlayerPropertiesUpdateEvent += SetPlayerPropertiesUpdate;
         LobbyScene.Instance.OnMasterClientSwitchedEvent += SetMasterClientSwitched;
+
+        StartCoroutine(SubscribeGameStartEvent());
     }
 
     /// <summary>
@@ -173,6 +180,36 @@ public class PlayerSpawner : MonoBehaviourPun
             }
         }
 
+    }
+
+    IEnumerator SubscribeGameStartEvent()
+    {
+        bool isSubscribe = false;
+
+        while (true)
+        {
+            if (GameLoadingScene.Instance != null)
+            {
+                if (isSubscribe == false)
+                {
+                    GameLoadingScene.Instance.OnStartGameEvent += DestroyMyPlayer;
+                    isSubscribe = true;
+                }
+            }
+            else
+            {
+                isSubscribe = false;
+            }
+
+            yield return null;
+        } 
+    }
+
+    private void DestroyMyPlayer()
+    {
+        PhotonNetwork.Destroy(_myPlayer.gameObject);
+        PhotonNetwork.Destroy(_myNamePanel.gameObject);
+        GameLoadingScene.Instance.OnStartGameEvent -= DestroyMyPlayer;
     }
 
 }

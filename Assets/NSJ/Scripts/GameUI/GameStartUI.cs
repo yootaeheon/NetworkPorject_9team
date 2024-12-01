@@ -7,7 +7,7 @@ namespace GameUIs
 {
     public class GameStartUI : BaseUI
     {
-        [SerializeField] float _duration;
+        [SerializeField] public float Duration;
 
         private GameObject _gooseUI => GetUI("GooseBackGround");
         private GameObject _duckUI => GetUI("DuckBackGround");
@@ -49,7 +49,7 @@ namespace GameUIs
         /// </summary>
         IEnumerator DurationRoutine()
         {
-            yield return _duration.GetDelay();
+            yield return Duration.GetDelay();
             GetUI("GameStartUI").SetActive(false);
         }
     }

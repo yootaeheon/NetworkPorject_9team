@@ -14,6 +14,11 @@ public class DontDestroySingleTon : MonoBehaviour
 
     private void Start()
     {
+        if(PhotonNetwork.InRoom == true)
+        {
+            CreateSingleTon();
+        }
+
         LobbyScene.Instance.OnJoinedRoomEvent += CreateSingleTon;
         LobbyScene.Instance.OnLeftRoomEvent += DeleteSingleTon;
     }
@@ -25,20 +30,26 @@ public class DontDestroySingleTon : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            gameLoadingScene = PhotonNetwork.InstantiateRoomObject("GameLoadingScene", Vector3.zero, Quaternion.identity);
-            playerDataContainer = PhotonNetwork.InstantiateRoomObject("PlayerDataContainer", Vector3.zero, Quaternion.identity);
+            if(GameLoadingScene.Instance == null)
+            {
+                PhotonNetwork.InstantiateRoomObject("GameLoadingScene", Vector3.zero, Quaternion.identity);
+            }
+            if (PlayerDataContainer.Instance == null)
+            {
+                PhotonNetwork.InstantiateRoomObject("PlayerDataContainer", Vector3.zero, Quaternion.identity);
+            }                  
         }
     }
 
     private void DeleteSingleTon()
     {
-        if(gameLoadingScene != null)
+        if(GameLoadingScene.Instance != null)
         {
-            Destroy(gameLoadingScene);
+            Destroy(GameLoadingScene.Instance.gameObject);
         }
-        if(playerDataContainer != null)
+        if(PlayerDataContainer.Instance != null)
         {
-            Destroy(playerDataContainer);
+            Destroy(PlayerDataContainer.Instance.gameObject);
         }
     }
 }

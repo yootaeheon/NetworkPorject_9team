@@ -101,9 +101,15 @@ public class PlayerController : MonoBehaviourPun
 
     private void Update()
     {
-
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
+
+        if(LobbyScene.Instance == null) // 로비씬이 아닐때 (게임중일때)
+        {
+            if (GameLoadingScene.IsOnGame == false) // 게임진행값이 false 가 아니라면 중지
+                return;
+        }
+
 
         Move();
         MoveCheck();

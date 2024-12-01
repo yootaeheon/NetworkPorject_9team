@@ -1,8 +1,9 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameLoadingScene : MonoBehaviourPun
 {
@@ -16,6 +17,9 @@ public class GameLoadingScene : MonoBehaviourPun
     private Color color;
 
     private bool isOnGame = false;
+    public static bool IsOnGame { get { return Instance.isOnGame; } set { Instance.isOnGame = value; } }
+
+    public event UnityAction OnStartGameEvent;
 
     public static GameLoadingScene Instance;
     private void Awake()
@@ -33,29 +37,22 @@ public class GameLoadingScene : MonoBehaviourPun
     }
     private void Start()
     {
-
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O))  // 체크용으로 만들어 둠 지워도 됨 
-        {
-            GameOverKill();
-            GameOverMission();
-        }
+        
     }
 
     public void GameStart()
-    {
-        SceneChanger.LoadLevel(1);
-        isOnGame = true;
-        StartCoroutine(Delaying());
+    { 
+        StartCoroutine(GameStartDelaying());
     }
 
-
-
-    IEnumerator Delaying()
+    IEnumerator GameStartDelaying()
     {
+        // 게임 시작 전 플레이어 오브젝트 비우기
+        photonView.RPC(nameof(DestroyMyPlayer),RpcTarget.All);
+        yield return 2f.GetDelay();
+        // 게임씬으로 씬전환
+        SceneChanger.LoadLevel(1);
+        PhotonNetwork.CurrentRoom.IsOpen = false;
         yield return 2f.GetDelay();
 
         RandomSpawner(); // 스폰 지정 및 소환 
@@ -63,6 +60,40 @@ public class GameLoadingScene : MonoBehaviourPun
 
         PlayerDataContainer.Instance.RandomSetjob(); // 랜덤 직업 설정 
         photonView.RPC(nameof(RpcSyncPlayerData), RpcTarget.AllBuffered);
+
+        // 게임 승패 판별 시작
+        photonView.RPC(nameof(StartJudgeGameOver), RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    private void StartJudgeGameOver()
+    {
+        StartCoroutine(GameOverRoutine());
+    }
+    /// <summary>
+    /// 게임 오버 조건 판별 코루틴
+    /// </summary>
+    IEnumerator GameOverRoutine()
+    {
+        // 로비 씬에서는 판별 금지
+        while (LobbyScene.Instance != null)
+        {
+            yield return null;
+        }
+        // 게임 시작 전 약간의 여유 타임
+        yield return 3f.GetDelay();
+
+        while (true)
+        {
+            // 킬로 인한 게임 종료시 코루틴 끊기
+            if (GameOverKill())
+                yield break;
+
+            // 미션승리로 인한 게임 종료시 코루틴 끊기
+            if (GameOverMission())
+                yield break;    
+            yield return null;
+        }
     }
 
 
@@ -75,33 +106,57 @@ public class GameLoadingScene : MonoBehaviourPun
     // 조건 체크를 방장(PhotonNetwork.MasterClient)만 해야하나? 아님 씬 이동이 rpc니 상관없나 
     private int GooseNotDead = 0; // 생존한 오리 , 거위
     private int DuckNotDead = 0;
-    public void GameOverKill() // 투표종료 및 살인시마다 호출 
-    {   
-        
+    public bool GameOverKill() // 투표종료 및 살인시마다 호출 
+    {
+
         PlayerDataContainer.Instance.SetPlayerTypeCounts();
         GooseNotDead = PlayerDataContainer.Instance.GooseCount;
         DuckNotDead = PlayerDataContainer.Instance.DuckCount;
         Debug.Log($"생존 : 거위 {GooseNotDead} 오리 {DuckNotDead}");
 
-        if (GooseNotDead < DuckNotDead)// 거위의 수가 오리보다 적으면 오리 승리 , 투표가도 못이기니까   or 남은 거위가 없으면
+        if (GooseNotDead <= DuckNotDead)// 거위의 수가 오리보다 적으면 오리 승리 , 투표가도 못이기니까   or 남은 거위가 없으면
         {
             // 오리승리로 게임 결과 표시 후 로비로 이동
+            GameUI.ShowGameOver(true, PlayerType.Duck);
+            isOnGame = false;
+            return true;
         }
         else if (DuckNotDead == 0)  // 오리가 다 죽으면  거위 승리 
         {
             // 거위승리로 게임 결과 표시 후 로비로 이동
+            GameUI.ShowGameOver(true, PlayerType.Goose);
+            isOnGame = false;
+            return true;
         }
+
+        return false;
     }
-    public void GameOverMission() // 미션완료시마다 호출 
+    public bool GameOverMission() // 미션완료시마다 호출 
     {
-        
-        if (GameManager.Instance._missionScoreSlider.value == 1f) 
+
+        if (GameManager.Instance._missionScoreSlider.value == 1f)
         {
             // 미션완료승리로 게임 결과 표시 후 로비로 이동 
+            // 거위 승리
+            GameUI.ShowGameOver(true, PlayerType.Goose);
+            isOnGame = false;
+            return true;
         }
-        
+
+        return false;
+
     }
 
+
+    /// <summary>
+    /// 로비(씬)로 돌아가기
+    /// </summary>
+    public static void BackLobby()
+    {
+        SceneChanger.LoadLevel(0);
+        PlayerDataContainer.Instance.ClearPlayerData();
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+    }
 
 
 
@@ -138,6 +193,18 @@ public class GameLoadingScene : MonoBehaviourPun
     {
         player.GetComponent<PlayerController>().SettingColor(color.r, color.g, color.b);  // 일단 보류 색 보존이 안됨 
         player.GetComponent<PlayerController>().SetJobs();
+        StartCoroutine(SetPlayerTypeCountRoutine());
+    }
+    IEnumerator SetPlayerTypeCountRoutine()
+    {
+        // 네트워크 상황이기 때문에 조금 딜레이를 준 후에 수치 계산을 해야할 것 같음
+        yield return 0.5f.GetDelay();
         PlayerDataContainer.Instance.SetPlayerTypeCounts();
+    }
+
+    [PunRPC]
+    private void DestroyMyPlayer()
+    {
+        OnStartGameEvent?.Invoke();
     }
 }

@@ -115,7 +115,11 @@ public class OptionQuitBox : BaseUI
     private void LeaveGame()
     {
         // 방떠나기
-        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LeaveRoom(); 
+    }
+
+    private void UnloadGameScene()
+    {
         SceneChanger.LoadLevel(0);
     }
 
@@ -128,5 +132,6 @@ public class OptionQuitBox : BaseUI
     {
         GetUI<Button>("GameQuitButton").onClick.AddListener(GameQuit);
         GetUI<Button>("MainMenuButton").onClick.AddListener(ClickMainMenu);
+        ServerCallback.Instance.OnLeftRoomEvent += UnloadGameScene;
     }
 }
