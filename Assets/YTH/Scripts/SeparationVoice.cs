@@ -34,6 +34,17 @@ public class SeparationVoice : MonoBehaviour
         {
             _speaker.transform.localPosition = Vector3.zero;
         }
+
+        // 게임중
+        if (VoteScene.Instance == null)
+        {
+            _speaker.gameObject.SetActive(true);
+        }
+        // 투표중
+        else
+        {
+            _speaker.gameObject.SetActive(false);
+        }
     }
 }
 
