@@ -85,7 +85,7 @@ public class OptionDeleteBox : BaseUI
     private void DisconnectServer()
     {
         // 삭제 시 자동으로 서버 연결 해제
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         PhotonNetwork.Disconnect();
     }
 

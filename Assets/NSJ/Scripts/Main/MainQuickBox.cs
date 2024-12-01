@@ -38,7 +38,7 @@ public class MainQuickBox : BaseUI
             nickName.ChangeNickName();
         }
 
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         PhotonNetwork.JoinRandomRoom();
     }
     /// <summary>

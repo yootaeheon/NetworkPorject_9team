@@ -256,17 +256,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 124316010}
     m_Modifications:
-    - target: {fileID: 2115099217681965637, guid: 1c6c4207382490c4286ef4be3a4e3274, type: 3}
-      propertyPath: _globalTaskText
-      value: 
-      objectReference: {fileID: 1785241489}
     - target: {fileID: 2115099217681965656, guid: 1c6c4207382490c4286ef4be3a4e3274, type: 3}
       propertyPath: m_Name
       value: FireFirstMissionPrefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 2115099217681965656, guid: 1c6c4207382490c4286ef4be3a4e3274, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2115099217681965659, guid: 1c6c4207382490c4286ef4be3a4e3274, type: 3}
       propertyPath: m_Pivot.x
@@ -2079,8 +2071,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC5C5\uBB34"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2882580176906d04bb898816242f011b, type: 2}
-  m_sharedMaterial: {fileID: -5713529529255606796, guid: 2882580176906d04bb898816242f011b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
+  m_sharedMaterial: {fileID: -5929784884430080619, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2594,7 +2586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1785241488
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2612,8 +2604,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 22, y: -83}
-  m_SizeDelta: {x: 480, y: 80}
+  m_AnchoredPosition: {x: 116, y: -83}
+  m_SizeDelta: {x: 700, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1785241489
 MonoBehaviour:
@@ -2637,8 +2629,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD654\uC7AC \uC9C4\uC555\uD558\uAE30 60"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2882580176906d04bb898816242f011b, type: 2}
-  m_sharedMaterial: {fileID: -5713529529255606796, guid: 2882580176906d04bb898816242f011b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
+  m_sharedMaterial: {fileID: -5929784884430080619, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2802,6 +2794,8 @@ MonoBehaviour:
   _breakerBtn: {fileID: 1912242076}
   _globalTaskText: {fileID: 1785241489}
   GlobalMissionState: 0
+  CountDown: 0
+  TheWin: 0
   _missionScoreSlider: {fileID: 255364787}
   GlobalMissionClear: 1
   FirstGlobalFire: 0

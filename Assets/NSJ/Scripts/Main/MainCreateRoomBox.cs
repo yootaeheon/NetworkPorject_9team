@@ -52,7 +52,7 @@ public class MainCreateRoomBox : BaseUI
         options.IsVisible = isVisible;
         options.SetPrivacy(_createPrivacyCheck.activeSelf);
 
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         PhotonNetwork.CreateRoom(roomCode, options);
     }
 

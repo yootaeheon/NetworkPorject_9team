@@ -33,7 +33,7 @@ public class MainMainBox :BaseUI
     /// </summary>
     private void LogOut()
     {
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         BackendManager.Auth.SignOut(); // ·Î±×¾Æ¿ô
         PhotonNetwork.Disconnect(); // ¼­¹ö ¿¬°á ²÷±â
     }

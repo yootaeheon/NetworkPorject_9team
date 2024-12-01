@@ -34,14 +34,14 @@ public class MainJoinBox : BaseUI
         string nickName = _joinNickNameInput.text; // 닉네임 캐싱
 
 
-        LobbyScene.ActivateLoadingBox(true); // 로딩창 활성화
+        LoadingBox.StartLoading(); // 로딩창 활성화
 
         if (nickName != string.Empty) // 닉네임 변경점 있으면 닉네임 변경
         {
             nickName.ChangeNickName(); // 닉네임 변경(포톤네트워크 닉네임 변경, 데이터베이스 닉네임 변경      
         }
 
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         PhotonNetwork.JoinLobby(); // 로비 입장
     }
     /// <summary>
@@ -90,7 +90,7 @@ public class MainJoinBox : BaseUI
 
         string nickName = _joinNickNameInput.text; // 닉네임 캐싱
 
-        LobbyScene.ActivateLoadingBox(true); // 로딩창 활성화
+        LoadingBox.StartLoading(); // 로딩창 활성화
 
         if (nickName != string.Empty) // 닉네임 변경점 있으면 닉네임 변경
         {

@@ -2,7 +2,6 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
 using Photon.Pun;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +12,7 @@ public class LoginPanel : BaseUI
 
     #region private 필드
     private Color _defaultInputColor => _loginEmailInput.placeholder.color; // InputField의 placeholder컬러의 기본값 지정
-    enum Box { Login, Find, FindSend,SignUp, SendSuccess, Error, ConfirmSend,Size }
+    enum Box { Login, Find, FindSend, SignUp, SendSuccess, Error, ConfirmSend, Size }
     private GameObject[] _boxs = new GameObject[(int)Box.Size];
     // 로그인 박스
     private TMP_InputField _loginEmailInput => GetUI<TMP_InputField>("LoginEmailInput");
@@ -38,7 +37,7 @@ public class LoginPanel : BaseUI
     {
         Bind(); // 바인딩
         Init(); // 초기 설정
-        
+
     }
 
     private void Start()
@@ -48,12 +47,11 @@ public class LoginPanel : BaseUI
 
     private void OnEnable()
     {
-        if (LobbyScene.IsLoginCancel == true) // 로딩 캔슬값 초기화, 동시에 UI 변경 금지
+        if (LobbyScene.Instance != null && LobbyScene.IsLoginCancel == true) // 로딩 캔슬값 초기화, 동시에 UI 변경 금지
         {
             LobbyScene.IsLoginCancel = false;
             return;
         }
-
         ChangeBox(Box.Login);
     }
 
@@ -70,7 +68,7 @@ public class LoginPanel : BaseUI
     /// </summary>
     private void CancelLogin()
     {
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         BackendManager.Auth.SignOut(); // 로그아웃
         PhotonNetwork.Disconnect(); // 서버 연결 끊기
     }
@@ -98,16 +96,16 @@ public class LoginPanel : BaseUI
         string password = _loginPasswordInput.text;
 
         //로딩화면 On
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         // 로그인 시도
         BackendManager.Auth.SignInWithEmailAndPasswordAsync(email, password).
             ContinueWithOnMainThread(task =>
             {
-                if (task.IsCanceled) 
+                if (task.IsCanceled)
                 {
                     ChangeBox(Box.Error);
                     return;
-                } 
+                }
                 else if (task.IsFaulted)
                 {
                     // 에러 팝업 출력
@@ -144,24 +142,24 @@ public class LoginPanel : BaseUI
         // 유저 데이터 획득 시도
         userRef.GetValueAsync()
             .ContinueWithOnMainThread(task =>
-            {  
-                if (task.IsCanceled) 
+            {
+                if (task.IsCanceled)
                 {
                     ChangeBox(Box.Error);
                     return;
                 }
-                   
+
                 else if (task.IsFaulted)
                 {
                     ChangeBox(Box.Error);
                     return;
-                }                 
+                }
                 else
                 {
                     DataSnapshot snapshot = task.Result;
                     string json = snapshot.GetRawJsonValue();
                     // 백앤드 매니저 UserData에 받아온 유저 데이터 캐싱
-                    BackendManager.User = JsonUtility.FromJson<UserDate>(json); 
+                    BackendManager.User = JsonUtility.FromJson<UserDate>(json);
 
                     //서버 연결
                     ConnectedServer();
@@ -214,7 +212,7 @@ public class LoginPanel : BaseUI
             SetErrorInput(_signUpConfirmInput);
         }
         //로딩화면 On
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         BackendManager.Auth.CreateUserWithEmailAndPasswordAsync(email, password).
             ContinueWithOnMainThread(task =>
             {
@@ -223,7 +221,7 @@ public class LoginPanel : BaseUI
                 {
                     ChangeBox(Box.Error);
                     return;
-                }            
+                }
                 else if (task.IsFaulted)
                 {
                     // 에러팝업 
@@ -311,7 +309,7 @@ public class LoginPanel : BaseUI
                     if (success)
                     {
                         // 서버 연결
-                        LobbyScene.ActivateLoadingBox(true);
+                        LoadingBox.StartLoading();
                         GetUserDate();
                     }
                     else
@@ -344,7 +342,7 @@ public class LoginPanel : BaseUI
         string email = _findEmailInput.text; // 이메일 캐싱
 
         // 로딩화면 On
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         BackendManager.Auth.SendPasswordResetEmailAsync(email).
             ContinueWithOnMainThread(task =>
             {
@@ -353,7 +351,7 @@ public class LoginPanel : BaseUI
                 {
                     ChangeBox(Box.Error);
                     return;
-                }                   
+                }
                 else if (task.IsFaulted)
                 {
                     ChangeBox(Box.Error);
@@ -386,7 +384,7 @@ public class LoginPanel : BaseUI
     private void ChangeBox(Box box)
     {
         // UI박스 바뀔 때 로딩창도 사라짐
-        LobbyScene.ActivateLoadingBox(false);
+        LoadingBox.StopLoading();
 
         if (box == Box.Error) // 에러창은 팝업방식으로
         {
@@ -514,7 +512,7 @@ public class LoginPanel : BaseUI
         GetUI<Button>("FindBackButton").onClick.AddListener(() => ChangeBox(Box.Login));
         GetUI<Button>("FindButton").onClick.AddListener(FindPassword);
         _findEmailInput.onValueChanged.AddListener(ActivateFindButton);
-        
+
         #endregion
 
         #region FindSendBox

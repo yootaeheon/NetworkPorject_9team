@@ -300,6 +300,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2816329665823397700}
     m_Modifications:
+    - target: {fileID: 1869228578820570445, guid: e978af06c85168442835f82f92f65801, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3465267924565869345, guid: e978af06c85168442835f82f92f65801, type: 3}
       propertyPath: m_Name
       value: VoteResultBox
@@ -474,6 +478,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2816329665823397700}
     m_Modifications:
+    - target: {fileID: 1850586730600877033, guid: 2400e548b5f682643b59cb03e281dce4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6775705379399062863, guid: 2400e548b5f682643b59cb03e281dce4, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -522,6 +530,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameOverBox
       objectReference: {fileID: 0}
+    - target: {fileID: 6775705379399062865, guid: 2400e548b5f682643b59cb03e281dce4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2400e548b5f682643b59cb03e281dce4, type: 3}
 --- !u!114 &6395585079223500893 stripped
@@ -565,7 +577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 998600890285384945, guid: d6bf0eb681dddde49b9ea1e7590623ef, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5367447220617869897, guid: d6bf0eb681dddde49b9ea1e7590623ef, type: 3}
       propertyPath: m_Name
@@ -648,9 +660,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnterVentButton
       objectReference: {fileID: 0}
+    - target: {fileID: 4871089001895160592, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -586
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871089001963600434, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -481
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871089001963600434, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -816
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871089002500896512, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -352
+      objectReference: {fileID: 0}
     - target: {fileID: 4871089002500896513, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
       propertyPath: m_Name
       value: EnterVentIcon
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871089003476816998, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -352.00003
       objectReference: {fileID: 0}
     - target: {fileID: 4871089003476816999, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
       propertyPath: m_Name
@@ -781,6 +813,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8219676356986111379, guid: 8e8926b3c6089af40905fe451c1f2d6b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -5929784884430080619, guid: c38756b0e456d7b42a00cc0c53f0c516, type: 2}
     - target: {fileID: 8219676357649440684, guid: 8e8926b3c6089af40905fe451c1f2d6b, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
@@ -795,7 +831,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8219676357649440720, guid: 8e8926b3c6089af40905fe451c1f2d6b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8219676357649440723, guid: 8e8926b3c6089af40905fe451c1f2d6b, type: 3}
       propertyPath: m_SortingOrder

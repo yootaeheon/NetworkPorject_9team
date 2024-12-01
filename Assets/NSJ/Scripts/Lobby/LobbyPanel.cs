@@ -99,7 +99,7 @@ public class LobbyPanel : BaseUI
     private void JoinRoom()
     {
         ClearRoomEntry();
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         PhotonNetwork.JoinRoom(_selectingRoomInfo.Name);
     }
 
@@ -131,7 +131,7 @@ public class LobbyPanel : BaseUI
     /// </summary>
     private void ChangeBox(Box box)
     {
-        LobbyScene.ActivateLoadingBox(false);
+        LoadingBox.StopLoading();
 
         for (int i = 0; i < _boxs.Length; i++)
         {
@@ -189,7 +189,7 @@ public class LobbyPanel : BaseUI
         LobbyScene.Instance.OnLeftLobbyEvent += ClearRoomEntry;
         GetUI<Button>("LobbyBackButton").onClick.AddListener(LeftLobby);
         GetUI<Button>("LobbyStartButton").onClick.AddListener(JoinRoom);
-        GetUI<Button>("SettingButton").onClick.AddListener(() => LobbyScene.ActivateOptionBox(true));
+        GetUI<Button>("SettingButton").onClick.AddListener(() => OptionPanel.SetActiveOption(true));
     }
 
 }

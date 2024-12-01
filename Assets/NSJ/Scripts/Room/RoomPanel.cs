@@ -225,7 +225,7 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void LeftRoom()
     {
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         PhotonNetwork.LeaveRoom();
     }
 
@@ -236,7 +236,7 @@ public class RoomPanel : BaseUI
     /// </summary>
     private void ChangeBox(Box box)
     {
-        LobbyScene.ActivateLoadingBox(false);
+        LoadingBox.StopLoading();
 
         for (int i = 0; i < _boxs.Length; i++)
         {
@@ -326,7 +326,7 @@ public class RoomPanel : BaseUI
         GetUI<Button>("RoomCopyButton").onClick.AddListener(CopyRoomCode);
         GetUI<Button>("RoomStartButton").onClick.AddListener(GameStart);
         GetUI<Button>("RoomReadyButton").onClick.AddListener(GameReady);
-        GetUI<Button>("SettingButton").onClick.AddListener(() => LobbyScene.ActivateOptionBox(true));
+        GetUI<Button>("SettingButton").onClick.AddListener(() => OptionPanel.SetActiveOption(true));
     }
 
 

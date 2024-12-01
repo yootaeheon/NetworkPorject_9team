@@ -7,9 +7,17 @@ public class OptionPanel : MonoBehaviour
 {
     public static OptionPanel Instance;
 
+    [SerializeField] private GameObject _optionUI;
+    public static GameObject OptionUI { get { return Instance._optionUI; } }
+
     private void Awake()
     {
         InitSingleTon();
+    }
+
+    public static void SetActiveOption(bool active)
+    {
+        Instance._optionUI.SetActive(active);
     }
 
     /// <summary>

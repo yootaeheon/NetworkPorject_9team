@@ -47,6 +47,9 @@ public class GameLoadingScene : MonoBehaviourPun
 
     IEnumerator GameStartDelaying()
     {
+        // 로딩 시작
+        LoadingBox.StartLoading();
+
         // 게임 시작 전 플레이어 오브젝트 비우기
         photonView.RPC(nameof(DestroyMyPlayer),RpcTarget.All);
         yield return 2f.GetDelay();
@@ -59,6 +62,10 @@ public class GameLoadingScene : MonoBehaviourPun
         yield return null;
 
         PlayerDataContainer.Instance.RandomSetjob(); // 랜덤 직업 설정 
+
+        // 로딩 종료
+        LoadingBox.StopLoading();
+
         photonView.RPC(nameof(RpcSyncPlayerData), RpcTarget.AllBuffered);
 
         // 게임 승패 판별 시작
@@ -153,6 +160,8 @@ public class GameLoadingScene : MonoBehaviourPun
     /// </summary>
     public static void BackLobby()
     {
+        LoadingBox.StartLoading();
+
         SceneChanger.LoadLevel(0);
         PlayerDataContainer.Instance.ClearPlayerData();
         PhotonNetwork.CurrentRoom.IsOpen = true;
