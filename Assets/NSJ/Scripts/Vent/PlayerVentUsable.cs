@@ -11,17 +11,25 @@ public class PlayerVentUsable : MonoBehaviourPun
 
     bool _isClickButton;
 
+    private void Awake()
+    {
+        _player = GetComponent<PlayerController>();
+    }
+
     private void Start()
     {
-        GameUI.Player.EnterVentButton.onClick.AddListener(() => { _isClickButton = true; });
+        if (GameUI.Instance != null)
+        {
+            GameUI.Player.EnterVentButton.onClick.AddListener(() => { _isClickButton = true; });
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (photonView.IsMine == false) 
             return;
-        //if (_player.playerType == PlayerType.Goose)
-        //    return;
+        if (_player.playerType == PlayerType.Goose)
+            return;
 
 
 
@@ -34,8 +42,8 @@ public class PlayerVentUsable : MonoBehaviourPun
     {
         if (photonView.IsMine == false) 
             return;
-        //if (_player.playerType == PlayerType.Goose) 
-        //    return;
+        if (_player.playerType == PlayerType.Goose) 
+            return;
 
 
         if (_enterTriggerRoutine != null)
