@@ -30,6 +30,10 @@ public class SeparationVoice : MonoBehaviour
         {
             _speaker.transform.position = new Vector3(0, 0, _speaker.transform.position.z - 500);
         }
+        else
+        {
+            _speaker.transform.localPosition = Vector3.zero;
+        }
     }
 }
 
