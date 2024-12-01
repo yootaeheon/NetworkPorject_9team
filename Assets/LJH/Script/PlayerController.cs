@@ -101,9 +101,15 @@ public class PlayerController : MonoBehaviourPun
 
     private void Update()
     {
-
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
+
+        if(LobbyScene.Instance == null) // 로비씬이 아닐때 (게임중일때)
+        {
+            if (GameLoadingScene.IsOnGame == false) // 게임진행값이 false 가 아니라면 중지
+                return;
+        }
+
 
         Move();
         MoveCheck();
@@ -313,6 +319,16 @@ public class PlayerController : MonoBehaviourPun
 
     public void Die()
     {
+        PlayerType type = PlayerDataContainer.Instance.GetPlayerJob(_playerNumber);
+        if (type == PlayerType.Goose)
+        {
+            PlayerDataContainer.Instance.GooseCount--;
+        }
+        else if (type == PlayerType.Duck)
+        {
+            PlayerDataContainer.Instance.DuckCount--;
+        }
+
         StartCoroutine(switchGhost());
     }
     IEnumerator switchGhost()

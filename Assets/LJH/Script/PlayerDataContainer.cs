@@ -92,6 +92,9 @@ public class PlayerDataContainer : MonoBehaviourPun
         PlayerData data = GetPlayerData(playerNumber);
         photonView.RPC(nameof(RpcSetExitPlayerData), RpcTarget.AllBuffered, playerNumber, "None", PlayerType.Goose, Color.white.r, Color.white.g, Color.white.b, true);
     }
+    /// <summary>
+    /// 플레이어 직업별 사람 수 측정
+    /// </summary>
     public void SetPlayerTypeCounts()
     {
         Debug.Log("타입별 카운팅");
@@ -116,20 +119,36 @@ public class PlayerDataContainer : MonoBehaviourPun
         }
 
     }
+    /// <summary>
+    /// 플레이어 데이터 가져오기
+    /// </summary>
+    /// <param name="playerNumber"></param>
+    /// <returns></returns>
     public PlayerData GetPlayerData(int playerNumber)
     {
         return playerDataArray[playerNumber];
     }
+    /// <summary>
+    /// 플레이어 직업 가져오기
+    /// </summary>
+    /// <param name="playerNumber"></param>
+    /// <returns></returns>
     public PlayerType GetPlayerJob(int playerNumber)
     {
         return playerDataArray[playerNumber].Type;
     }
+    /// <summary>
+    /// 게임의 플레이어들 직업 랜덤 선정
+    /// </summary>
     public void RandomSetjob()
     {
         photonView.RPC(nameof(RpcRandomSetjob), RpcTarget.MasterClient);
 
     }
 
+    /// <summary>
+    /// 플레이어 사망 처리 변경
+    /// </summary>
     public void UpdatePlayerGhostList(int playerNumber)
     {
         photonView.RPC("RpcUpdatePlayerGhostList", RpcTarget.All, playerNumber);
@@ -140,6 +159,8 @@ public class PlayerDataContainer : MonoBehaviourPun
     {
         playerDataArray[playerNumber].IsGhost = true;
     }
+
+
 
     [PunRPC]
     private void RpcSetPlayerData(int playerNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
@@ -256,6 +277,13 @@ public class PlayerDataContainer : MonoBehaviourPun
         PlayerType type = playerDataArray[index].Type;
         Color color = playerDataArray[index].PlayerColor;
         GameUI.ShowGameStart(type, color);
+        StartCoroutine(GameStartDelayRoutine());
+    }
+
+    IEnumerator GameStartDelayRoutine()
+    {
+        yield return GameUI.GameStart.Duration.GetDelay();
+        GameLoadingScene.IsOnGame = true;
     }
 
     IEnumerator SubscribesEventLobbySceneRoutine()
@@ -290,6 +318,9 @@ public class PlayerDataContainer : MonoBehaviourPun
             }
         }
     }
+    /// <summary>
+    /// 로비씬에서의 필요한 이벤트 구독
+    /// </summary>
     private void SubscribesEventLobbyScene()
     {
         LobbyScene.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
