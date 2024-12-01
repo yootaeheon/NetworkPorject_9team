@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Voice.Unity;
+using System.Collections;
 using UnityEngine;
 
 public class SeparationVoice : MonoBehaviour
@@ -9,9 +10,10 @@ public class SeparationVoice : MonoBehaviour
 
     private Speaker _speaker;
 
-    private void Awake()
+    IEnumerator Start()
     {
-        Speaker speaker = GetComponent<Speaker>();
+        yield return null;
+        Speaker speaker = GetComponentInChildren<Speaker>();
         _speaker = speaker;
     }
 
