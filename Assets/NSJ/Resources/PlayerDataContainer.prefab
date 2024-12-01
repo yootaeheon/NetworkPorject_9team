@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff7a4682c1182f44b6fcaf7c5090a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GooseCount: 0
+  DuckCount: 0
   playerDataArray: []
 --- !u!114 &8019438871348865098
 MonoBehaviour:

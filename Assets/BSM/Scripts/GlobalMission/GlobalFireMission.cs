@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GlobalFireMission : MonoBehaviour
 {
     private MissionState _missionState;
     private MissionController _missionController;
-
-
+     
     private GameObject _fireObjects;
     private bool IsBurn;
-
+     
     private void Awake()
     {
         Init();
@@ -27,13 +28,14 @@ public class GlobalFireMission : MonoBehaviour
     {
         IsBurn = false;
         _missionState.ObjectCount = 3;
+  
     }
 
     private void Start()
     {
-        _fireObjects = _missionController.GetMissionObj("FireObjects");
+        _fireObjects = _missionController.GetMissionObj("FireObjects"); 
     }
-
+    
     private void Update()
     {
         if (!GameManager.Instance.CurAbility.Equals(SabotageType.Fire))

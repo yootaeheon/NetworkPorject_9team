@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +15,60 @@ public class GameManager : MonoBehaviourPun
     [SerializeField] private Button _lifeBtn;
     [SerializeField] private Button _breakerBtn;
 
-
+    private Coroutine _globalTaskCo;
+    [SerializeField] private TextMeshProUGUI _globalTaskText;
     public bool GlobalMissionState;
+    private string _globalTaskName;
+
+    private bool _globalState;
+    public bool GlobalState
+    {
+        get => _globalState;
+        set
+        {
+            _globalState = GlobalMissionState;
+            Debug.Log("값이 바뀌나");
+
+            if (_globalState)
+            {
+                SetTaskText();
+            }
+            else
+            {
+                if (_globalTaskCo != null)
+                {
+                    StopCoroutine(_globalTaskCo);
+                    _globalTaskText.gameObject.SetActive(false);
+                    _globalTaskCo = null;
+                }
+            }
+        }
+    }
+
+    private void SetTaskText()
+    {
+        _globalTaskText.gameObject.SetActive(true);
+        _globalTaskCo = StartCoroutine(TaskTextCoroutine());
+    }
+
+    private IEnumerator TaskTextCoroutine()
+    {
+        float _elapsedTime = 0f;
+        float _limitTime = 60f;
+        float countDown = _limitTime;
+
+        while (_elapsedTime < _limitTime)
+        {
+            _elapsedTime += Time.deltaTime;
+            countDown -= Time.deltaTime;
+            _globalTaskText.text = string.Concat(_globalTaskName + ((int)countDown).ToString());
+
+            yield return null;
+        }
+
+        yield break;
+    }
+
 
     public static GameManager Instance { get; private set; }
 
@@ -102,6 +155,7 @@ public class GameManager : MonoBehaviourPun
     private void Update()
     {
         Debug.Log($"현재 사용 능력 :{UseAbility}");
+        Debug.Log($"이름 :{_globalTaskName}");
     }
 
     private void DuckFireAbilityInvoke()
@@ -139,20 +193,24 @@ public class GameManager : MonoBehaviourPun
         {
             case SabotageType.Fire:
                 SabotageFire = false;
+                _globalTaskName = "화재 진압하기";
                 break;
 
             case SabotageType.BlackOut:
                 SabotageBreaker = false;
+                _globalTaskName = "전등 고치기";
                 break;
 
             case SabotageType.OxygenBlock:
                 SabotageLife = false;
+                _globalTaskName = "생명 유지 장치 재설정하기";
                 break;
         }
         Debug.Log($"발동된 능력 :{type}");
 
         GlobalMissionClear = false;
         GlobalMissionState = value;
+        GlobalState = GlobalMissionState;
         SoundManager.Instance.BGMPlay(_sirenClip);
         StartCoroutine(SirenCoroutine());
     }
@@ -294,6 +352,7 @@ public class GameManager : MonoBehaviourPun
     {
         GlobalMissionClear = value;
         GlobalMissionState = false;
+        GlobalState = GlobalMissionState;
         _sirenPanelImage.gameObject.SetActive(false);
         SoundManager.Instance.BGMPlay(_bgmClip);
     }
