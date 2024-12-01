@@ -15,10 +15,15 @@ public class GameManager : MonoBehaviourPun
     [SerializeField] private Button _lifeBtn;
     [SerializeField] private Button _breakerBtn;
 
-    private Coroutine _globalTaskCo;
+    [Header("글로벌 미션 Task Text")]
     [SerializeField] private TextMeshProUGUI _globalTaskText;
+
+    private Coroutine _globalTaskCo;
+
     public bool GlobalMissionState;
     private string _globalTaskName;
+    public float CountDown;
+    public bool TheWin;
 
     private bool _globalState;
     public bool GlobalState
@@ -27,7 +32,6 @@ public class GameManager : MonoBehaviourPun
         set
         {
             _globalState = GlobalMissionState;
-            Debug.Log("값이 바뀌나");
 
             if (_globalState)
             {
@@ -44,32 +48,7 @@ public class GameManager : MonoBehaviourPun
             }
         }
     }
-
-    private void SetTaskText()
-    {
-        _globalTaskText.gameObject.SetActive(true);
-        _globalTaskCo = StartCoroutine(TaskTextCoroutine());
-    }
-
-    private IEnumerator TaskTextCoroutine()
-    {
-        float _elapsedTime = 0f;
-        float _limitTime = 60f;
-        float countDown = _limitTime;
-
-        while (_elapsedTime < _limitTime)
-        {
-            _elapsedTime += Time.deltaTime;
-            countDown -= Time.deltaTime;
-            _globalTaskText.text = string.Concat(_globalTaskName + ((int)countDown).ToString());
-
-            yield return null;
-        }
-
-        yield break;
-    }
-
-
+     
     public static GameManager Instance { get; private set; }
 
     [SerializeField] public Slider _missionScoreSlider;
@@ -151,13 +130,41 @@ public class GameManager : MonoBehaviourPun
             Destroy(gameObject);
         }
     }
+      
 
-    private void Update()
+    /// <summary>
+    /// 글로벌 미션 Text 코루틴
+    /// </summary>
+    private void SetTaskText()
     {
-        Debug.Log($"현재 사용 능력 :{UseAbility}");
-        Debug.Log($"이름 :{_globalTaskName}");
+        _globalTaskText.gameObject.SetActive(true);
+        _globalTaskCo = StartCoroutine(TaskTextCoroutine());
     }
 
+    /// <summary>
+    /// 글로벌 미션 Text 변화 코루틴
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator TaskTextCoroutine()
+    {
+        float _elapsedTime = 0f;
+        float _limitTime = 60f;
+        CountDown = _limitTime;
+
+        while (_elapsedTime < _limitTime)
+        {
+            _elapsedTime += Time.deltaTime;
+            CountDown -= Time.deltaTime;
+            _globalTaskText.text = string.Concat(_globalTaskName + " [" + ((int)CountDown).ToString()) + "]";
+
+            yield return null;
+        }
+
+        TheWin = CountDown <= 0f ? true : false;
+
+        yield break;
+    }
+     
     private void DuckFireAbilityInvoke()
     {
         UseAbility = SabotageType.Fire; 
