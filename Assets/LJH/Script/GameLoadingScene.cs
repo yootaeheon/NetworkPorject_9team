@@ -37,7 +37,7 @@ public class GameLoadingScene : MonoBehaviourPun
     }
     private void Start()
     {
-        StartCoroutine(GameOverRoutine());
+        
     }
 
     public void GameStart()
@@ -49,6 +49,7 @@ public class GameLoadingScene : MonoBehaviourPun
     {
         // 게임 시작 전 플레이어 오브젝트 비우기
         photonView.RPC(nameof(DestroyMyPlayer),RpcTarget.All);
+        yield return 0.5f.GetDelay();
         // 게임씬으로 씬전환
         SceneChanger.LoadLevel(1);
         PhotonNetwork.CurrentRoom.IsOpen = false;
@@ -59,8 +60,16 @@ public class GameLoadingScene : MonoBehaviourPun
 
         PlayerDataContainer.Instance.RandomSetjob(); // 랜덤 직업 설정 
         photonView.RPC(nameof(RpcSyncPlayerData), RpcTarget.AllBuffered);
+
+        // 게임 승패 판별 시작
+        photonView.RPC(nameof(StartJudgeGameOver), RpcTarget.AllBuffered);
     }
 
+    [PunRPC]
+    private void StartJudgeGameOver()
+    {
+        StartCoroutine(GameOverRoutine());
+    }
     /// <summary>
     /// 게임 오버 조건 판별 코루틴
     /// </summary>

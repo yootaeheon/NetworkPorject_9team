@@ -9,8 +9,8 @@ using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 public class PlayerSpawner : MonoBehaviourPun
 {
     [SerializeField] PlayerReadyUI _readyUI;
-    private PlayerController _myPlayer;
-    private UiFollowingPlayer _myNamePanel;
+   [SerializeField]private PlayerController _myPlayer;
+    [SerializeField] private UiFollowingPlayer _myNamePanel;
 
     private void Start()
     {
@@ -209,6 +209,7 @@ public class PlayerSpawner : MonoBehaviourPun
     {
         PhotonNetwork.Destroy(_myPlayer.gameObject);
         PhotonNetwork.Destroy(_myNamePanel.gameObject);
+        GameLoadingScene.Instance.OnStartGameEvent -= DestroyMyPlayer;
     }
 
 }

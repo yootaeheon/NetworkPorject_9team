@@ -57,15 +57,9 @@ public class PlayerDataContainer : MonoBehaviourPun
     /// </summary>
     public void ClearPlayerData()
     {
-        foreach (PlayerData playerData in playerDataArray) 
-        {      
-            if (playerData.IsNone == false)
-            {
-                // 플레이어 유령상태 해제
-                playerData.IsGhost = false;
-            }
-        }
+        photonView.RPC(nameof(RPCClearPlayerData),RpcTarget.All);
     }
+
 
     /// <summary>
     /// 입장 플레이어 데이터 세팅
@@ -262,8 +256,17 @@ public class PlayerDataContainer : MonoBehaviourPun
         count = (PhotonNetwork.CurrentRoom.MaxPlayers % 5) != 0 ? PhotonNetwork.CurrentRoom.MaxPlayers / 5 + 1 : PhotonNetwork.CurrentRoom.MaxPlayers / 5;
         for (int i = 0; i < count; i++)
         {
+            int x;
             // 랜덤 인덱스 오리 선정
-            int x = Random.Range(0, PhotonNetwork.CurrentRoom.MaxPlayers);
+            while (true)
+            {
+                x = Random.Range(0, PhotonNetwork.CurrentRoom.MaxPlayers);
+
+                // 만약 선정된 대상이 거위였다면 오리로 바꿈
+                // 오리였다면 다시 뽑음
+                if (playerDataArray[x].Type == PlayerType.Goose)
+                    break;
+            }
             // 정해진 인덱스를 모든 플레이어와 동기화
             photonView.RPC(nameof(RpcSetDuckPlayer), RpcTarget.All, x);
         }
@@ -306,6 +309,20 @@ public class PlayerDataContainer : MonoBehaviourPun
     {
         ServerCallback.Instance.OnPlayerEnteredRoomEvent += SetEnterPlayerData;
         ServerCallback.Instance.OnPlayerLeftRoomEvent += SetExitPlayerData;
+    }
+
+    [PunRPC]
+    private void RPCClearPlayerData()
+    {
+        foreach (PlayerData playerData in playerDataArray)
+        {
+            if (playerData.IsNone == false)
+            {
+                // 플레이어 유령상태 해제
+                playerData.IsGhost = false;
+                playerData.Type = PlayerType.Goose;
+            }
+        }
     }
 }
  
