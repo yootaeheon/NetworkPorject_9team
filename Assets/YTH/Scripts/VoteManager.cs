@@ -80,7 +80,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
         PlayerData playerData = PlayerDataContainer.Instance.GetPlayerData(playerIndex);
         if (isKick == true)
         {
-            StartCoroutine(ShowVoteResultRoutine(playerData.PlayerColor, playerData.PlayerName, playerData.Type));
+            StartCoroutine(ShowVoteResultRoutine(playerIndex ,playerData.PlayerColor, playerData.PlayerName, playerData.Type));
         }
         else
         {
@@ -94,27 +94,32 @@ public class VoteManager : MonoBehaviourPunCallbacks
         if (isKick == true)
         {
             // 최다 득표자가 본인일때
-            if (playerIndex == PhotonNetwork.LocalPlayer.GetPlayerNumber())
-            {
-                PlayerController myController = GameLoadingScene.MyPlayer.GetComponent<PlayerController>();
-                // 사망
-                myController.Die();
-            }
+
         }
     }
 
     /// <summary>
     /// 추방 컷씬 이후 다시 투표씬 닫기
     /// </summary>
-    IEnumerator ShowVoteResultRoutine(Color playerColor, string name, PlayerType type)
+    IEnumerator ShowVoteResultRoutine(int playerIndex ,Color playerColor, string name, PlayerType type)
     {
         yield return 3f.GetDelay();
         GameUI.ShowVoteKick(playerColor, name, type);
-        yield return 7f.GetDelay();
+
+        yield return (GameUI.VoteResult._duration - 1f).GetDelay();
+
+        if (playerIndex == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+        {
+            PlayerController myController = GameLoadingScene.MyPlayer.GetComponent<PlayerController>();
+            // 사망
+            myController.Die();
+        }
+
+        yield return 1f.GetDelay();
 
         //if (PhotonNetwork.IsMasterClient == true)
         //{
-            SceneChanger.UnLoadScene("VoteScene");
+        SceneChanger.UnLoadScene("VoteScene");
         //}
     }
     IEnumerator ShowVoteSkipRoutine()

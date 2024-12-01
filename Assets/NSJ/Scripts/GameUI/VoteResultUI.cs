@@ -9,7 +9,7 @@ namespace GameUIs
     {
         public enum Result { Kick, Skip }
 
-        [SerializeField] private float _duration;
+        [SerializeField] public float _duration;
 
         private Image _playerImage => GetUI<Image>("Goose");
         private TMP_Text _nameText => GetUI<TMP_Text>("NameText");
