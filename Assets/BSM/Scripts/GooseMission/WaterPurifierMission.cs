@@ -60,7 +60,7 @@ public class WaterPurifierMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -157,7 +157,8 @@ public class WaterPurifierMission : MonoBehaviour
     private void MissionClear()
     {
         if (_missionState.ObjectCount < 1)
-        { 
+        {
+            _missionState.IsPerform = false;
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             StartCoroutine(PluginCoroutine()); 
             IncreaseTotalScore();

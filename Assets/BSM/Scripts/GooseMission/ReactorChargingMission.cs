@@ -70,7 +70,7 @@ public class ReactorChargingMission : MonoBehaviour
     private Coroutine _beepCo;
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -229,6 +229,7 @@ public class ReactorChargingMission : MonoBehaviour
     {
         if (_missionState.ObjectCount < 1)
         {
+            _missionState.IsPerform = false;
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
