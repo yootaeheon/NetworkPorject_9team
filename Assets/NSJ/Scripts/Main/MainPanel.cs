@@ -43,8 +43,8 @@ public class MainPanel : MonoBehaviour
     }
 
     private void OnEnable()
-    {
-        if (LobbyScene.IsJoinRoomCancel == true) // 로딩 캔슬 초기화 및 UI 변경 금지
+    { 
+        if (LobbyScene.Instance != null &&LobbyScene.IsJoinRoomCancel == true) // 로딩 캔슬 초기화 및 UI 변경 금지
         {
             LobbyScene.IsJoinRoomCancel = false;
             return;
@@ -66,7 +66,7 @@ public class MainPanel : MonoBehaviour
     /// </summary>
     private void CancelJoinRoom()
     {
-        LobbyScene.ActivateLoadingBox(true);
+        LoadingBox.StartLoading();
         PhotonNetwork.LeaveRoom();
     }
 
@@ -76,7 +76,7 @@ public class MainPanel : MonoBehaviour
     /// </summary>
     public static void ChangeBox(Box box)
     {
-        LobbyScene.ActivateLoadingBox(false);
+        LoadingBox.StopLoading();
 
         for (int i = 0; i < s_boxs.Length; i++)
         {
@@ -111,7 +111,7 @@ public class MainPanel : MonoBehaviour
     /// </summary>
     private void SubscribesEvent()
     {
-        _settingButton.onClick.AddListener(() => LobbyScene.ActivateOptionBox(true));
+        _settingButton.onClick.AddListener(() => OptionPanel.SetActiveOption(true));
     }
 
     /// <summary>

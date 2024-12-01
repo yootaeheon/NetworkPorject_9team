@@ -104,20 +104,22 @@ public class OptionQuitBox : BaseUI
     private void ChangeMainmenu()
     {
         // 옵션 끄기
-        LobbyScene.ActivateOptionBox(false);
-
-        // 로딩화면
-        LobbyScene.ActivateLoadingBox(true);
+        OptionPanel.SetActiveOption(false);
+        // 로딩 시작
+        LoadingBox.StartLoading();
         // 방떠나기
         PhotonNetwork.LeaveRoom();     
     }
 
     private void LeaveGame()
     {
+        // 로딩 시작
+        LoadingBox.StartLoading();
+
         // 방떠나기
         PhotonNetwork.LeaveRoom(); 
+        
     }
-
     private void UnloadGameScene()
     {
         SceneChanger.LoadLevel(0);

@@ -9,7 +9,7 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class LobbyScene : MonoBehaviourPunCallbacks
 {
     public static LobbyScene Instance;
-    public static bool IsLoginCancel { get { return  Instance._isLoginCancel; } set { Instance._isLoginCancel = value; } }
+    public static bool IsLoginCancel { get { return Instance._isLoginCancel; } set { Instance._isLoginCancel = value; } }
     public static bool IsJoinRoomCancel { get { return Instance._isJoinRoomCancel; } set { Instance._isJoinRoomCancel = value; } }
 
     #region 이벤트
@@ -48,8 +48,8 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     private static GameObject s_mainPanel { get { return Instance._panelStruct.MainPanel; } }
     private static GameObject s_lobbyPanel { get { return Instance._panelStruct.LobbyPanel; } }
     private static GameObject s_roomPanel { get { return Instance._panelStruct.RoomPanel; } }
-    private static GameObject s_loadingPanel { get { return Instance._panelStruct.LoadingPanel;} }
-    private static GameObject s_optionPanel { get { return Instance._panelStruct.OptionPanel;} }
+    private static GameObject s_loadingPanel { get { return Instance._panelStruct.LoadingPanel; } }
+    private static GameObject s_optionPanel { get { return Instance._panelStruct.OptionPanel; } }
 
     private List<GameObject> _panels = new List<GameObject>((int)Panel.Size);
     private GameObject _curPanel;
@@ -69,12 +69,11 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     {
         SubscribesEvent();
 
-        if (OptionPanel.Instance != null)
-        {
-           
-            _panelStruct.OptionPanel = OptionPanel.Instance.gameObject;
-            _panels.Add(OptionPanel.Instance.gameObject);
-        }
+        _panelStruct.LoadingPanel = LoadingBox.LoadingUI;
+        _panels.Add(LoadingBox.LoadingUI);    
+
+        _panelStruct.OptionPanel = OptionPanel.OptionUI;
+        _panels.Add(OptionPanel.OptionUI);
 
         InitPanel();
     }
@@ -121,7 +120,7 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <param name="message"></param>
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        ActivateLoadingBox(false);
+        LoadingBox.StopLoading();
     }
 
     /// <summary>
@@ -206,23 +205,6 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     #endregion
 
     /// <summary>
-    /// 로딩 화면 활성화 / 비활성화
-    /// </summary>
-    public static void ActivateLoadingBox(bool isActive)
-    { 
-        s_loadingPanel.SetActive(isActive);
-    }
-
-    /// <summary>
-    /// 옵션 창 활성화 / 비활성화
-    /// </summary>
-    /// <param name="isActive"></param>
-    public static void ActivateOptionBox(bool isActive)
-    {
-        s_optionPanel.SetActive(isActive);
-    }
-
-    /// <summary>
     /// 패널 교체
     /// </summary>
     /// <param name="panel"></param>
@@ -255,14 +237,15 @@ public class LobbyScene : MonoBehaviourPunCallbacks
     /// <summary>
     /// 로딩 캔슬 세팅
     /// </summary>
-   public static void SetIsLoadingCancel()
+    public static void SetIsLoadingCancel()
     {
-        if(s_curPanel == s_loginPanel)
+        if (s_curPanel == s_loginPanel)
         {
             IsLoginCancel = true;
         }
-        else if(s_curPanel == s_mainPanel)
+        else if (s_curPanel == s_mainPanel)
         {
+            Debug.Log("왜눌림");
             IsJoinRoomCancel = true;
         }
     }
@@ -314,11 +297,6 @@ public class LobbyScene : MonoBehaviourPunCallbacks
         _panels.Add(s_mainPanel);
         _panels.Add(s_lobbyPanel);
         _panels.Add(s_roomPanel);
-        _panels.Add(s_loadingPanel);
-        //_panels[(int)Panel.Option] = s_optionPanel;
-
-        //ActivateLoadingBox(false);
-        //ActivateOptionBox(false);
 
         PhotonNetwork.AutomaticallySyncScene = true;
     }

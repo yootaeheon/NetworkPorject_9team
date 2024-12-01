@@ -8,8 +8,14 @@ using UnityEngine.UI;
 
 public class LoadingBox : BaseUI
 {
+    public static LoadingBox Instance;
+
+    private GameObject _loadingUI => GetUI("LoadingUI");
+    public static GameObject LoadingUI { get { return Instance._loadingUI; } }
+
     private void Awake()
     {
+        InitSingleTon();
         Bind();
         Init();
     }
@@ -19,13 +25,28 @@ public class LoadingBox : BaseUI
     }
 
     /// <summary>
+    /// 로딩 시작
+    /// </summary>
+    public static void StartLoading()
+    {
+        Instance._loadingUI.SetActive(true);
+    }
+
+    /// <summary>
     /// 로딩 스톱
     /// </summary>
-    private void Stop()
+    public static void StopLoading()
     {
-        // TODO : 스톱기능을 어떻게 구현해야 하는가
-        LobbyScene.SetIsLoadingCancel();
-        gameObject.SetActive(false);
+
+        Instance._loadingUI.SetActive(false);
+    }
+
+    private void ClickStopButton()
+    {
+        if (LobbyScene.Instance != null)
+        {
+            LobbyScene.SetIsLoadingCancel();
+        }
     }
 
     private void Init()
@@ -34,8 +55,25 @@ public class LoadingBox : BaseUI
     }
     private void SubscribesEvents()
     {
-        GetUI<Button>("LoadingCancelButton").onClick.AddListener(Stop);
+        GetUI<Button>("LoadingCancelButton").onClick.AddListener(StopLoading);
+        GetUI<Button>("LoadingCancelButton").onClick.AddListener(ClickStopButton);
     }
 
+    /// <summary>
+    /// 싱글톤 설정
+    /// </summary>
+    private void InitSingleTon()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            transform.SetParent(null);
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
 }

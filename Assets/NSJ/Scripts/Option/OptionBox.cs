@@ -70,7 +70,7 @@ public class OptionBox : BaseUI
     }
     private void SubscribeEvents()
     {
-        GetUI<Button>("CancelButton").onClick.AddListener(() => LobbyScene.ActivateOptionBox(false)); // X 버튼 누르면 옵션창 꺼짐
+        GetUI<Button>("CancelButton").onClick.AddListener(() => OptionPanel.SetActiveOption(false)); // X 버튼 누르면 옵션창 꺼짐
         GetUI<Button>("SoundButton").onClick.AddListener(()=>ChangeBox(Box.Sound)); 
         GetUI<Button>("GameOptionButton").onClick.AddListener(()=>ChangeBox(Box.GameOption));
         GetUI<Button>("QuitButton").onClick.AddListener(()=>ChangeBox(Box.Quit));
