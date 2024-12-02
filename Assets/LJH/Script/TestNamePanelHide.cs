@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class TestNamePanelHide : MonoBehaviour
 {
-    [SerializeField] float Detectradius = 30;
+    [SerializeField] float Detectradius = 15;
     [SerializeField] GameObject[] namePanels;
 
 
@@ -15,11 +15,11 @@ public class TestNamePanelHide : MonoBehaviour
     private void Start()
     {
         StartCoroutine(findNameobj());
-       // StartCoroutine(hideNamePanel());
+      
     }
     IEnumerator findNameobj() 
     {
-        yield return 0.5f.GetDelay();
+        yield return 3f.GetDelay();
         namePanels = GameObject.FindGameObjectsWithTag("Test");
     }
 
@@ -33,26 +33,25 @@ public class TestNamePanelHide : MonoBehaviour
         {
             if (Detectradius > Vector2.Distance(transform.position, namePanels[i].transform.position))
             {
-                Vector2 dir = namePanels[i].transform.position - transform.position;
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, Detectradius);
-
-                Debug.DrawLine(transform.position, namePanels[i].transform.position, Color.cyan);
+               
                 namePanels[i].layer = 0;
+                Vector2 dir = namePanels[i].transform.position - transform.position;
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, dir.normalized, Detectradius);
 
                 if (hit.collider != null)
                 {
-                    if (hit.collider.gameObject == namePanels[i]) 
+                    if (hit.collider.gameObject == namePanels[i])
                     {
-                        hit.collider.gameObject.layer = 0;
+                        GameObject obj = hit.collider.gameObject;
+                        obj.layer = 0;
+
+
                     }
-                }
-                else 
-                {
-                    namePanels[i].layer = 11;
                 }
             }
             else
-            {
+            {   
+             
                 namePanels[i].layer = 11;
               
             }
