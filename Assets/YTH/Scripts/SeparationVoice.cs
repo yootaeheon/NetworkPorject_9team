@@ -4,7 +4,7 @@ using Photon.Voice.Unity;
 using System.Collections;
 using UnityEngine;
 
-public class SeparationVoice : MonoBehaviour
+public class SeparationVoice : MonoBehaviourPun
 {
     PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
 
@@ -21,16 +21,8 @@ public class SeparationVoice : MonoBehaviour
     {
         if (_playerDataContainer == null || LobbyScene.Instance != null || _speaker == null)
             return;
+        SeparateVoice();
 
-        // 플레이어 사망 시 스피커 위치 변경하여 보이스 분리
-       if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
-       {
-           _speaker.transform.position = new Vector3(0, 0, 30);
-       }
-       else
-       {
-           _speaker.transform.localPosition = Vector3.zero;
-       }
 
         // 게임중
         if (VoteScene.Instance == null)
@@ -41,6 +33,26 @@ public class SeparationVoice : MonoBehaviour
         else
         {
             _speaker.gameObject.SetActive(false);
+        }
+    }
+
+    public void SeparateVoice()
+    {
+        photonView.RPC(nameof(SeparateVoiceRpc), RpcTarget.AllBuffered);
+    }
+
+    // 플레이어 사망 시 스피커 위치 변경하여 보이스 분리
+
+    [PunRPC]
+    public void SeparateVoiceRpc()
+    {
+        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
+        {
+            _speaker.transform.position = new Vector3(0, 0, 30);
+        }
+        else
+        {
+            _speaker.transform.localPosition = Vector3.zero;
         }
     }
 }
