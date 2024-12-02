@@ -284,7 +284,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 105, y: -131}
+  m_AnchoredPosition: {x: 105, y: 124}
   m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &243107797
@@ -1059,8 +1059,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1755,6 +1755,10 @@ MonoBehaviour:
   - {fileID: 1500343266}
   - {fileID: 1940323642}
   _assignList: []
+  _arrowBtn: {fileID: 1563450150}
+  _taskObj: {fileID: 1835524040}
+  _globalTaskRect: {fileID: 138929003}
+  _arrowImage: {fileID: 1563450151}
 --- !u!1 &987118089
 GameObject:
   m_ObjectHideFlags: 0
@@ -2977,8 +2981,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3040,7 +3044,7 @@ GameObject:
   - component: {fileID: 1563450151}
   - component: {fileID: 1563450150}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ArrowButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3053,7 +3057,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1563450148}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3061,11 +3065,11 @@ RectTransform:
   m_Father: {fileID: 1271788680}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: 210}
-  m_SizeDelta: {x: 30, y: 30}
-  m_Pivot: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0.88087237, y: 0.8880001}
+  m_AnchorMax: {x: 0.94900006, y: 0.952}
+  m_AnchoredPosition: {x: 0, y: -0.000015258789}
+  m_SizeDelta: {x: -2, y: -2}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1563450150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3570,7 +3574,6 @@ MonoBehaviour:
   _breakerBtn: {fileID: 1912242076}
   _globalTaskText: {fileID: 1785241489}
   GlobalMissionState: 0
-  CountDown: 0
   TheWin: 0
   _missionScoreSlider: {fileID: 255364787}
   GlobalMissionClear: 1
@@ -3617,7 +3620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1835524041
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4049,8 +4052,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

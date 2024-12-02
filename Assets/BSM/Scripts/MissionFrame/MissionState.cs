@@ -11,10 +11,10 @@ public class MissionState : MonoBehaviour
     [field: HideInInspector] public bool IsDetect { get; set; }
     [field: HideInInspector] public Vector2 MousePos { get; set; } 
     [field: HideInInspector] public PlayerType MyPlayerType { get; set; }
-    [field: SerializeField] public bool IsPerform { get; set; }
-    [field: SerializeField] public bool IsAssign { get; set; }
+    [field: HideInInspector] public bool IsPerform { get; set; }
+    [field: HideInInspector] public bool IsAssign { get; set; }
 
-    [field: SerializeField] public int TextIndex { get; set; } = -1;
+    [field: HideInInspector] public int TextIndex { get; set; } = -1;
 
     //오리의 컬러 값
     public static Color PlayerColor { get; set; }

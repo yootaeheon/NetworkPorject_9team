@@ -6,20 +6,34 @@ using UnityEngine.UI;
 
 public class MissionPerform : MonoBehaviour
 {
+    [Header("전체적인 미션 관리 리스트")]
     [SerializeField] private List<MonoBehaviour> _missionList = new List<MonoBehaviour>();
+     
+    [Header("진행 가능한 미션 리스트")]
     [SerializeField] private List<TextMeshProUGUI> _textList = new List<TextMeshProUGUI>();
-
     [SerializeField] private List<MissionState> _assignList = new List<MissionState>();
 
-    private MissionState _missionState;
-    private MonoBehaviour _parentClass;
-    private int randIndex = 0;
+    [Header("Mission List Hide/Show")]
+    [SerializeField] private Button _arrowBtn; 
+    [SerializeField] private GameObject _taskObj;
+    [SerializeField] private RectTransform _globalTaskRect;
+    [SerializeField] private Image _arrowImage;
 
+    private MissionState _missionState; 
+    private int randIndex = 0;
+    private bool isTaskState;
+
+    private void Awake() => Init();
     private void Start()
     {
         SetMissionList();
     }
-     
+    
+    private void Init()
+    {
+        _arrowBtn.onClick.AddListener(HideAndShowTask);
+    }
+
     public void SetMissionList()
     {
         for (int i = 0; i < 3; i++)
@@ -63,12 +77,15 @@ public class MissionPerform : MonoBehaviour
   
         for (int i = 0; i < _assignList.Count; i++)
         {
+            //할당된 State Get
             assignState = _assignList[i];
              
+            //Clear된 미션인지?
             if(!assignState.IsAssign && assignState.TextIndex != (-1))
             {
                 nextMissionIndex = Random.Range(0, 8);
                  
+                ///Random으로 돌린 State가 할당된 리스트에 포함되어 있을 경우 재배정
                 if (_assignList.Contains(_missionList[nextMissionIndex].GetComponent<MissionState>()))
                 { 
                     while (true)
@@ -77,6 +94,7 @@ public class MissionPerform : MonoBehaviour
 
                         MissionState nextState = _missionList[nextMissionIndex].GetComponent<MissionState>();
 
+                        //State가 할당된 리스트에 없을 경우 미션 교체
                         if (!_assignList.Contains(nextState))
                         {
                             nextState.TextIndex = assignState.TextIndex;
@@ -92,13 +110,27 @@ public class MissionPerform : MonoBehaviour
             } 
         }
          
-    } 
-    //mission state의 perform이 true인 애들만 미션 수행 가능하게.
-    //perform이 True인 애들만 Text에 State의 MissionName 셋팅
+    }
+     
+    private void HideAndShowTask()
+    {
+        isTaskState = !isTaskState;
 
-    //미션을 클리어 했으면 해당 미션의 perform값 false로 변경하고
-    //다른 미션을 또 True로 변경하여 Text 셋팅
+        Debug.Log($"task:{isTaskState}");
 
-    //미션 리스트 확장/축소 애니메이션 필요
+        if (isTaskState)
+        {
+            _taskObj.SetActive(true);
+            _globalTaskRect.anchoredPosition = new Vector2(105f, -131f);
+            _arrowImage.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,180f));   
 
+        }
+        else
+        {
+            _taskObj.SetActive(false);
+            _globalTaskRect.anchoredPosition = new Vector2(105f, 124f);
+            _arrowImage.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        } 
+    }
+     
 }

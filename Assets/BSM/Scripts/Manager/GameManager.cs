@@ -20,11 +20,11 @@ public class GameManager : MonoBehaviourPun
 
     private Coroutine _globalTaskCo;
 
-    public bool GlobalMissionState;
+    [HideInInspector] public bool GlobalMissionState;
+    [HideInInspector] public bool TheWin;
     private string _globalTaskName;
-    public float CountDown;
-    public bool TheWin;
-
+    private float CountDown;
+     
     private bool _globalState;
     public bool GlobalState
     {
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviourPun
             }
         }
     }
-     
+
     public static GameManager Instance { get; private set; }
 
     [SerializeField] public Slider _missionScoreSlider;
@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviourPun
         SetSingleton();
         _fireBtn.onClick.AddListener(DuckFireAbilityInvoke);
         _lifeBtn.onClick.AddListener(DuckLifeAbilityInvoke);
-        _breakerBtn.onClick.AddListener(DuckBreakerAbilityInvoke); 
+        _breakerBtn.onClick.AddListener(DuckBreakerAbilityInvoke);
     }
 
     private void SetSingleton()
@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviourPun
             Destroy(gameObject);
         }
     }
-      
+
 
     /// <summary>
     /// 글로벌 미션 Text 코루틴
@@ -164,10 +164,10 @@ public class GameManager : MonoBehaviourPun
 
         yield break;
     }
-     
+
     private void DuckFireAbilityInvoke()
     {
-        UseAbility = SabotageType.Fire; 
+        UseAbility = SabotageType.Fire;
         photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, UseAbility);
     }
 
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviourPun
         UseAbility = SabotageType.BlackOut;
         photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, UseAbility);
     }
-     
+
     /// <summary>
     /// Duck 유저 사보타지 능력 기능 동기화
     /// </summary>
