@@ -674,9 +674,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MissionName>k__BackingField: "\uB2F9\uAD6C\uACF5 \uCCAD\uC18C\uD558\uAE30"
-  <IsPerform>k__BackingField: 0
-  <IsAssign>k__BackingField: 0
-  <TextIndex>k__BackingField: -1
   _clips:
   - {fileID: 8300000, guid: 982d8570748a3b64b97c7ea8f0162f92, type: 3}
   - {fileID: 8300000, guid: 81ecc3e023e12d746b5165e91ed1be32, type: 3}

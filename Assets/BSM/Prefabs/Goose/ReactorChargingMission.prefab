@@ -186,7 +186,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -632,9 +632,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MissionName>k__BackingField: "\uC6D0\uC790\uB85C \uC911\uC2EC\uBD80 \uCDA9\uC804\uD558\uAE30"
-  <IsPerform>k__BackingField: 0
-  <IsAssign>k__BackingField: 0
-  <TextIndex>k__BackingField: -1
   _clips:
   - {fileID: 8300000, guid: abd6dfee7df868d49ad8feb91803aae1, type: 3}
   - {fileID: 8300000, guid: 81ecc3e023e12d746b5165e91ed1be32, type: 3}
