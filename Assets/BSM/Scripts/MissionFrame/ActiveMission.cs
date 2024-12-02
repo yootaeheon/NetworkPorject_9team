@@ -21,6 +21,10 @@ public class ActiveMission : MonoBehaviour
     {
         _missionPrefab.SetActive(true);
         MissionState.PlayerColor = color;
-        _missionPrefab.GetComponent<MissionState>().MyPlayerType = type;
+        bool success = _missionPrefab.TryGetComponent<MissionState>(out MissionState missionState);
+        if (success)
+        {
+            missionState.MyPlayerType = type;
+        }  
     } 
 }

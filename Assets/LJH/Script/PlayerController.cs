@@ -309,8 +309,9 @@ public class PlayerController : MonoBehaviourPun
 
     IEnumerator ReportRoutine()
     {
-        GameUI.ShowReport(body.material.color, Random.ColorHSV());
-        yield return 3f.GetDelay();
+        Color reporterColor = PlayerDataContainer.Instance.GetPlayerData(_playerNumber).PlayerColor;
+        GameUI.ShowReport(reporterColor, Random.ColorHSV());
+        yield return GameUI.Report.Duration.GetDelay();
         if (PhotonNetwork.IsMasterClient == true)
         {
             SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive);

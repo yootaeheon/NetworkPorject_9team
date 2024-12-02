@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class EmergencyCall : BaseUI
+public class EmergencyCall : BaseUIPun
 {
     private EmergencyCallButton _button => GetUI<EmergencyCallButton>("Button");
     private GameObject _buttonPush => GetUI("ButtonPush");
@@ -45,18 +46,23 @@ public class EmergencyCall : BaseUI
         if (_button.OnButton)
         {
             // TODO : 긴급회의
+            int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();   
+            photonView.RPC(nameof(RPCEmergencyCall),RpcTarget.AllViaServer, playerNumber);
         }
     }
 
+
     [PunRPC]
-    private void RPCEmergencyCall()
+    private void RPCEmergencyCall(int playerNumber)
     {
-        StartCoroutine(EmergencyCallRoutine());
+        Debug.Log("RPC 테스트");
+        StartCoroutine(EmergencyCallRoutine(playerNumber));
     }
 
-    IEnumerator EmergencyCallRoutine()
+    IEnumerator EmergencyCallRoutine(int playerNumber)
     {
-       // GameUI.ShowEmergency();
+        Color reporterColor = PlayerDataContainer.Instance.GetPlayerData(playerNumber).PlayerColor;
+        GameUI.ShowEmergency(reporterColor);
         yield return GameUI.Emergency.Duration.GetDelay();
         if (PhotonNetwork.IsMasterClient == true)
         {

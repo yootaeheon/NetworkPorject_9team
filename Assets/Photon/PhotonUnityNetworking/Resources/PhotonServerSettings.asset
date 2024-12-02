@@ -116,6 +116,7 @@ MonoBehaviour:
   - DestroyMyPlayer
   - RPCClearPlayerData
   - StartJudgeGameOver
+  - RPCEmergencyCall
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

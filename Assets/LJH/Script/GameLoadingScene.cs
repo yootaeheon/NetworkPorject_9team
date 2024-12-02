@@ -21,6 +21,11 @@ public class GameLoadingScene : MonoBehaviourPun
 
     public event UnityAction OnStartGameEvent;
 
+    public static bool IsTest { get 
+        {
+            return NSJ_Test.TestGame.Instance == null ? false : true;
+        } }
+
     public static GameLoadingScene Instance;
     private void Awake()
     {
@@ -78,6 +83,9 @@ public class GameLoadingScene : MonoBehaviourPun
     /// </summary>
     IEnumerator GameOverRoutine()
     {
+        if(IsTest)
+            yield break;
+
         // 로비 씬에서는 판별 금지
         while (LobbyScene.Instance != null)
         {
