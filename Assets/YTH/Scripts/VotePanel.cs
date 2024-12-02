@@ -83,8 +83,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        //SpawnPlayerPanel();
-        //SetPlayerPanel();
+        SpawnPlayerPanel();
+       SetPlayerPanel();
     }
 
     private void Update()
@@ -157,7 +157,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < 12; i++)
         {
-           _panelAnonymImage[i].SetActive(true);
+           //TODO : 
         }
     }
 
@@ -187,7 +187,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             if (_voteData.VoteTimeCount <= 0) // 투표 시간 종료 시 투표, 스킵 버튼 비활성화
             {
                 DisableButton();
-                SpawnAnonymImage();
+                //SpawnAnonymImage();
                 SpawnSkipAnonymImage();
                 _voteManager.GetVoteResult();
             }

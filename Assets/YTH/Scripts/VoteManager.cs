@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class VoteManager : MonoBehaviourPunCallbacks
 {
+    PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
+
     [SerializeField] VoteSceneData _voteData;
 
     [SerializeField] VotePanel _votePanel;
@@ -21,9 +23,12 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Button[] _voteButtons;
 
-    // IsDead == false && DidVote == false 일때만 스킵 가능하게 조건 추가
+    // IsDead == false &&일때만 스킵 가능하게 조건 추가
     public void Vote(int index) // 플레이어 패널을 눌러 투표
     {
+         if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber).IsGhost == false)
+        return;
+
         photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
         _votePanel.DisableButton();
 
@@ -38,9 +43,11 @@ public class VoteManager : MonoBehaviourPunCallbacks
         Debug.Log($"{index}번 플레이어 득표수 {_voteCounts[index]} ");
     }
 
-    // IsDead == false && DidVote == false 일때만 스킵 가능하게 조건 추가
     public void OnClickSkip()  // 스킵 버튼 누를 시
     {
+        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == false)
+            return;
+
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
         _votePanel.DisableButton();
     }

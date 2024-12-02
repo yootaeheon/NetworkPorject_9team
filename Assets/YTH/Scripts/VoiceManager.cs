@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
 using UnityEngine;
@@ -6,19 +7,16 @@ using UnityEngine.UI;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
-   // public const string RoomName = "playerpaneltest";
+    // public const string RoomName = "playerpaneltest";
     public static VoiceManager Instance { get; private set; }
 
-    [SerializeField] PlayerController _controller;
-
-    [SerializeField] PunVoiceClient _voiceClient;
-
-    [SerializeField] Photon.Voice.Unity.Recorder _recorder;
-
     [SerializeField] Image[] _speakingSigns;
+
     [SerializeField] PhotonVoiceView[] _voiceViews;
 
-    private Speaker _speaker;
+    [SerializeField] Recorder _recorder;
+
+    PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
 
     private void Awake()
     {
@@ -39,10 +37,11 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     }
 
 
-   public void IsSpeakingImageEnable()
-   {
-        _speakingSigns[PhotonNetwork.LocalPlayer.ActorNumber-1].enabled = _voiceViews[PhotonNetwork.LocalPlayer.ActorNumber - 1].IsSpeaking;
-   }
+    // 말할 때 표시 기능
+    public void IsSpeakingImageEnable()
+    {
+        _speakingSigns[PhotonNetwork.LocalPlayer.ActorNumber - 1].enabled = _voiceViews[PhotonNetwork.LocalPlayer.ActorNumber - 1].IsSpeaking;
+    }
 
     public void FindAndLogConnectedSpeakers()
     {
@@ -57,5 +56,14 @@ public class VoiceManager : MonoBehaviourPunCallbacks
             _voiceViews[index] = voiceView;
             index++;
         }
+    }
+
+    public void DisableVoice()
+    {
+        //사망 시 보이스 off 기능
+        // if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
+        // {
+        //     _recorder.TransmitEnabled = false;
+        // }
     }
 }
