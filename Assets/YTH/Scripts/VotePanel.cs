@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using TMPro;
@@ -8,38 +9,34 @@ using UnityEngine.UI;
 public class VotePanel : MonoBehaviourPunCallbacks
 {
     public const string RoomName = "playerpaneltest";
+    PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
 
     [SerializeField] VoteManager _voteManager;
 
     [SerializeField] VoteSceneData _voteData;
 
-    private PlayerType _playerType; // Duck이 마피아
+    [SerializeField] VoteScenePlayerData[] _playerData;
 
     [SerializeField] GameObject[] _panelList; // PlayerActorNumber 인덱스로 미리 생성해둔 패널들을 리스트에 담아 연결
+
+    #region UI
+    [Header("UI")]
 
     [SerializeField] GameObject[] _SkipAnonymImage; // 스킵 수 만큼 익명 이미지 생성
 
     [SerializeField] GameObject[] _panelAnonymImage; // 2차원 배열 이용하여 구현 계획
 
-    [SerializeField] VoteScenePlayerData[] _playerData;
-
     [SerializeField] Button[] _voteButtons; // 투표하기 위한 버튼들
+  
+    [SerializeField] GameObject[] _deadSignImage; // 죽은 상태 표시 이미지
 
-    #region UI
-    [Header("UI")]
-    // [SerializeField] GameObject _characterImage; // 투표창에서 각 플레이어 캐릭터 이미지
+    [SerializeField] GameObject[] _voteSignImage; // 죽은 상태 표시 이미지
 
-    //  [SerializeField] Image _voteSignImage; // 투표한 플레이어 표시 이미지
+    [SerializeField] TMP_Text[] _nickNameText; // 각 플레이어 닉네임 텍스트
 
-    //  [SerializeField] Image _deadSignImage; // 죽은 상태 표시 이미지
-
-    [SerializeField] TMP_Text _nickNameText; // 각 플레이어 닉네임 텍스트
+    [SerializeField] Image[] _playerColor;
 
     [SerializeField] TMP_Text _stateText;
-
-    [SerializeField] GameObject _votePanel; // 투표창 전체 패널
-
-    [SerializeField] GameObject _playerPanel; // 각 플레이어 패널
 
     [SerializeField] public Button _skipButton;
 
@@ -71,14 +68,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
         else
         {
             SpawnPlayerPanel();
+            SetPlayerPanel();
         }
-   
-
-        // 투표씬 입장 시 투표 여부 false로 초기화
-        //for (int i = 0; i < 12; i++)
-        //{
-        //    _playerData[i].DidVote = false;
-        //}
     }
 
     public override void OnConnectedToMaster()
@@ -92,23 +83,39 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        SpawnPlayerPanel();
+        //SpawnPlayerPanel();
+        //SetPlayerPanel();
     }
 
     private void Update()
     {
         Debug.Log(PhotonNetwork.NetworkClientState);
-
         CountTime();
     }
 
     // 각 플레이어 패널을 세팅하는 함수
-    private void SetPlayerPanel(GameObject[] panelList)
+    private void SetPlayerPanel()
     {
-        // _nickNameText.text = player.NickName; // 닉네임 불러오기
-        //TODO : _characterImage = ""; // 캐릭터 이미지 불러오기
-        //TODO : 죽은 캐릭터에 사망 표시 띄워놓기
-        //TODO : 플레이어가 죽은 상태라면 그 플레이어 투표 버튼 비활성화 // button.interatable == false
+        photonView.RPC(nameof(SetPlayerPanelRPC), RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    public void SetPlayerPanelRPC()
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            _nickNameText[i].text = _playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerName;
+            _voteSignImage[i].SetActive(false);
+            _deadSignImage[i].SetActive(_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost);
+            _playerColor[i].color = _playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerColor;
+            _panelAnonymImage[i].SetActive(false);
+            _playerData[i].DidVote = false;
+
+            if (_playerDataContainer.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) != PlayerType.Duck)
+                return;
+
+            _nickNameText[PhotonNetwork.LocalPlayer.ActorNumber - 1].color = Color.red;
+        }
     }
 
     // 플레이어 패널 생성 함수
@@ -150,10 +157,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < 12; i++)
         {
-            for (int j = 0; j < index; j++)
-            {
-                //TODO : 득표수만큼 활성화, 2차원 배열 사용
-            }
+           _panelAnonymImage[i].SetActive(true);
         }
     }
 
@@ -183,7 +187,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             if (_voteData.VoteTimeCount <= 0) // 투표 시간 종료 시 투표, 스킵 버튼 비활성화
             {
                 DisableButton();
-                //  SpawnAnonymImage();
+                SpawnAnonymImage();
                 SpawnSkipAnonymImage();
                 _voteManager.GetVoteResult();
             }
@@ -206,6 +210,4 @@ public class VotePanel : MonoBehaviourPunCallbacks
         yield return 2f.GetDelay();
         SpawnPlayerPanel();
     }
-
-
 }

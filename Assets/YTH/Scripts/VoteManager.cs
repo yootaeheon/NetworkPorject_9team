@@ -15,6 +15,8 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     [SerializeField] VoteScenePlayerData[] _playerData;
 
+    [SerializeField] GameObject[] _voteSignImage; // 투표한 플레이어 표시 이미지
+
     public int[] _voteCounts; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
 
     [SerializeField] Button[] _voteButtons;
@@ -24,6 +26,9 @@ public class VoteManager : MonoBehaviourPunCallbacks
     {
         photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
         _votePanel.DisableButton();
+
+        // 투표한 플레이어에 이미지 띄우기
+        _voteSignImage[index].SetActive(true);
     }
 
     [PunRPC]

@@ -100,7 +100,7 @@ MonoBehaviour:
   - RPCUnLoadScene
   - Test
   - RPCSetParent
-  - 
+  - RPCEmergencyCall
   - 
   - SpawnSkipAnonymImageRPC
   - SpawnAnonymImageRPC
@@ -116,7 +116,7 @@ MonoBehaviour:
   - DestroyMyPlayer
   - RPCClearPlayerData
   - StartJudgeGameOver
-  - RPCEmergencyCall
+  - SetPlayerPanelRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
