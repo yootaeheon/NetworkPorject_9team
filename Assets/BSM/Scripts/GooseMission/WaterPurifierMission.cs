@@ -158,7 +158,7 @@ public class WaterPurifierMission : MonoBehaviour
     {
         if (_missionState.ObjectCount < 1)
         {
-            _missionState.IsPerform = false;
+            _missionState.IsAssign = false; 
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             StartCoroutine(PluginCoroutine()); 
             IncreaseTotalScore();
@@ -168,6 +168,7 @@ public class WaterPurifierMission : MonoBehaviour
     private IEnumerator PluginCoroutine()
     {
         yield return Util.GetDelay(1f);
+        _missionState.IsPerform = false;
         _missionState.ClosePopAnim();
         yield return Util.GetDelay(0.5f);
         gameObject.SetActive(false);

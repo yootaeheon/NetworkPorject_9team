@@ -8,17 +8,13 @@ public class MissionPerform : MonoBehaviour
 {
     [SerializeField] private List<MonoBehaviour> _missionList = new List<MonoBehaviour>();
     [SerializeField] private List<TextMeshProUGUI> _textList = new List<TextMeshProUGUI>();
- 
+
+    [SerializeField] private List<MissionState> _assignList = new List<MissionState>();
+
     private MissionState _missionState;
     private MonoBehaviour _parentClass;
     private int randIndex = 0;
-    private int curIndex = 0;
 
-    private void Awake()
-    {
-        
-    }
-     
     private void Start()
     {
         SetMissionList();
@@ -47,14 +43,56 @@ public class MissionPerform : MonoBehaviour
             }
 
             _textList[i].text = _missionState.MissionName;
+            _assignList.Add(_missionState);
             _missionState.IsPerform = true;
             _missionState.IsAssign = true;
             _missionState.TextIndex = i;
         }
+        
     }
 
+    private void Update()
+    {
+        UpdateMissionList();
+    }
 
+    private void UpdateMissionList()
+    {
+        int nextMissionIndex = 0;
+        MissionState assignState = null;
+  
+        for (int i = 0; i < _assignList.Count; i++)
+        {
+            assignState = _assignList[i];
+             
+            if(!assignState.IsAssign && assignState.TextIndex != (-1))
+            {
+                nextMissionIndex = Random.Range(0, 8);
+                 
+                if (_assignList.Contains(_missionList[nextMissionIndex].GetComponent<MissionState>()))
+                { 
+                    while (true)
+                    {
+                        nextMissionIndex = Random.Range(0, 8);
 
+                        MissionState nextState = _missionList[nextMissionIndex].GetComponent<MissionState>();
+
+                        if (!_assignList.Contains(nextState))
+                        {
+                            nextState.TextIndex = assignState.TextIndex;
+                            nextState.IsPerform = true;
+                            nextState.IsAssign = true;
+                            _textList[i].text = nextState.MissionName;
+                            _assignList[i] = nextState;
+                            assignState.TextIndex = -1;
+                            break;
+                        } 
+                    }
+                } 
+            } 
+        }
+         
+    } 
     //mission state의 perform이 true인 애들만 미션 수행 가능하게.
     //perform이 True인 애들만 Text에 State의 MissionName 셋팅
 

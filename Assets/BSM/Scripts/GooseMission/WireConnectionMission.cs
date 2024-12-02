@@ -228,6 +228,7 @@ public class WireConnectionMission : MonoBehaviour
         if (_missionState.ObjectCount < 1 && !isComplete)
         {
             isComplete = true;
+            _missionState.IsAssign = false;
             _missionState.IsPerform = false;
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
