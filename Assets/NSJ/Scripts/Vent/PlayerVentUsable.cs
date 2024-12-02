@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using UnityEngine;
 
@@ -27,6 +28,9 @@ public class PlayerVentUsable : MonoBehaviourPun
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (photonView.IsMine == false) 
+            return;
+
+        if (PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
             return;
         //if (_player.playerType == PlayerType.Goose)
         //    return;
@@ -114,14 +118,14 @@ public class PlayerVentUsable : MonoBehaviourPun
         {
             yield return null;
             // 벤트 나오기
-            if (Input.GetKeyDown(KeyCode.LeftShift) || _isClickButton == true)
+            if (Input.GetKeyDown(KeyCode.LeftShift) || _isClickButton == true || VoteScene.Instance != null)
             {
                 _isClickButton = false;
 
                 ExitVent();
                 _enterVentRoutine = null;
                 yield break;
-            }       
+            }
         }
     }
 
