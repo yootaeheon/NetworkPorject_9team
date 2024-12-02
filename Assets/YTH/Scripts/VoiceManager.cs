@@ -39,10 +39,13 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     }
 
 
+
+    // 말할 때 표시 기능
    public void IsSpeakingImageEnable()
    {
         _speakingSigns[PhotonNetwork.LocalPlayer.ActorNumber-1].enabled = _voiceViews[PhotonNetwork.LocalPlayer.ActorNumber - 1].IsSpeaking;
    }
+
 
     public void FindAndLogConnectedSpeakers()
     {
