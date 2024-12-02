@@ -23,9 +23,18 @@ public class SeparationVoice : MonoBehaviour
             return;
 
         // 플레이어 사망 시 스피커 위치 변경하여 보이스 분리
-        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
+       // if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
+       // {
+       //     _speaker.transform.position = new Vector3(0, 0, _speaker.transform.position.z - 500);
+       // }
+       // else
+       // {
+       //     _speaker.transform.localPosition = Vector3.zero;
+       // }
+
+        if (Input.GetKey(KeyCode.Alpha0))
         {
-            _speaker.transform.position = new Vector3(0, 0, _speaker.transform.position.z - 500);
+            _speaker.transform.position = new Vector3(0, 0, -30);
         }
         else
         {
