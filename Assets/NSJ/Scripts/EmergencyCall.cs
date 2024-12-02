@@ -14,14 +14,15 @@ public class EmergencyCall : BaseUIPun
     private GameObject _emergencyCall => GetUI("EmergencyCall");
     private EmergencyCallButton _button => GetUI<EmergencyCallButton>("Button");
     private GameObject _buttonPush => GetUI("ButtonPush");
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
 
+    int _openPopUpHash = Animator.StringToHash("OpenPopup");
     int _closePopUpHash = Animator.StringToHash("ClosePopup");
 
     private void Awake()
     {
         Bind();
-        _animator = GetComponent<Animator>();
+
     }
 
     private void Start()
