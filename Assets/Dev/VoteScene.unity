@@ -4827,8 +4827,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skipCount: 0
-  _reportTimeCount: 8
-  _voteTimeCount: 12
+  _reportTimeCount: 10
+  _voteTimeCount: 60
 --- !u!114 &825037835
 MonoBehaviour:
   m_ObjectHideFlags: 0
