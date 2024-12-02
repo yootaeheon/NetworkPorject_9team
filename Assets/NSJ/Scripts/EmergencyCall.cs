@@ -47,7 +47,7 @@ public class EmergencyCall : BaseUIPun
         {
             // TODO : 긴급회의
             int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();   
-            photonView.RPC(nameof(RPCEmergencyCall),RpcTarget.AllViaServer, playerNumber);
+            photonView.RPC(nameof(RPCEmergencyCall),RpcTarget.All, playerNumber);
         }
     }
 
@@ -55,7 +55,6 @@ public class EmergencyCall : BaseUIPun
     [PunRPC]
     private void RPCEmergencyCall(int playerNumber)
     {
-        Debug.Log("RPC 테스트");
         StartCoroutine(EmergencyCallRoutine(playerNumber));
     }
 
