@@ -10,7 +10,7 @@ public class GameLoadingScene : MonoBehaviourPun
     // 로비씬에 넣어놓고 로비에 있는 정보를 가지고 게임으로 들어가기 
     // 씬에 입장하면 랜덤 스폰기능 
     // 투표씬 전환
-    [SerializeField] Transform[] SpawnPoints;
+    private Transform[] SpawnPoints;
 
     private GameObject player;
     public static GameObject MyPlayer { get { return Instance.player; } }
@@ -37,8 +37,7 @@ public class GameLoadingScene : MonoBehaviourPun
         else
         {
             Destroy(gameObject); // 기존 인스턴스가 있으면 새로 생성된 객체를 제거
-        }
-        SpawnPoints = new Transform[6];
+        }       
     }
     private void Start()
     {
@@ -190,15 +189,7 @@ public class GameLoadingScene : MonoBehaviourPun
     [PunRPC]
     private void RpcRandomSpawner()
     {
-        GameObject obj = GameObject.Find("SpawnPoint");
-
-        for (int i = 0; i < obj.transform.childCount; i++)
-        {
-            SpawnPoints[i] = obj.transform.GetChild(i);
-        }
-        int x = Random.Range(0, obj.transform.childCount);
-
-        spawnPlayer(SpawnPoints[x].position);
+        spawnPlayer(GetRandomSpawnPoint());
     }
 
     [PunRPC]
@@ -221,5 +212,28 @@ public class GameLoadingScene : MonoBehaviourPun
         LoadingBox.StartLoading();
 
         OnStartGameEvent?.Invoke();
+    }
+
+    /// <summary>
+    /// 랜덤 리스폰 포인트 획득
+    /// </summary>
+    /// <returns></returns>
+    private Vector3 GetRandomSpawnPoint()
+    {      
+        // 배열 입력이 안됬을때 리스폰 포인트 저장)
+        if (SpawnPoints == null)
+        {
+            GameObject obj = GameObject.FindGameObjectWithTag("Respawn");         
+            SpawnPoints = new Transform[obj.transform.childCount];
+            Debug.Log($"{obj} : {SpawnPoints.Length}");
+            for (int i = 0; i < SpawnPoints.Length; i++)
+            {
+                SpawnPoints[i] = obj.transform.GetChild(i);
+            }
+        }
+
+        int x = Random.Range(0, SpawnPoints.Length);
+
+        return SpawnPoints[x].position;
     }
 }

@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,8 +35,15 @@ public class MissionController : BaseMission
         _graphicRaycaster = _grCanvas.GetComponent<GraphicRaycaster>();
         GetMissionComponent<Button>("MissionCloseButton").onClick.AddListener(CloseMissionPopUp); 
     }
- 
 
+    private void Update()
+    {
+        if(VoteScene.Instance != null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+    }
 
     /// <summary>
     /// 미션 진행 중 오브젝트 감지

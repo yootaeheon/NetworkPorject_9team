@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class EmergencyCall : BaseUIPun
 {
+    private GameObject _emergencyCall => GetUI("EmergencyCall");
     private EmergencyCallButton _button => GetUI<EmergencyCallButton>("Button");
     private GameObject _buttonPush => GetUI("ButtonPush");
     private Animator _animator;
@@ -28,6 +29,15 @@ public class EmergencyCall : BaseUIPun
         SubscribeEvents();
     }
 
+    private void Update()
+    {
+        if (VoteScene.Instance != null)
+        {
+            _emergencyCall.SetActive(false);
+            return;
+        }
+    }
+
     /// <summary>
     /// 버튼 클릭시 누른 이미지 나오기
     /// </summary>
@@ -43,6 +53,10 @@ public class EmergencyCall : BaseUIPun
     {
         _buttonPush.SetActive(false);
         // 마우스 포인트가 버튼 위에 있을 시에 긴급소집
+
+        if (GameManager.Instance.GlobalMissionState == true)
+            return;
+
         if (_button.OnButton)
         {
             // TODO : 긴급회의
@@ -79,7 +93,7 @@ public class EmergencyCall : BaseUIPun
     {
        _animator.Play(_closePopUpHash);
         yield return 0.2f.GetDelay();
-        gameObject.SetActive(false);
+        _emergencyCall.SetActive(false);
     }
 
     private void SubscribeEvents()
