@@ -11,9 +11,9 @@ public class SoundManager : BaseMission
 
     [Header("Sound Setting UI")]
     [SerializeField] private AudioMixer _audioMixer;
-    [SerializeField] private Slider _masterSlider;
-    [SerializeField] private Slider _sfxSlider;
-    [SerializeField] private Slider _bgmSlider;
+    //[SerializeField] private Slider _masterSlider;
+    //[SerializeField] private Slider _sfxSlider;
+    //[SerializeField] private Slider _bgmSlider;
 
 
     private AudioSource _sfxSource;
@@ -43,7 +43,7 @@ public class SoundManager : BaseMission
 
     private void SetObject()
     {
-        if (_bgmSlider == null || _sfxSlider == null || _masterSlider == null) return;
+        //if (_bgmSlider == null || _sfxSlider == null || _masterSlider == null) return;
 
 
         _sfxSource = GetMissionComponent<AudioSource>("SFX");
