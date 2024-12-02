@@ -20,21 +20,21 @@ public class TestNamePanelHide : MonoBehaviour
     IEnumerator findNameobj() 
     {
         yield return 3f.GetDelay();
-        namePanels = GameObject.FindGameObjectsWithTag("Test");
+        namePanels = GameObject.FindGameObjectsWithTag("NamePanel");
         StartCoroutine(DelayFindNamePanel());
     }
     IEnumerator DelayFindNamePanel() 
     {
         while (true)
         {
-            yield return 1f.GetDelay();
+            yield return 0.3f.GetDelay();
 
-            FindNamePanel3();
+            FindNamePanel();
 
         }
     }
 
-    private void FindNamePanel3() 
+    private void FindNamePanel() 
     {
         for (int i = 0; i < namePanels.Length; i++)
         {
@@ -59,7 +59,7 @@ public class TestNamePanelHide : MonoBehaviour
             else
             {   
              
-                namePanels[i].layer = 11;
+                namePanels[i].layer = 15;
               
             }
         }

@@ -71,6 +71,7 @@ public class UiFollowingPlayer : MonoBehaviourPun
         if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Duck)
         {
             //
+            nameTxt.color = Color.red;
         }
     }
 

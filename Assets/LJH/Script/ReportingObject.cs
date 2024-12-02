@@ -9,7 +9,7 @@ public class ReportingObject : MonoBehaviourPun
     public void Reporting()
     {
         Debug.Log("시체 찾는중");
-        GameObject[] Corpse = GameObject.FindGameObjectsWithTag("Test");
+        GameObject[] Corpse = GameObject.FindGameObjectsWithTag("Dead");
 
         for (int i = 0; i < Corpse.Length; i++)
         {   

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8879989204353344754}
   m_Layer: 0
   m_Name: NamePanel
-  m_TagString: Test
+  m_TagString: NamePanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
