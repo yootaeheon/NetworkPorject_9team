@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -68,7 +69,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
         else
         {
             SpawnPlayerPanel();
-            SetPlayerPanel();
         }
     }
 
@@ -84,7 +84,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         SpawnPlayerPanel();
-        StartCoroutine(SetPlayerPanel());
     }
 
     private void Update()
@@ -94,10 +93,52 @@ public class VotePanel : MonoBehaviourPunCallbacks
     }
 
     // 각 플레이어 패널을 세팅하는 함수
-    private IEnumerator SetPlayerPanel()
+
+    private void SpawnPlayerPanel()
     {
-        yield return 1f.GetDelay();
-        photonView.RPC(nameof(SetPlayerPanelRPC), RpcTarget.AllBuffered);
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) 
+        {
+            _panelList[i].SetActive(true);
+            Debug.Log($"{i} {PlayerDataContainer.Instance.GetPlayerData(i).PlayerName} 인덱스");
+            _panelList[i].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(i); });
+
+            PlayerData playerData = PlayerDataContainer.Instance.GetPlayerData(i);
+            if (playerData.IsNone == true)
+                continue;
+
+            _nickNameText[i].SetText(playerData.PlayerName);
+            _voteSignImage[i].SetActive(false);
+            _playerColor[i].color = playerData.PlayerColor;
+
+
+            // 플레이어 사망일때
+            if (playerData.IsGhost)
+            {
+                _deadSignImage[i].SetActive(true);
+                _playerData[i].DidVote = true;
+            }
+            else
+            {
+                _deadSignImage[i].SetActive(false);
+                _playerData[i].DidVote = false;
+            }
+
+            // 플레이어가 오리면 같은 팀 오리끼리는 빨간색으로 보임
+            if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Duck) {
+                if (playerData.Type == PlayerType.Goose)
+                {
+                    _nickNameText[i].color = Color.white;
+                }
+                else if (playerData.Type == PlayerType.Duck)
+                {
+                    _nickNameText[i].color = Color.red;
+                }
+            }
+            else if(PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Goose)
+            {
+                _nickNameText[i].color = Color.white;
+            }
+        }
     }
 
     [PunRPC]
@@ -110,7 +151,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
             _voteSignImage[i].SetActive(false);
             _deadSignImage[i].SetActive(_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost);
             _playerColor[i].color = _playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerColor;
-            //_panelAnonymImage[i].SetActive(false);
             _playerData[i].DidVote = false;
 
             if (_playerDataContainer.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) != PlayerType.Duck)
@@ -121,10 +161,12 @@ public class VotePanel : MonoBehaviourPunCallbacks
     }
 
     // 플레이어 패널 생성 함수
-    private void SpawnPlayerPanel()
+    private IEnumerator SetPlayerPanel()
     {
-        photonView.RPC("SpawnPlayerPanelRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.GetPlayerNumber());
+        yield return 1f.GetDelay();
+        photonView.RPC(nameof(SetPlayerPanelRPC), RpcTarget.AllBuffered);
     }
+
 
     [PunRPC]
     public void SpawnPlayerPanelRPC(int index)

@@ -26,7 +26,9 @@ public class VoteManager : MonoBehaviourPunCallbacks
     // IsDead == false &&일때만 스킵 가능하게 조건 추가
     public void Vote(int index) // 플레이어 패널을 눌러 투표
     {
-         if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber).IsGhost == false)
+        Debug.LogWarning($"{index} 투표");
+
+         if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
         return;
 
         photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
@@ -45,7 +47,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     public void OnClickSkip()  // 스킵 버튼 누를 시
     {
-        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == false)
+        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
             return;
 
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
