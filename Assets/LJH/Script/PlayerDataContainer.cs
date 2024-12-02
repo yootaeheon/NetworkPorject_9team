@@ -184,12 +184,12 @@ public class PlayerDataContainer : MonoBehaviourPun
     [PunRPC]
     private void RpcSetPlayerData(int playerNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
+        if (PhotonNetwork.LocalPlayer.GetPlayerNumber() == -1)
+            return;
 
         int index = playerNumber;
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
 
-        Debug.Log("¼Â µð¹ö±ë");
-        Debug.Log(playerDataArray[index]);
 
         if (playerDataArray[index] == null)
         {
