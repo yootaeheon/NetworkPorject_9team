@@ -11,8 +11,8 @@ public class UiFollowingPlayer : MonoBehaviourPun
     [SerializeField] Vector3 offset;
 
     [SerializeField] TMP_Text nameTxt;
-    [SerializeField] GameObject MasterIcon;
-    [SerializeField] GameObject ReadyIcon;
+   // [SerializeField] GameObject MasterIcon;
+    //[SerializeField] GameObject ReadyIcon;
 
    
     
@@ -22,8 +22,8 @@ public class UiFollowingPlayer : MonoBehaviourPun
 
         if (PhotonNetwork.IsMasterClient == true) 
         {
-            if(photonView.IsMine == true)
-                photonView.RPC("RpciconActive", RpcTarget.AllBuffered, "Master", true);
+            if (photonView.IsMine == true) { }
+               // photonView.RPC("RpciconActive", RpcTarget.AllBuffered, "Master", true);
         }
         if (photonView.IsMine == true)
         {
@@ -81,11 +81,11 @@ public class UiFollowingPlayer : MonoBehaviourPun
     {
         if (name == "Ready")
         {
-            ReadyIcon.SetActive(isActive);  
+           // ReadyIcon.SetActive(isActive);  
         }
         else if (name == "Master")
         {
-            MasterIcon.SetActive(isActive);
+           // MasterIcon.SetActive(isActive);
         }
         else 
         {

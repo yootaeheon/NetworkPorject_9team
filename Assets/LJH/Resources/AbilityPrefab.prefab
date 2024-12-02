@@ -1020,7 +1020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7454712156121486538
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1056,6 +1056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fbbece2104f84445ac50dcea615d0db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <MissionName>k__BackingField: 
   _clips:
   - {fileID: 8300000, guid: 41d21cde5a6bb3f4683f80752c00bec6, type: 3}
   - {fileID: 8300000, guid: 81ecc3e023e12d746b5165e91ed1be32, type: 3}
