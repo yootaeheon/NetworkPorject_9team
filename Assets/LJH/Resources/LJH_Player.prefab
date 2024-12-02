@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3949325273916533569}
   - component: {fileID: 303560568322161268}
   - component: {fileID: 7407736591267279870}
+  - component: {fileID: -6287053667063853016}
   m_Layer: 7
   m_Name: LJH_Player
   m_TagString: Player
@@ -125,8 +126,8 @@ MonoBehaviour:
   Ghost: {fileID: 8454319113634648400}
   Corpse: {fileID: 5682648312278218900}
   body: {fileID: 2878660863447843465}
-  GhostRender: {fileID: 8454319113562270436}
-  CorpRender: {fileID: 5682648311407957950}
+  GhostRender: {fileID: 0}
+  CorpRender: {fileID: 0}
   eyeAnim: {fileID: 2878660863797681155}
   bodyAnim: {fileID: 2878660863447843462}
   feetAnim: {fileID: 2878660863164772043}
@@ -300,6 +301,114 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0759072b61a2f37419222cf22cac3e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6287053667063853016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2878660863728613669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91175dcc15224463780e01a8a98b1b60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voiceDetection: 0
+  voiceDetectionThreshold: 0.01
+  voiceDetectionDelayMs: 500
+  interestGroup: 0
+  useTargetPlayers: 0
+  targetPlayers: 
+  debugEchoMode: 0
+  reliableMode: 0
+  encrypt: 0
+  transmitEnabled: 1
+  samplingRate: 24000
+  frameDuration: 20000
+  bitrate: 30000
+  sourceType: 0
+  microphoneType: 0
+  audioClip: {fileID: 0}
+  loopAudioClip: 1
+  recordingEnabled: 1
+  audioSessionParameters:
+    Category: 4
+    Mode: 1
+    CategoryOptions: 0800000004000000
+  editorAudioSessionPreset: 1
+  androidMicrophoneSettings:
+    EnableAEC: 1
+    EnableAGC: 1
+    EnableNS: 1
+  stopRecordingWhenPaused: 0
+  useOnAudioFilterRead: 0
+  useMicrophoneTypeFallback: 1
+  recordWhenJoined: 1
+--- !u!1 &5682648312278218900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2368936015205160106, guid: 6a15b4a9251e6764aa243a08880a085a, type: 3}
+  m_PrefabInstance: {fileID: 7943492437232462910}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5682648312278218901}
+  - component: {fileID: 4440556167688193459}
+  - component: {fileID: 3042358093382254462}
+  - component: {fileID: 8325067740013855198}
+  m_Layer: 0
+  m_Name: 'Goosecorpse (Missing Prefab with guid: 6a15b4a9251e6764aa243a08880a085a)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5682648312278218901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2368936015205160107, guid: 6a15b4a9251e6764aa243a08880a085a, type: 3}
+  m_PrefabInstance: {fileID: 7943492437232462910}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682648312278218900}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2878660863728613666}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8454319113634648400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 5012684464317954040, guid: 11f85a39ac145354498ee0c4e3995de9, type: 3}
+  m_PrefabInstance: {fileID: 3513765962240714408}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8454319113634648407}
+  m_Layer: 0
+  m_Name: 'GoosePolter (Missing Prefab with guid: 11f85a39ac145354498ee0c4e3995de9)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8454319113634648407
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 5012684464317954047, guid: 11f85a39ac145354498ee0c4e3995de9, type: 3}
+  m_PrefabInstance: {fileID: 3513765962240714408}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8454319113634648400}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2878660863728613666}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3513765962240714408
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -401,21 +510,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11f85a39ac145354498ee0c4e3995de9, type: 3}
---- !u!212 &8454319113562270436 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 5012684465321528396, guid: 11f85a39ac145354498ee0c4e3995de9, type: 3}
-  m_PrefabInstance: {fileID: 3513765962240714408}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8454319113634648400 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5012684464317954040, guid: 11f85a39ac145354498ee0c4e3995de9, type: 3}
-  m_PrefabInstance: {fileID: 3513765962240714408}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8454319113634648407 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5012684464317954047, guid: 11f85a39ac145354498ee0c4e3995de9, type: 3}
-  m_PrefabInstance: {fileID: 3513765962240714408}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5055286714534798579
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -761,16 +855,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a15b4a9251e6764aa243a08880a085a, type: 3}
---- !u!212 &5682648311407957950 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 2368936014464940928, guid: 6a15b4a9251e6764aa243a08880a085a, type: 3}
-  m_PrefabInstance: {fileID: 7943492437232462910}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5682648312278218900 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2368936015205160106, guid: 6a15b4a9251e6764aa243a08880a085a, type: 3}
-  m_PrefabInstance: {fileID: 7943492437232462910}
-  m_PrefabAsset: {fileID: 0}
 --- !u!61 &4440556167688193459
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -831,8 +915,3 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!4 &5682648312278218901 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2368936015205160107, guid: 6a15b4a9251e6764aa243a08880a085a, type: 3}
-  m_PrefabInstance: {fileID: 7943492437232462910}
-  m_PrefabAsset: {fileID: 0}
