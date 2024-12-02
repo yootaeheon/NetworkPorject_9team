@@ -45,7 +45,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     public void OnClickSkip()  // 스킵 버튼 누를 시
     {
-        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber).IsGhost == false)
+        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == false)
             return;
 
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
