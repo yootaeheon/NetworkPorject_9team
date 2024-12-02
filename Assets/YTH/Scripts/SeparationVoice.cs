@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SeparationVoice : MonoBehaviourPun
 {
-    PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
+    PlayerDataContainer PlayerDataContainer => PlayerDataContainer.Instance;
 
     private Speaker _speaker;
 
@@ -20,7 +20,7 @@ public class SeparationVoice : MonoBehaviourPun
 
     private void Update()
     {
-        if (_playerDataContainer == null || LobbyScene.Instance != null || _speaker == null)
+        if (PlayerDataContainer == null || LobbyScene.Instance != null || _speaker == null)
             return;
         SeparateVoice();
 
@@ -47,7 +47,10 @@ public class SeparationVoice : MonoBehaviourPun
     [PunRPC]
     public void SeparateVoiceRpc()
     {
-        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
+        if (photonView.IsMine == false)
+            return;
+
+        if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
         {
             _speaker.transform.position = new Vector3(0, 0, 30);
         }
