@@ -14,11 +14,13 @@ public class VoteManager : MonoBehaviourPunCallbacks
     private int[] _voteCounts = new int[12]; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
     public static int[] VoteCounts { get { return Instance._voteCounts; } }
 
-    PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
+    public static PlayerDataContainer PlayerDataContainer => PlayerDataContainer.Instance;
+    public static PhotonView PhotonView { get { return Instance.photonView; } }
 
     [SerializeField] VoteSceneData _voteData;
 
     [SerializeField] VotePanel _votePanel;
+    public static VotePanel VotePanel { get { return Instance._votePanel; } }
 
     [SerializeField] VoteScenePlayerData[] _playerData;
 
@@ -29,31 +31,32 @@ public class VoteManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         InitSingleTon();
+        _votePanel.gameObject.SetActive(true);
     }
-    public void Vote(int index) // 플레이어 패널을 눌러 투표
+    public static void Vote(int index) // 플레이어 패널을 눌러 투표
     {
         Debug.LogWarning($"{index} 투표");
 
-         if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
+         if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
         return;
 
-        photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
-        _votePanel.DisableButton();
+        PhotonView.RPC("VotePlayerRPC", RpcTarget.All, index, PhotonNetwork.LocalPlayer.GetPlayerNumber());
+        VotePanel.DisableButton();
 
-        // 투표한 플레이어에 이미지 띄우기
-        _voteSignImage[index].SetActive(true);
+        // 투표한 본인 패널에 이미지 띄우기      
     }
 
     [PunRPC]
-    public void VotePlayerRPC(int index)
+    public void VotePlayerRPC(int index, int votePlayer)
     {
         _voteCounts[index]++;
+        _voteSignImage[votePlayer].SetActive(true);
         Debug.Log($"{index}번 플레이어 득표수 {_voteCounts[index]} ");
     }
 
     public void OnClickSkip()  // 스킵 버튼 누를 시
     {
-        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
+        if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
             return;
 
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);

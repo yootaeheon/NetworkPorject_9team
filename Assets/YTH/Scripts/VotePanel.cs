@@ -105,7 +105,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
                 continue;
 
             _panelList[index].SetActive(true);
-            _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(index); });
+            _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { VoteManager.Vote(index); });
 
             _nickNameText[index].SetText(playerData.PlayerName);
             _voteSignImage[index].SetActive(false);

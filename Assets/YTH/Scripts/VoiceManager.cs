@@ -61,7 +61,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     public void DisableVoice()
     {
         //사망 시 보이스 off 기능
-        // if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
+        // if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
         // {
         //     _recorder.TransmitEnabled = false;
         // }
