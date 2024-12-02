@@ -9,43 +9,54 @@ using UnityEngine.UI;
 
 public class VoteManager : MonoBehaviourPunCallbacks
 {
-    PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
+    public static VoteManager Instance;
+
+    private int[] _voteCounts = new int[12]; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
+    public static int[] VoteCounts { get { return Instance._voteCounts; } }
+
+    public static PlayerDataContainer PlayerDataContainer => PlayerDataContainer.Instance;
+    public static PhotonView PhotonView { get { return Instance.photonView; } }
 
     [SerializeField] VoteSceneData _voteData;
 
     [SerializeField] VotePanel _votePanel;
+    public static VotePanel VotePanel { get { return Instance._votePanel; } }
 
     [SerializeField] VoteScenePlayerData[] _playerData;
 
-    [SerializeField] GameObject[] _voteSignImage; // 투표한 플레이어 표시 이미지
-
-    public int[] _voteCounts; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
+    [SerializeField] GameObject[] _voteSignImage; // 투표한 플레이어 표시 이미지 
 
     [SerializeField] Button[] _voteButtons;
 
-    // IsDead == false &&일때만 스킵 가능하게 조건 추가
-    public void Vote(int index) // 플레이어 패널을 눌러 투표
+    private void Awake()
     {
-         if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.ActorNumber).IsGhost == false)
+        InitSingleTon();
+        _votePanel.gameObject.SetActive(true);
+    }
+    public static void Vote(int index) // 플레이어 패널을 눌러 투표
+    {
+        Debug.LogWarning($"{index} 투표");
+
+         if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
         return;
 
-        photonView.RPC("VotePlayerRPC", RpcTarget.All, index);
-        _votePanel.DisableButton();
+        PhotonView.RPC("VotePlayerRPC", RpcTarget.All, index, PhotonNetwork.LocalPlayer.GetPlayerNumber());
+        VotePanel.DisableButton();
 
-        // 투표한 플레이어에 이미지 띄우기
-        _voteSignImage[index].SetActive(true);
+        // 투표한 본인 패널에 이미지 띄우기      
     }
 
     [PunRPC]
-    public void VotePlayerRPC(int index)
+    public void VotePlayerRPC(int index, int votePlayer)
     {
         _voteCounts[index]++;
+        _voteSignImage[votePlayer].SetActive(true);
         Debug.Log($"{index}번 플레이어 득표수 {_voteCounts[index]} ");
     }
 
     public void OnClickSkip()  // 스킵 버튼 누를 시
     {
-        if (_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == false)
+        if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
             return;
 
         photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
@@ -99,15 +110,6 @@ public class VoteManager : MonoBehaviourPunCallbacks
             //TODO: 동점 시 아무도 안쫓겨나는 컷 씬
             StartCoroutine(ShowVoteSkipRoutine());
         }
-
-
-        //TODO : 고스트가 되는 기능
-
-        if (isKick == true)
-        {
-            // 최다 득표자가 본인일때
-
-        }
     }
 
     /// <summary>
@@ -144,5 +146,18 @@ public class VoteManager : MonoBehaviourPunCallbacks
         //{
             SceneChanger.UnLoadScene("VoteScene");
         //}
+    }
+
+
+    private void InitSingleTon()
+    {
+        if(Instance  == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
