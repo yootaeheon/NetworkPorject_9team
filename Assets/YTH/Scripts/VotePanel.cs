@@ -143,40 +143,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    public void SetPlayerPanelRPC()
-    {
-
-        for (int i = 0; i < 12; i++)
-        {
-            _nickNameText[i].text = _playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerName;
-            _voteSignImage[i].SetActive(false);
-            _deadSignImage[i].SetActive(_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost);
-            _playerColor[i].color = _playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerColor;
-            _playerData[i].DidVote = false;
-
-            if (_playerDataContainer.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) != PlayerType.Duck)
-                return;
-
-            _nickNameText[PhotonNetwork.LocalPlayer.GetPlayerNumber()].color = Color.red;
-        }
-    }
-
-    // 플레이어 패널 생성 함수
-    private IEnumerator SetPlayerPanel()
-    {
-        yield return 1f.GetDelay();
-        photonView.RPC(nameof(SetPlayerPanelRPC), RpcTarget.AllBuffered);
-    }
-
-
-    [PunRPC]
-    public void SpawnPlayerPanelRPC(int index)
-    {
-        _panelList[index].SetActive(true);
-        _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(index); });
-    }
-
     //투표 종료 후 스킵 수 만큼 익명 이미지 생성
     private void SpawnSkipAnonymImage()
     {
