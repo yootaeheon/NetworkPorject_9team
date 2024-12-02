@@ -110,7 +110,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             _voteSignImage[i].SetActive(false);
             _deadSignImage[i].SetActive(_playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost);
             _playerColor[i].color = _playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerColor;
-            _panelAnonymImage[i].SetActive(false);
+            //_panelAnonymImage[i].SetActive(false);
             _playerData[i].DidVote = false;
 
             if (_playerDataContainer.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) != PlayerType.Duck)
