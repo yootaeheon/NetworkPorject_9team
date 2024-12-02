@@ -84,7 +84,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         SpawnPlayerPanel();
-       SetPlayerPanel();
+        StartCoroutine(SetPlayerPanel());
     }
 
     private void Update()
@@ -96,7 +96,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
     // 각 플레이어 패널을 세팅하는 함수
     private IEnumerator SetPlayerPanel()
     {
-        yield return 0.5f.GetDelay();
+        yield return 1f.GetDelay();
         photonView.RPC(nameof(SetPlayerPanelRPC), RpcTarget.AllBuffered);
     }
 
@@ -116,14 +116,14 @@ public class VotePanel : MonoBehaviourPunCallbacks
             if (_playerDataContainer.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) != PlayerType.Duck)
                 return;
 
-            _nickNameText[PhotonNetwork.LocalPlayer.ActorNumber - 1].color = Color.red;
+            _nickNameText[PhotonNetwork.LocalPlayer.GetPlayerNumber()].color = Color.red;
         }
     }
 
     // 플레이어 패널 생성 함수
     private void SpawnPlayerPanel()
     {
-        photonView.RPC("SpawnPlayerPanelRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber - 1);
+        photonView.RPC("SpawnPlayerPanelRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.GetPlayerNumber());
     }
 
     [PunRPC]
