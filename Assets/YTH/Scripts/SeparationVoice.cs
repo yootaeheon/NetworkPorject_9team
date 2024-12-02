@@ -14,6 +14,7 @@ public class SeparationVoice : MonoBehaviourPun
     {
         yield return null;
         Speaker speaker = GetComponentInChildren<Speaker>();
+        speaker.transform.SetParent(null);
         _speaker = speaker;
     }
 
@@ -52,7 +53,7 @@ public class SeparationVoice : MonoBehaviourPun
         }
         else
         {
-            _speaker.transform.localPosition = Vector3.zero;
+            _speaker.transform.position = transform.position;
         }
     }
 }
