@@ -28,8 +28,6 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] Button[] _voteButtons; // 투표하기 위한 버튼들
   
-    [SerializeField] GameObject[] _characterImage; // 투표창에서 각 플레이어 캐릭터 이미지
-
     [SerializeField] GameObject[] _deadSignImage; // 죽은 상태 표시 이미지
 
     [SerializeField] GameObject[] _voteSignImage; // 죽은 상태 표시 이미지
