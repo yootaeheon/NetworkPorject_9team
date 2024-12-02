@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class BathroomMission : MonoBehaviour
 {
-     
     private MissionController _missionController;
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(5);
@@ -33,7 +32,6 @@ public class BathroomMission : MonoBehaviour
     { 
         _missionController = GetComponent<MissionController>(); 
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "¸ñ¿åÅÁ Ã»¼ÒÇÏ±â";
     }
 
     /// <summary>
@@ -51,7 +49,7 @@ public class BathroomMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -115,6 +113,8 @@ public class BathroomMission : MonoBehaviour
     {
         if (_missionState.ObjectCount < 1)
         {
+            _missionState.IsAssign = false;
+            _missionState.IsPerform = false;
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
