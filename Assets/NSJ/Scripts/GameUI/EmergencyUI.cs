@@ -7,7 +7,7 @@ namespace GameUIs
 {
     public class EmergencyUI : BaseUI
     {
-        [SerializeField] private float _duration;
+        [SerializeField] public float Duration;
 
         private Image _playerArm => GetUI<Image>("PlayerArmImage");
 
@@ -39,7 +39,7 @@ namespace GameUIs
         /// </summary>
         IEnumerator DurationRoutine()
         {
-            yield return _duration.GetDelay();
+            yield return Duration.GetDelay();
             GetUI("EmergencyCallUI").SetActive(false);
         }
     }
