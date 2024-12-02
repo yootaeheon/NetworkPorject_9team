@@ -631,6 +631,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fbbece2104f84445ac50dcea615d0db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <MissionName>k__BackingField: "\uC6D0\uC790\uB85C \uC911\uC2EC\uBD80 \uCDA9\uC804\uD558\uAE30"
+  <IsPerform>k__BackingField: 0
+  <IsAssign>k__BackingField: 0
+  <TextIndex>k__BackingField: -1
   _clips:
   - {fileID: 8300000, guid: abd6dfee7df868d49ad8feb91803aae1, type: 3}
   - {fileID: 8300000, guid: 81ecc3e023e12d746b5165e91ed1be32, type: 3}

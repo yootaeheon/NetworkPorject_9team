@@ -24,9 +24,9 @@ public class AirLockMission : MonoBehaviour
     private void Init()
     {
         _missionController = GetComponent<MissionController>();
-        _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "에어락 문 검사하기";
-  
+        _missionState = GetComponent<MissionState>(); 
+
+
     }
 
     private void OnEnable()
@@ -43,7 +43,7 @@ public class AirLockMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -134,6 +134,8 @@ public class AirLockMission : MonoBehaviour
     {
         if (_missionState.ObjectCount < 1)
         {
+            _missionState.IsAssign = false;
+            _missionState.IsPerform = false;
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();

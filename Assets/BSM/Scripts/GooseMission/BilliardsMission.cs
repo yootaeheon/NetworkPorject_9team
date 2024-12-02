@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class BilliardsMission : MonoBehaviour
 {
-
     private MissionController _missionController;
     private MissionState _missionState;
     private List<GameObject> _stainList = new List<GameObject>(4);
@@ -30,7 +29,6 @@ public class BilliardsMission : MonoBehaviour
     {
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "당구공 청소하기";
     }
 
     private void OnDisable()
@@ -45,7 +43,7 @@ public class BilliardsMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -124,6 +122,8 @@ public class BilliardsMission : MonoBehaviour
     {
         if (_missionState.ObjectCount < 1)
         {
+            _missionState.IsAssign = false;
+            _missionState.IsPerform = false;
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
