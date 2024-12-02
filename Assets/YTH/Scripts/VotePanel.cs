@@ -94,14 +94,16 @@ public class VotePanel : MonoBehaviourPunCallbacks
     }
 
     // 각 플레이어 패널을 세팅하는 함수
-    private void SetPlayerPanel()
+    private IEnumerator SetPlayerPanel()
     {
+        yield return 0.5f.GetDelay();
         photonView.RPC(nameof(SetPlayerPanelRPC), RpcTarget.AllBuffered);
     }
 
     [PunRPC]
     public void SetPlayerPanelRPC()
     {
+
         for (int i = 0; i < 12; i++)
         {
             _nickNameText[i].text = _playerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerName;
