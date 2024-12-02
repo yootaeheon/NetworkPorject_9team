@@ -9,6 +9,11 @@ using UnityEngine.UI;
 
 public class VoteManager : MonoBehaviourPunCallbacks
 {
+    public static VoteManager Instance;
+
+    private int[] _voteCounts; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
+    public static int[] VoteCounts { get { return Instance._voteCounts; } }
+
     PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
 
     [SerializeField] VoteSceneData _voteData;
@@ -17,13 +22,14 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
     [SerializeField] VoteScenePlayerData[] _playerData;
 
-    [SerializeField] GameObject[] _voteSignImage; // 투표한 플레이어 표시 이미지
-
-    public int[] _voteCounts; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
+    [SerializeField] GameObject[] _voteSignImage; // 투표한 플레이어 표시 이미지 
 
     [SerializeField] Button[] _voteButtons;
 
-    // IsDead == false &&일때만 스킵 가능하게 조건 추가
+    private void Awake()
+    {
+        InitSingleTon();
+    }
     public void Vote(int index) // 플레이어 패널을 눌러 투표
     {
         Debug.LogWarning($"{index} 투표");
@@ -101,15 +107,6 @@ public class VoteManager : MonoBehaviourPunCallbacks
             //TODO: 동점 시 아무도 안쫓겨나는 컷 씬
             StartCoroutine(ShowVoteSkipRoutine());
         }
-
-
-        //TODO : 고스트가 되는 기능
-
-        if (isKick == true)
-        {
-            // 최다 득표자가 본인일때
-
-        }
     }
 
     /// <summary>
@@ -146,5 +143,18 @@ public class VoteManager : MonoBehaviourPunCallbacks
         //{
             SceneChanger.UnLoadScene("VoteScene");
         //}
+    }
+
+
+    private void InitSingleTon()
+    {
+        if(Instance  == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

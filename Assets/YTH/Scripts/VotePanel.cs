@@ -3,7 +3,6 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System;
 using System.Collections;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,10 +25,10 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject[] _SkipAnonymImage; // 스킵 수 만큼 익명 이미지 생성
 
-    [SerializeField] GameObject[] _panelAnonymImage; // 2차원 배열 이용하여 구현 계획
+    [SerializeField] VotePlayerPanel[] _panelAnonymImage; // 2차원 배열 이용하여 구현 계획
 
     [SerializeField] Button[] _voteButtons; // 투표하기 위한 버튼들
-  
+
     [SerializeField] GameObject[] _deadSignImage; // 죽은 상태 표시 이미지
 
     [SerializeField] GameObject[] _voteSignImage; // 죽은 상태 표시 이미지
@@ -97,7 +96,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     private void SpawnPlayerPanel()
     {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) 
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
         {
             int index = i;
 
@@ -126,7 +125,8 @@ public class VotePanel : MonoBehaviourPunCallbacks
             }
 
             // 플레이어가 오리면 같은 팀 오리끼리는 빨간색으로 보임
-            if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Duck) {
+            if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Duck)
+            {
                 if (playerData.Type == PlayerType.Goose)
                 {
                     _nickNameText[index].color = Color.white;
@@ -136,7 +136,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
                     _nickNameText[index].color = Color.red;
                 }
             }
-            else if(PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Goose)
+            else if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Goose)
             {
                 _nickNameText[index].color = Color.white;
             }
@@ -146,31 +146,42 @@ public class VotePanel : MonoBehaviourPunCallbacks
     //투표 종료 후 스킵 수 만큼 익명 이미지 생성
     private void SpawnSkipAnonymImage()
     {
-        photonView.RPC("SpawnSkipAnonymImageRPC", RpcTarget.All, _voteData.SkipCount);
+        for (int i = 0; i < _voteData.SkipCount; i++)
+        {
+            _SkipAnonymImage[i].SetActive(true);
+        }
+        //photonView.RPC("SpawnSkipAnonymImageRPC", RpcTarget.All, _voteData.SkipCount);
     }
 
     [PunRPC]
     public void SpawnSkipAnonymImageRPC(int index)
     {
-        for (int i = 0; i < index; i++)
-        {
-            _SkipAnonymImage[i].SetActive(true);
-        }
+
     }
 
     //투표 종료 후 득표 수 만큼 플레이어 패널에 익명 이미지 생성
     private void SpawnAnonymImage()
     {
-        photonView.RPC("SpawnAnonymImageRPC", RpcTarget.All, _voteManager._voteCounts);
+
+        for (int i = 0; i < 12; i++)
+        {
+            // 해당 패널 투표 수
+            int voteCount = VoteManager.VoteCounts[i];
+
+            VotePlayerPanel playerPanel = _panelAnonymImage[i];
+
+            for (int j = 0; j < voteCount; j++)
+            {
+                playerPanel.PanelAnonymImages[j].SetActive(true);
+            }
+        }
+        //photonView.RPC("SpawnAnonymImageRPC", RpcTarget.All, VoteManager.VoteCounts);
     }
 
     [PunRPC]
     public void SpawnAnonymImageRPC(int index)
     {
-        for (int i = 0; i < 12; i++)
-        {
-           //TODO : 
-        }
+
     }
 
     // 시간 측정 함수
@@ -199,7 +210,7 @@ public class VotePanel : MonoBehaviourPunCallbacks
             if (_voteData.VoteTimeCount <= 0) // 투표 시간 종료 시 투표, 스킵 버튼 비활성화
             {
                 DisableButton();
-                //SpawnAnonymImage();
+                SpawnAnonymImage();
                 SpawnSkipAnonymImage();
                 _voteManager.GetVoteResult();
             }
