@@ -123,8 +123,8 @@ MonoBehaviour:
     m_Bits: 9600
   audioSource: {fileID: 3949325273916533569}
   IdleBody: {fileID: 2878660863419640593}
-  Ghost: {fileID: 0}
-  Corpse: {fileID: 0}
+  Ghost: {fileID: 2396923184650015772}
+  Corpse: {fileID: 7968691545538164818}
   body: {fileID: 2878660863447843465}
   GhostRender: {fileID: 2396923184711987112}
   CorpRender: {fileID: 7968691545334667128}
@@ -674,6 +674,11 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 2368936014464940928, guid: 35e7b7ef8d6b9c545ac63dd183ca8a09, type: 3}
   m_PrefabInstance: {fileID: 5653808072298802424}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7968691545538164818 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2368936015205160106, guid: 35e7b7ef8d6b9c545ac63dd183ca8a09, type: 3}
+  m_PrefabInstance: {fileID: 5653808072298802424}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7968691545538164819 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2368936015205160107, guid: 35e7b7ef8d6b9c545ac63dd183ca8a09, type: 3}
@@ -743,6 +748,11 @@ PrefabInstance:
 --- !u!4 &2396923184650015771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5012684464317954047, guid: e874dbdda10c1904ea976f9bb553c978, type: 3}
+  m_PrefabInstance: {fileID: 7265209007990383588}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2396923184650015772 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5012684464317954040, guid: e874dbdda10c1904ea976f9bb553c978, type: 3}
   m_PrefabInstance: {fileID: 7265209007990383588}
   m_PrefabAsset: {fileID: 0}
 --- !u!212 &2396923184711987112 stripped
