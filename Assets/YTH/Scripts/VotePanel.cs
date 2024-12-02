@@ -3,6 +3,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System;
 using System.Collections;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -98,45 +99,46 @@ public class VotePanel : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++) 
         {
-            _panelList[i].SetActive(true);
-            Debug.Log($"{i} {PlayerDataContainer.Instance.GetPlayerData(i).PlayerName} 인덱스");
-            _panelList[i].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(i); });
+            int index = i;
 
             PlayerData playerData = PlayerDataContainer.Instance.GetPlayerData(i);
             if (playerData.IsNone == true)
                 continue;
 
-            _nickNameText[i].SetText(playerData.PlayerName);
-            _voteSignImage[i].SetActive(false);
-            _playerColor[i].color = playerData.PlayerColor;
+            _panelList[index].SetActive(true);
+            _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { _voteManager.Vote(index); });
+
+            _nickNameText[index].SetText(playerData.PlayerName);
+            _voteSignImage[index].SetActive(false);
+            _playerColor[index].color = playerData.PlayerColor;
 
 
             // 플레이어 사망일때
             if (playerData.IsGhost)
             {
-                _deadSignImage[i].SetActive(true);
-                _playerData[i].DidVote = true;
+                _deadSignImage[index].SetActive(true);
+                _playerData[index].DidVote = true;
             }
             else
             {
-                _deadSignImage[i].SetActive(false);
-                _playerData[i].DidVote = false;
+                _deadSignImage[index].SetActive(false);
+                _playerData[index].DidVote = false;
             }
 
             // 플레이어가 오리면 같은 팀 오리끼리는 빨간색으로 보임
             if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Duck) {
                 if (playerData.Type == PlayerType.Goose)
                 {
-                    _nickNameText[i].color = Color.white;
+                    _nickNameText[index].color = Color.white;
                 }
                 else if (playerData.Type == PlayerType.Duck)
                 {
-                    _nickNameText[i].color = Color.red;
+                    _nickNameText[index].color = Color.red;
                 }
             }
             else if(PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Goose)
             {
-                _nickNameText[i].color = Color.white;
+                _nickNameText[index].color = Color.white;
             }
         }
     }
