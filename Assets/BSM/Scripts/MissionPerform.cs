@@ -115,9 +115,7 @@ public class MissionPerform : MonoBehaviour
     private void HideAndShowTask()
     {
         isTaskState = !isTaskState;
-
-        Debug.Log($"task:{isTaskState}");
-
+         
         if (isTaskState)
         {
             _taskObj.SetActive(true);

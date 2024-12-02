@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPun
     [HideInInspector] public bool TheWin;
     private string _globalTaskName;
     private float CountDown;
-     
+
     private bool _globalState;
     public bool GlobalState
     {
@@ -51,24 +51,21 @@ public class GameManager : MonoBehaviourPun
 
     public static GameManager Instance { get; private set; }
 
+    [Header("미션 게이지 슬라이더")]
     [SerializeField] public Slider _missionScoreSlider;
 
     private int _totalMissionScore = 30;
     private int _clearMissionScore = 0;
 
+    //글로벌 미션 팝업창 종료 조건 변수
+    [HideInInspector] public bool GlobalMissionClear = true;
 
-    [Header("글로벌 미션 팝업창 종료 조건 변수")]
-    public bool GlobalMissionClear = true;
-
-    [Header("불 지르기 미션 클리어 조건")]
-    public bool FirstGlobalFire;
-    public bool SecondGlobalFire;
-    public int GlobalFireCount = 2;
-
-
+    //불지르기 미션 클리어 조건
+    [HideInInspector] public bool FirstGlobalFire;
+    [HideInInspector] public bool SecondGlobalFire;
+    [HideInInspector] public int GlobalFireCount = 2; 
+    [HideInInspector] public SabotageType CurAbility;
     private SabotageType UseAbility;
-    public SabotageType CurAbility;
-
 
     private bool _sabotageFire;
     public bool SabotageFire
@@ -117,6 +114,11 @@ public class GameManager : MonoBehaviourPun
         _fireBtn.onClick.AddListener(DuckFireAbilityInvoke);
         _lifeBtn.onClick.AddListener(DuckLifeAbilityInvoke);
         _breakerBtn.onClick.AddListener(DuckBreakerAbilityInvoke);
+    }
+
+    private void OnEnable()
+    {
+        TheWin = false;
     }
 
     private void SetSingleton()
@@ -213,7 +215,6 @@ public class GameManager : MonoBehaviourPun
                 _globalTaskName = "생명 유지 장치 재설정하기";
                 break;
         }
-        Debug.Log($"발동된 능력 :{type}");
 
         GlobalMissionClear = false;
         GlobalMissionState = value;

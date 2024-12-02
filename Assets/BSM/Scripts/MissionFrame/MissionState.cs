@@ -44,8 +44,7 @@ public class MissionState : MonoBehaviour
     private void OnEnable()
     {
         if(isAnimCheck)
-            _anim.Play(_openHash);
-        Debug.Log($"현재 미션 내용 : {MissionName}");
+            _anim.Play(_openHash); 
     }
 
     public void ClosePopAnim()
