@@ -7,7 +7,7 @@ namespace GameUIs
 {
     public class ReportUI :BaseUI
     {
-        [SerializeField] private float _duration;
+        [SerializeField] public float Duration;
 
 
         private Image _reporter => GetUI<Image>("PlayerHeadImage");
@@ -46,7 +46,7 @@ namespace GameUIs
         /// </summary>
         IEnumerator DurationRoutine()
         {
-            yield return _duration.GetDelay();
+            yield return Duration.GetDelay();
             GetUI("CorpseReportUI").SetActive(false);
         }
     }

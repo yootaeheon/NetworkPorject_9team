@@ -20,10 +20,10 @@ public class GameManager : MonoBehaviourPun
 
     private Coroutine _globalTaskCo;
 
-    public bool GlobalMissionState;
+    [HideInInspector] public bool GlobalMissionState;
+    [HideInInspector] public bool TheWin;
     private string _globalTaskName;
-    public float CountDown;
-    public bool TheWin;
+    private float CountDown;
 
     private bool _globalState;
     public bool GlobalState
@@ -42,33 +42,30 @@ public class GameManager : MonoBehaviourPun
                 if (_globalTaskCo != null)
                 {
                     StopCoroutine(_globalTaskCo);
-                    _globalTaskText.gameObject.SetActive(false);
+                    _globalTaskText.transform.parent.gameObject.SetActive(false);
                     _globalTaskCo = null;
                 }
             }
         }
     }
-     
+
     public static GameManager Instance { get; private set; }
 
+    [Header("미션 게이지 슬라이더")]
     [SerializeField] public Slider _missionScoreSlider;
 
     private int _totalMissionScore = 30;
     private int _clearMissionScore = 0;
 
+    //글로벌 미션 팝업창 종료 조건 변수
+    [HideInInspector] public bool GlobalMissionClear = true;
 
-    [Header("글로벌 미션 팝업창 종료 조건 변수")]
-    public bool GlobalMissionClear = true;
-
-    [Header("불 지르기 미션 클리어 조건")]
-    public bool FirstGlobalFire;
-    public bool SecondGlobalFire;
-    public int GlobalFireCount = 2;
-
-
+    //불지르기 미션 클리어 조건
+    [HideInInspector] public bool FirstGlobalFire;
+    [HideInInspector] public bool SecondGlobalFire;
+    [HideInInspector] public int GlobalFireCount = 2; 
+    [HideInInspector] public SabotageType CurAbility;
     private SabotageType UseAbility;
-    public SabotageType CurAbility;
-
 
     private bool _sabotageFire;
     public bool SabotageFire
@@ -116,7 +113,12 @@ public class GameManager : MonoBehaviourPun
         SetSingleton();
         _fireBtn.onClick.AddListener(DuckFireAbilityInvoke);
         _lifeBtn.onClick.AddListener(DuckLifeAbilityInvoke);
-        _breakerBtn.onClick.AddListener(DuckBreakerAbilityInvoke); 
+        _breakerBtn.onClick.AddListener(DuckBreakerAbilityInvoke);
+    }
+
+    private void OnEnable()
+    {
+        TheWin = false;
     }
 
     private void SetSingleton()
@@ -130,14 +132,14 @@ public class GameManager : MonoBehaviourPun
             Destroy(gameObject);
         }
     }
-      
+
 
     /// <summary>
     /// 글로벌 미션 Text 코루틴
     /// </summary>
     private void SetTaskText()
     {
-        _globalTaskText.gameObject.SetActive(true);
+        _globalTaskText.transform.parent.gameObject.SetActive(true);
         _globalTaskCo = StartCoroutine(TaskTextCoroutine());
     }
 
@@ -164,10 +166,10 @@ public class GameManager : MonoBehaviourPun
 
         yield break;
     }
-     
+
     private void DuckFireAbilityInvoke()
     {
-        UseAbility = SabotageType.Fire; 
+        UseAbility = SabotageType.Fire;
         photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, UseAbility);
     }
 
@@ -182,7 +184,7 @@ public class GameManager : MonoBehaviourPun
         UseAbility = SabotageType.BlackOut;
         photonView.RPC(nameof(DuckAbilityRPC), RpcTarget.AllViaServer, true, UseAbility);
     }
-     
+
     /// <summary>
     /// Duck 유저 사보타지 능력 기능 동기화
     /// </summary>
@@ -213,7 +215,6 @@ public class GameManager : MonoBehaviourPun
                 _globalTaskName = "생명 유지 장치 재설정하기";
                 break;
         }
-        Debug.Log($"발동된 능력 :{type}");
 
         GlobalMissionClear = false;
         GlobalMissionState = value;

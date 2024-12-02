@@ -44,8 +44,6 @@ public class WaterPurifierMission : MonoBehaviour
     {
         _missionController = GetComponent<MissionController>();
         _missionState = GetComponent<MissionState>();
-        _missionState.MissionName = "정수기 수리하기";
-        
     }
  
     private void OnEnable()
@@ -62,7 +60,7 @@ public class WaterPurifierMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -159,7 +157,8 @@ public class WaterPurifierMission : MonoBehaviour
     private void MissionClear()
     {
         if (_missionState.ObjectCount < 1)
-        { 
+        {
+            _missionState.IsAssign = false; 
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             StartCoroutine(PluginCoroutine()); 
             IncreaseTotalScore();
@@ -169,6 +168,7 @@ public class WaterPurifierMission : MonoBehaviour
     private IEnumerator PluginCoroutine()
     {
         yield return Util.GetDelay(1f);
+        _missionState.IsPerform = false;
         _missionState.ClosePopAnim();
         yield return Util.GetDelay(0.5f);
         gameObject.SetActive(false);

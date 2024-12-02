@@ -18,6 +18,6 @@ public class GameOption : BaseUI
 
     private void ActivateOption()
     {
-        OptionPanel.Instance.gameObject.SetActive(true);
+        OptionPanel.SetActiveOption(true);
     }
 }

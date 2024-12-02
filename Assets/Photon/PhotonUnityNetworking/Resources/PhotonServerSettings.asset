@@ -100,7 +100,7 @@ MonoBehaviour:
   - RPCUnLoadScene
   - Test
   - RPCSetParent
-  - 
+  - RPCEmergencyCall
   - 
   - SpawnSkipAnonymImageRPC
   - SpawnAnonymImageRPC

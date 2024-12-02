@@ -25,9 +25,10 @@ public class UiFollowingPlayer : MonoBehaviourPun
                 photonView.RPC("RpciconActive", RpcTarget.AllBuffered, "Master", true);
         }
         if (photonView.IsMine == true)
-            photonView.RPC("RpcSetNicknamePanel", RpcTarget.AllBuffered,name);
-
-
+        {
+            photonView.RPC("RpcSetNicknamePanel", RpcTarget.AllBuffered, name);
+            gameObject.AddComponent<TestNamePanelHide>();
+        }
     }
     private void Update()
     {

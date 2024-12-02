@@ -309,8 +309,9 @@ public class PlayerController : MonoBehaviourPun
 
     IEnumerator ReportRoutine()
     {
-        GameUI.ShowReport(body.material.color, Random.ColorHSV());
-        yield return 3f.GetDelay();
+        Color reporterColor = PlayerDataContainer.Instance.GetPlayerData(_playerNumber).PlayerColor;
+        GameUI.ShowReport(reporterColor, Random.ColorHSV());
+        yield return GameUI.Report.Duration.GetDelay();
         if (PhotonNetwork.IsMasterClient == true)
         {
             SceneChanger.LoadScene("VoteScene", LoadSceneMode.Additive);
@@ -327,7 +328,7 @@ public class PlayerController : MonoBehaviourPun
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
         yield return new WaitForSeconds(1f);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
-        gameObject.GetComponent<BoxCollider2D>().enabled = false;  // 나중에 맵 보고 충돌 바꾸는걸로 해결하는게 나을듯
+        gameObject.layer = 9;    // ghost 레이어로 바꾸기 
         PlayerDataContainer.Instance.UpdatePlayerGhostList(_playerNumber);
     }
 

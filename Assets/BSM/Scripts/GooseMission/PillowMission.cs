@@ -25,8 +25,7 @@ public class PillowMission : MonoBehaviour
     private void Init()
     {
         _missionState = GetComponent<MissionState>();
-        _missionController = GetComponent<MissionController>();
-        _missionState.MissionName = "베개속 두드려 펴기"; 
+        _missionController = GetComponent<MissionController>(); 
     }
 
     private void Start()
@@ -50,7 +49,7 @@ public class PillowMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -103,6 +102,8 @@ public class PillowMission : MonoBehaviour
     /// </summary>
     private void MissionClear(object sender, EventArgs args)
     { 
+        _missionState.IsAssign = false;
+        _missionState.IsPerform = false;
         SoundManager.Instance.SFXPlay(_missionState._clips[1]);
         _missionController.MissionCoroutine(0.5f);
         IncreaseTotalScore(); 

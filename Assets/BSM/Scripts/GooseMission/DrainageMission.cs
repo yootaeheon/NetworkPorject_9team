@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DrainageMission : MonoBehaviour
 {
+
     private MissionState _missionState;
     private MissionController _missionController;
 
@@ -36,7 +37,6 @@ public class DrainageMission : MonoBehaviour
     {
         _missionState = GetComponent<MissionState>();
         _missionController = GetComponent<MissionController>();
-        _missionState.MissionName = "¸·Èù »þ¿ö ¹è¼ö±¸ ¶Õ±â";
         _commonHash = Animator.StringToHash("CommonClip");
     }
 
@@ -66,7 +66,7 @@ public class DrainageMission : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GlobalMissionState)
+        if (GameManager.Instance.GlobalMissionState || !_missionState.IsPerform)
         {
             gameObject.SetActive(false);
         }
@@ -226,6 +226,8 @@ public class DrainageMission : MonoBehaviour
     {
         if (_missionState.ObjectCount < 1)
         {
+            _missionState.IsAssign = false;
+            _missionState.IsPerform = false;
             SoundManager.Instance.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
