@@ -1608,7 +1608,6 @@ GameObject:
   - component: {fileID: 933061777}
   - component: {fileID: 933061778}
   - component: {fileID: 933061779}
-  - component: {fileID: 933061780}
   m_Layer: 0
   m_Name: TemPlayer
   m_TagString: Untagged
@@ -1734,36 +1733,6 @@ MonoBehaviour:
   _playerType: 1
   _abilityObject: {fileID: 9175474473542162358}
   _armColor: {fileID: 2877983666219537556}
---- !u!114 &933061780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 933061774}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da098028774998045b23afe22cdd6935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _missionList:
-  - {fileID: 6387638704296497613}
-  - {fileID: 1296706261}
-  - {fileID: 992612191}
-  - {fileID: 7375422628085909083}
-  - {fileID: 3101225511674256249}
-  - {fileID: 6387638704117385343}
-  - {fileID: 6387638702645230878}
-  - {fileID: 6387638703829327783}
-  _textList:
-  - {fileID: 588236744}
-  - {fileID: 1500343266}
-  - {fileID: 1940323642}
-  _assignList: []
-  _arrowBtn: {fileID: 1563450150}
-  _taskObj: {fileID: 1835524040}
-  _globalTaskRect: {fileID: 138929003}
-  _arrowImage: {fileID: 1563450151}
 --- !u!1 &987118089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1947,9 +1916,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioMixer: {fileID: 24100000, guid: 9b669685bb2fc7f43afd6a62c69fc7bb, type: 2}
-  _masterSlider: {fileID: 617952126}
-  _sfxSlider: {fileID: 617952126}
-  _bgmSlider: {fileID: 1170148027}
 --- !u!1 &1012054679
 GameObject:
   m_ObjectHideFlags: 0
@@ -3637,6 +3603,8 @@ MonoBehaviour:
   _globalTaskText: {fileID: 1785241489}
   GlobalMissionState: 0
   TheWin: 0
+  _armImage: {fileID: 2877983666219537556}
+  _abilityPrefab: {fileID: 9175474473542162358}
   _missionScoreSlider: {fileID: 255364787}
   GlobalMissionClear: 1
   FirstGlobalFire: 0
@@ -4643,6 +4611,10 @@ PrefabInstance:
     - target: {fileID: 7454712156121486537, guid: 60c2bef217d6d4346a435b484690843f, type: 3}
       propertyPath: m_Name
       value: AbilityPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7454712156121486537, guid: 60c2bef217d6d4346a435b484690843f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7454712156121486538, guid: 60c2bef217d6d4346a435b484690843f, type: 3}
       propertyPath: m_Pivot.x
