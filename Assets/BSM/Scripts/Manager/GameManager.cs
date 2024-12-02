@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviourPun
                 if (_globalTaskCo != null)
                 {
                     StopCoroutine(_globalTaskCo);
-                    _globalTaskText.gameObject.SetActive(false);
+                    _globalTaskText.transform.parent.gameObject.SetActive(false);
                     _globalTaskCo = null;
                 }
             }
@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviourPun
     /// </summary>
     private void SetTaskText()
     {
-        _globalTaskText.gameObject.SetActive(true);
+        _globalTaskText.transform.parent.gameObject.SetActive(true);
         _globalTaskCo = StartCoroutine(TaskTextCoroutine());
     }
 
