@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class TestNamePanelHide : MonoBehaviour
 {
-    [SerializeField] float Detectradius = 15;
+    [SerializeField] float Detectradius = 10;
     [SerializeField] GameObject[] namePanels;
 
 
@@ -21,12 +21,19 @@ public class TestNamePanelHide : MonoBehaviour
     {
         yield return 3f.GetDelay();
         namePanels = GameObject.FindGameObjectsWithTag("Test");
+        StartCoroutine(DelayFindNamePanel());
+    }
+    IEnumerator DelayFindNamePanel() 
+    {
+        while (true)
+        {
+            yield return 1f.GetDelay();
+
+            FindNamePanel3();
+
+        }
     }
 
-    private void Update()
-    {   
-      FindNamePanel3();
-    }
     private void FindNamePanel3() 
     {
         for (int i = 0; i < namePanels.Length; i++)
