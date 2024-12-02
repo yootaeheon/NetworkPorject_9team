@@ -11,7 +11,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
 {
     public static VoteManager Instance;
 
-    private int[] _voteCounts; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
+    private int[] _voteCounts = new int[12]; // 각 플레이어의(ActorNumber와 연결된 인덱스 번호)의 득표수를 배열로 저장
     public static int[] VoteCounts { get { return Instance._voteCounts; } }
 
     PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
