@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,10 +15,10 @@ public class UiFollowingPlayer : MonoBehaviourPun
     [SerializeField] GameObject ReadyIcon;
 
    
-
+    
     private void Start()
     {   
-        name = PhotonNetwork.LocalPlayer.NickName;
+        name = PhotonNetwork.LocalPlayer.NickName; // 바꿔야 할듯? 
 
         if (PhotonNetwork.IsMasterClient == true) 
         {
@@ -59,7 +60,19 @@ public class UiFollowingPlayer : MonoBehaviourPun
     }
 
     //레디나 방장 아이콘 온 오프는 rpc로 해야 함 
+    PlayerType[] playerTypes;
+    private void NameToRed()
+    {
+        for (int i = 0; i < PlayerDataContainer.Instance.playerDataArray.Length; i++)
+        {
+            playerTypes[i] = PlayerDataContainer.Instance.GetPlayerJob(i);
+        }
 
+        if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Duck)
+        {
+            //
+        }
+    }
 
     [PunRPC]
 
