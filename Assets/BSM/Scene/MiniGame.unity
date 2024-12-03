@@ -3648,7 +3648,7 @@ MonoBehaviour:
   _breakerBtn: {fileID: 1912242076}
   _globalTaskText: {fileID: 1785241489}
   GlobalMissionState: 0
-  TheWin: 0
+  IsDuckWin: 0
   _missionScoreSlider: {fileID: 255364787}
   GlobalMissionClear: 1
   FirstGlobalFire: 0
