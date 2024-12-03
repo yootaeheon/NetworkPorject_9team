@@ -26,11 +26,13 @@ public class TestNamePanelHide : MonoBehaviour
         StartCoroutine(DelayFindNamePanel());
     }
     IEnumerator DelayFindNamePanel()
-    {
+    {   
+        
         while (true)
         {
             yield return 0.3f.GetDelay();
-            FindNamePanel();
+            if (LobbyScene.Instance == null)
+                FindNamePanel();
         }
     }
 

@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviourPun
 
     [SerializeField] Animator eyeAnim;
     [SerializeField] Animator bodyAnim;
-    [SerializeField] Animator feetAnim; 
-
+    [SerializeField] Animator feetAnim;
+    [SerializeField] GameObject myNickPanel;
    
     private Vector3 privPos;
     private Vector3 privDir;
@@ -120,7 +120,19 @@ public class PlayerController : MonoBehaviourPun
     /// <summary>
     /// 어빌리티 팝업창 오픈 기능
     /// </summary>
-    
+    private void SetMyNickPanel() 
+    {
+        GameObject[] panels = GameObject.FindGameObjectsWithTag("NamePanel");
+
+        for (int i = 0; i < panels.Length; i++) 
+        {
+            if (photonView) 
+            {
+
+            }
+        }
+
+    }
 
     public void SettingColor(float r, float g , float b) 
     {

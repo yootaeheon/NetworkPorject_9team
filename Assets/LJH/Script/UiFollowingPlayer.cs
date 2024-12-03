@@ -80,7 +80,6 @@ public class UiFollowingPlayer : MonoBehaviourPun
         
         transform.position = target.position+offset;
 
-        
     }
     public void Ready() 
     {
