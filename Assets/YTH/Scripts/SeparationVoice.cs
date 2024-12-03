@@ -14,7 +14,7 @@ public class SeparationVoice : MonoBehaviourPun
     {
         yield return null;
         Speaker speaker = GetComponentInChildren<Speaker>();
-        speaker.transform.SetParent(null);
+     //   speaker.transform.SetParent(null);
         _speaker = speaker;
     }
 
