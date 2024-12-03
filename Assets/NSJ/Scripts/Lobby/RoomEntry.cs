@@ -75,6 +75,7 @@ public class RoomEntry : BaseUI
     private void SubscribesEvent()
     {
         _roomEntry.onClick.AddListener(Select);
+        _roomEntry.onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
 
 

@@ -5,6 +5,9 @@ public class SoundManager : BaseMission
 {
     public static SoundManager Instance { get; private set; }
 
+    [SerializeField] private SoundData _data;
+    public static SoundData Data { get { return Instance._data; } }
+
     [Header("Sound Setting UI")]
     [SerializeField] private AudioMixer _audioMixer;
     public static AudioMixer AudioMixer { get { return Instance._audioMixer; } }
@@ -107,6 +110,9 @@ public class SoundManager : BaseMission
     /// <param name="clip"></param>
     public static void BGMPlay(AudioClip clip)
     {
+        if (clip == null)
+            return;
+
         BGM.clip = clip;
         BGM.Play();
     }
@@ -117,12 +123,18 @@ public class SoundManager : BaseMission
     /// <param name="clip"></param>
     public static void SFXPlay(AudioClip clip)
     {
+        if (clip == null)
+            return;
+
         SFX.clip = clip;
         SFX.PlayOneShot(clip);
     }
 
     public static void LoopSFXPlay(AudioClip clip)
     {
+        if (clip == null)
+            return;
+
         LoopSFX.clip = clip;
         LoopSFX.PlayOneShot(clip);
     }

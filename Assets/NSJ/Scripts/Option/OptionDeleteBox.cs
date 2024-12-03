@@ -164,10 +164,17 @@ public class OptionDeleteBox : BaseUI
                 ChangeBox(Box.Confirm);
             }
         });
+        GetUI<Button>("DeleteButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         _confirmEmailInput.onValueChanged.AddListener(ActivateConfirmButton);
         _confirmPasswordInput.onValueChanged.AddListener(ActivateConfirmButton);
         GetUI<Button>("ConfirmButton").onClick.AddListener(ConfirmEmail);
+        GetUI<Button>("ConfirmButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("ErrorBackButton").onClick.AddListener(() => ChangeBox(Box.Delete));
+        GetUI<Button>("ErrorBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("SuccessButton").onClick.AddListener(DisconnectServer);
+        GetUI<Button>("SuccessButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
 }

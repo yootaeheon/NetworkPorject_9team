@@ -80,7 +80,13 @@ public class UiFollowingPlayer : MonoBehaviourPun
         
         transform.position = target.position+offset;
 
+        if (PlayerDataContainer.Instance.playerDataArray[0] !=null)
+            if (PlayerDataContainer.Instance.playerDataArray[PhotonNetwork.LocalPlayer.GetPlayerNumber()].IsGhost == true) 
+            {
+                photonView.RPC("RpciconActive", RpcTarget.AllBuffered, false);
+            }
     }
+    
     public void Ready() 
     {
         photonView.RPC("RpciconActive", RpcTarget.AllBuffered, "Ready",true);
@@ -89,20 +95,9 @@ public class UiFollowingPlayer : MonoBehaviourPun
 
     [PunRPC]
 
-    private void RpciconActive(string name , bool isActive) 
+    private void RpciconActive(bool isActive) 
     {
-        if (name == "Ready")
-        {
-           // ReadyIcon.SetActive(isActive);  
-        }
-        else if (name == "Master")
-        {
-           // MasterIcon.SetActive(isActive);
-        }
-        else 
-        {
-            Debug.Log("바르지 않은 이름");
-        }
+        gameObject.GetComponent<BoxCollider2D>().enabled =isActive;
     }
 
     [PunRPC]
