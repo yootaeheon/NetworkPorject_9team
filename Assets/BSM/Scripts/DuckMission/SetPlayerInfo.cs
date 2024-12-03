@@ -50,6 +50,8 @@ public class SetPlayerInfo : MonoBehaviour
         _playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber());
         PlayerData data = PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber());
         _armImage.color = data.PlayerColor;
+
+        GameManager.Instance.playerType = _playerType; 
     }
 
 }
