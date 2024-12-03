@@ -54,13 +54,6 @@ public class GameManager : MonoBehaviourPun
 
     public static GameManager Instance { get; private set; }
 
-    [Header("Sabotage Ability")]
-    [SerializeField] private Image _armImage;   //게임 스폰 시 컬러 값 전달
-    [SerializeField] private GameObject _abilityPrefab;
-    private PlayerType _playerType;
-    
-
-
     [Header("미션 게이지 슬라이더")]
     [SerializeField] public Slider _missionScoreSlider;
 
@@ -131,22 +124,6 @@ public class GameManager : MonoBehaviourPun
         TheWin = false;
     }
 
-    private void Start()
-    {
-        StartCoroutine(SetPlayerCoroutine());
-    }
-
-    private void Update()
-    {
-        if (_playerType.Equals(PlayerType.Duck))
-        {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                _abilityPrefab.SetActive(true);
-            }
-        }
-    }
-
     private void SetSingleton()
     {
         if (Instance == null)
@@ -157,26 +134,6 @@ public class GameManager : MonoBehaviourPun
         {
             Destroy(gameObject);
         }
-    }
-    
-    /// <summary>
-    /// Ability 팝업창 정보 셋팅 코루틴
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator SetPlayerCoroutine()
-    {
-        yield return Util.GetDelay(3f);
-        SetPlayerInfo(); 
-    }
-
-    /// <summary>
-    /// 오리 플레이어 Ability 팝업창 정보 셋팅
-    /// </summary>
-    private void SetPlayerInfo()
-    {
-        _playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber());
-        PlayerData data = PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber());
-        _armImage.color = data.PlayerColor; 
     }
 
     /// <summary>

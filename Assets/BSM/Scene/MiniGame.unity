@@ -122,6 +122,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &68486452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 68486454}
+  - component: {fileID: 68486453}
+  m_Layer: 0
+  m_Name: SetPlayerInfo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &68486453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68486452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b027bd2ab72078c46a99f0d069ba12af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _armImage: {fileID: 2877983666219537556}
+  _abilityPrefab: {fileID: 9175474473542162358}
+--- !u!4 &68486454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68486452}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.375353, y: 24.355494, z: -0.73156995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &77298500 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1738847257095452731, guid: 60c2bef217d6d4346a435b484690843f, type: 3}
@@ -3603,8 +3649,6 @@ MonoBehaviour:
   _globalTaskText: {fileID: 1785241489}
   GlobalMissionState: 0
   TheWin: 0
-  _armImage: {fileID: 2877983666219537556}
-  _abilityPrefab: {fileID: 9175474473542162358}
   _missionScoreSlider: {fileID: 255364787}
   GlobalMissionClear: 1
   FirstGlobalFire: 0
