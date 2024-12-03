@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
 
 public class SoundManager : BaseMission
 {
@@ -11,14 +7,11 @@ public class SoundManager : BaseMission
 
     [Header("Sound Setting UI")]
     [SerializeField] private AudioMixer _audioMixer;
-    private static AudioMixer s_audioMixer { get { return Instance._audioMixer; } }
-    //[SerializeField] private Slider _masterSlider;
-    //[SerializeField] private Slider _sfxSlider;
-    //[SerializeField] private Slider _bgmSlider;
-    private static AudioSource s_sfx {  get { return Instance._sfxSource; } }
-    private static AudioSource s_bgm { get { return Instance._bgmSource; } }
-    private static AudioSource s_loopSfx { get { return Instance._loopSfxSource; } }
-    private static AudioSource s_master { get { return Instance._masterSource; } }
+    public static AudioMixer AudioMixer { get { return Instance._audioMixer; } }
+    public static AudioSource SFX { get { return Instance._sfxSource; } }
+    public static AudioSource BGM { get { return Instance._bgmSource; } }
+    public static AudioSource LoopSFX { get { return Instance._loopSfxSource; } }
+    public static AudioSource Master { get { return Instance._masterSource; } }
 
     private AudioSource _sfxSource;
     private AudioSource _bgmSource;
@@ -47,16 +40,10 @@ public class SoundManager : BaseMission
 
     private void SetObject()
     {
-        //if (_bgmSlider == null || _sfxSlider == null || _masterSlider == null) return;
-
-
         _sfxSource = GetMissionComponent<AudioSource>("SFX");
         _bgmSource = GetMissionComponent<AudioSource>("BGM");
         _masterSource = GetMissionComponent<AudioSource>("Master");
         _loopSfxSource = GetMissionComponent<AudioSource>("LoopSFX");
-        //_sfxSlider.onValueChanged.AddListener(SetVolumeSFX);
-        //_bgmSlider.onValueChanged.AddListener(SetVolumeBGM);
-        //_masterSlider.onValueChanged.AddListener(SetVolumeMaster);
     }
 
     /// <summary>
@@ -65,14 +52,17 @@ public class SoundManager : BaseMission
     /// <param name="volume"></param>
     public static void SetVolumeSFX(float volume)
     {
-        s_audioMixer.SetFloat("SFX", volume * 20f); 
-        
+        AudioMixer.SetFloat("SFX", volume * 20f);
     }
 
+    /// <summary>
+    /// SFX 볼륨값 가져오기
+    /// </summary>
+    /// <returns></returns>
     public static float GetVolumeSFX()
     {
-        s_audioMixer.GetFloat("SFX", out float volume);
-        return volume;
+        AudioMixer.GetFloat("SFX", out float volume);
+        return volume / 20f;
     }
     /// <summary>
     /// BGM 볼륨 조절
@@ -80,7 +70,16 @@ public class SoundManager : BaseMission
     /// <param name="volume"></param>
     public static void SetVolumeBGM(float volume)
     {
-        s_audioMixer.SetFloat("BGM", volume * 20f);
+        AudioMixer.SetFloat("BGM", volume * 20f);
+    }
+    /// <summary>
+    /// BGM 볼륨값 가져오기
+    /// </summary>
+    /// <param name="volume"></param>
+    public static float GetVolumeBGM()
+    {
+        AudioMixer.GetFloat("BGM", out float volume);
+        return volume / 20f;
     }
 
     /// <summary>
@@ -89,18 +88,27 @@ public class SoundManager : BaseMission
     /// <param name="volume"></param>
     public static void SetVolumeMaster(float volume)
     {
-        s_audioMixer.SetFloat("MASTER", volume * 20f);
+        AudioMixer.SetFloat("MASTER", volume * 20f);
     }
 
+    /// <summary>
+    /// Master 볼륨값 가져오기
+    /// </summary>
+    /// <returns></returns>
+    public static float GetVolumeMaster()
+    {
+        AudioMixer.GetFloat("MASTER", out float volume);
+        return volume / 20f;
+    }
 
     /// <summary>
     /// BGM 교체 후 재생
     /// </summary>
     /// <param name="clip"></param>
-    public static  void BGMPlay(AudioClip clip)
+    public static void BGMPlay(AudioClip clip)
     {
-        s_bgm.clip = clip;
-        s_bgm.Play();
+        BGM.clip = clip;
+        BGM.Play();
     }
 
     /// <summary>
@@ -109,14 +117,14 @@ public class SoundManager : BaseMission
     /// <param name="clip"></param>
     public static void SFXPlay(AudioClip clip)
     {
-        s_sfx.clip = clip;
-        s_sfx.Play(); 
+        SFX.clip = clip;
+        SFX.PlayOneShot(clip);
     }
 
     public static void LoopSFXPlay(AudioClip clip)
     {
-        s_loopSfx.clip = clip;
-        s_loopSfx.Play();
+        LoopSFX.clip = clip;
+        LoopSFX.PlayOneShot(clip);
     }
 
 }

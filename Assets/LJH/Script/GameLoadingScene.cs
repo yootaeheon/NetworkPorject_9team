@@ -10,7 +10,8 @@ public class GameLoadingScene : MonoBehaviourPun
     // 로비씬에 넣어놓고 로비에 있는 정보를 가지고 게임으로 들어가기 
     // 씬에 입장하면 랜덤 스폰기능 
     // 투표씬 전환
-    private Transform[] SpawnPoints;
+    private Transform[] _spawnPoints;
+    private static Transform[] s_spawnPoints { get { return Instance._spawnPoints; } set { Instance._spawnPoints = value; } }
 
     private GameObject player;
     public static GameObject MyPlayer { get { return Instance.player; } }
@@ -122,7 +123,6 @@ public class GameLoadingScene : MonoBehaviourPun
         PlayerDataContainer.Instance.SetPlayerTypeCounts();
         GooseNotDead = PlayerDataContainer.Instance.GooseCount;
         DuckNotDead = PlayerDataContainer.Instance.DuckCount;
-        Debug.Log($"생존 : 거위 {GooseNotDead} 오리 {DuckNotDead}");
 
         if (GooseNotDead <= DuckNotDead)// 거위의 수가 오리보다 적으면 오리 승리 , 투표가도 못이기니까   or 남은 거위가 없으면
         {
@@ -153,6 +153,12 @@ public class GameLoadingScene : MonoBehaviourPun
             return true;
         }
 
+        if (GameManager.Instance.IsDuckWin == true)
+        {
+            GameUI.ShowGameOver(true, PlayerType.Duck);
+            isOnGame = false;
+            return true;
+        }
         return false;
 
     }
@@ -167,6 +173,7 @@ public class GameLoadingScene : MonoBehaviourPun
 
         SceneChanger.LoadLevel(0);
         PlayerDataContainer.Instance.ClearPlayerData();
+        s_spawnPoints = null;
         PhotonNetwork.CurrentRoom.IsOpen = true;
     }
 
@@ -221,19 +228,18 @@ public class GameLoadingScene : MonoBehaviourPun
     private Vector3 GetRandomSpawnPoint()
     {      
         // 배열 입력이 안됬을때 리스폰 포인트 저장)
-        if (SpawnPoints == null)
+        if (_spawnPoints == null)
         {
             GameObject obj = GameObject.FindGameObjectWithTag("Respawn");         
-            SpawnPoints = new Transform[obj.transform.childCount];
-            Debug.Log($"{obj} : {SpawnPoints.Length}");
-            for (int i = 0; i < SpawnPoints.Length; i++)
+            _spawnPoints = new Transform[obj.transform.childCount];
+            for (int i = 0; i < _spawnPoints.Length; i++)
             {
-                SpawnPoints[i] = obj.transform.GetChild(i);
+                _spawnPoints[i] = obj.transform.GetChild(i);
             }
         }
 
-        int x = Random.Range(0, SpawnPoints.Length);
+        int x = Random.Range(0, _spawnPoints.Length);
 
-        return SpawnPoints[x].position;
+        return _spawnPoints[x].position;
     }
 }
