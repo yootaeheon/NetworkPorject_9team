@@ -79,10 +79,12 @@ public class UiFollowingPlayer : MonoBehaviourPun
         }
         
         transform.position = target.position+offset;
-        if (PlayerDataContainer.Instance.playerDataArray[PhotonNetwork.LocalPlayer.GetPlayerNumber()].IsGhost == true) 
-        {
-            photonView.RPC("RpciconActive", RpcTarget.AllBuffered, false);
-        }
+
+        if (PlayerDataContainer.Instance.playerDataArray[0] !=null)
+            if (PlayerDataContainer.Instance.playerDataArray[PhotonNetwork.LocalPlayer.GetPlayerNumber()].IsGhost == true) 
+            {
+                photonView.RPC("RpciconActive", RpcTarget.AllBuffered, false);
+            }
     }
     
     public void Ready() 
