@@ -41,7 +41,7 @@ public class TestNamePanelHide : MonoBehaviour
             if (Detectradius > Vector2.Distance(transform.position, namePanels[i].transform.position))
             {
                
-                namePanels[i].layer = 0;
+                namePanels[i].layer = 16;
                 Vector2 dir = namePanels[i].transform.position - transform.position;
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, dir.normalized, Detectradius);
 
@@ -50,7 +50,7 @@ public class TestNamePanelHide : MonoBehaviour
                     if (hit.collider.gameObject == namePanels[i])
                     {
                         GameObject obj = hit.collider.gameObject;
-                        obj.layer = 0;
+                        obj.layer = 16;
 
 
                     }
