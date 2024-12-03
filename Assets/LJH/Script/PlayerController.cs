@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviourPun
         SettingColor(randomColor.r, randomColor.g, randomColor.b);
 
         StartCoroutine(SetPlayerDataRoutine());
-        SetMyNickPanel();
+        
        
     }
     /// <summary>
@@ -121,19 +121,7 @@ public class PlayerController : MonoBehaviourPun
     /// <summary>
     /// 어빌리티 팝업창 오픈 기능
     /// </summary>
-    private void SetMyNickPanel() 
-    {
-        GameObject[] panels = GameObject.FindGameObjectsWithTag("NamePanel");
-
-        for (int i = 0; i < panels.Length; i++) 
-        {
-            if (panels[i].GetPhotonView().IsMine == true) 
-            {
-                myNickPanel = panels[i];
-            }
-        }
-
-    }
+   
 
     public void SettingColor(float r, float g , float b) 
     {
@@ -412,7 +400,7 @@ public class PlayerController : MonoBehaviourPun
         if (name == "GooseIdel")
         {
             IdleBody.SetActive(isActive);
-            myNickPanel.SetActive(isActive);
+            gameObject.layer = 9;
         }
         else if (name == "Goosecorpse")
         {
@@ -423,7 +411,7 @@ public class PlayerController : MonoBehaviourPun
         {
             isGhost = true;
             Ghost.SetActive(isActive);
-            gameObject.layer = 9;
+            
         }
     }
 
