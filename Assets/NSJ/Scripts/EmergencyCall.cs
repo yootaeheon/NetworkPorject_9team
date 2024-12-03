@@ -57,15 +57,30 @@ public class EmergencyCall : BaseUIPun
 
         if (GameManager.Instance.GlobalMissionState == true)
             return;
+        if (GameManager.IsStartVote == true)
+            return;
 
         if (_button.OnButton)
         {
-            // TODO : 긴급회의
+            StartCoroutine(StartVoteRoutine());
             int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();   
             photonView.RPC(nameof(RPCEmergencyCall),RpcTarget.All, playerNumber);
         }
     }
 
+    IEnumerator StartVoteRoutine()
+    {
+        GameManager.Instance.SetIsStartVote(true);
+        while (true)
+        {
+            if (VoteScene.Instance != null) 
+            {
+                GameManager.Instance.SetIsStartVote(false);
+                yield break;
+            }
+            yield return null;
+        }
+    }
 
     [PunRPC]
     private void RPCEmergencyCall(int playerNumber)

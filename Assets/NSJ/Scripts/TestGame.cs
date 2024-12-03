@@ -12,11 +12,13 @@ namespace NSJ_Test
 
         private void Awake()
         {
+#if UNITY_EDITOR
             if (_isTest == false)
             {
                 Destroy(gameObject);
                 return;
             }
+
             if(Instance == null)
             {
                 Instance = this;
@@ -27,6 +29,9 @@ namespace NSJ_Test
             {
                 Destroy(gameObject);
             }
+#else 
+            Destroy(gameObject);
+#endif
         }
     }
 }
