@@ -12,13 +12,10 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Recorder _recorder;
 
-   
+    private bool _initTarget = false;
 
     private void Start()
     {
-       
-
-       
         StartCoroutine(SetTargetPlayerRoutine());
     }
 
@@ -31,8 +28,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         // }
     }
 
-  
-
     IEnumerator SetTargetPlayerRoutine()
     {
 
@@ -42,7 +37,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
             {
                 yield return null;
             }
-            else 
+            else
             {
                 while (true)
                 {
@@ -77,9 +72,14 @@ public class VoiceManager : MonoBehaviourPunCallbacks
                     if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
                     {
                         // 모든 인덱스 0으로 초기화 + 사망 플레이어 인덱스 추가
-                        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                        // 이거 한번만 호출해주고 아래 반복문을 계속 체크 
+                        if (_initTarget == false)
                         {
-                            _recorder.TargetPlayers[i] = 0;
+                            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                            {
+                                _recorder.TargetPlayers[i] = 0;
+                            }
+                            _initTarget = true;
                         }
 
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
