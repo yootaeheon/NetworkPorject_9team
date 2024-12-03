@@ -14,11 +14,9 @@ public class SetPlayerInfo : MonoBehaviour
     private PlayerType _playerType;
     private Coroutine _setCo;
 
-    private Light2D _light2D;
     private void Start()
     {
         _setCo = StartCoroutine(SetPlayerCoroutine());
-        _light2D = Camera.main.transform.GetChild(0).GetComponent<Light2D>();
     }
 
     private void Update()
