@@ -26,15 +26,15 @@ public class SeparationVoice : MonoBehaviourPun
 
 
         // 게임중
-        if (VoteScene.Instance == null)
-        {
-            _speaker.gameObject.SetActive(true);
-        }
-        // 투표중
-        else
-        {
-            _speaker.gameObject.SetActive(false);
-        }
+      //  if (VoteScene.Instance == null)
+      //  {
+      //      _speaker.gameObject.SetActive(true);
+      //  }
+      //  // 투표중
+      //  else
+      //  {
+      //      _speaker.gameObject.SetActive(false);
+      //  }
     }
 
     public void SeparateVoice()
@@ -56,7 +56,7 @@ public class SeparationVoice : MonoBehaviourPun
         }
         else
         {
-            _speaker.transform.position = transform.position;
+            _speaker.transform.localPosition = Vector3.zero;
         }
     }
 }
