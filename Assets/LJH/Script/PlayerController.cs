@@ -409,7 +409,7 @@ public class PlayerController : MonoBehaviourPun
         {
             isGhost = true;
             Ghost.SetActive(isActive);
-
+            gameObject.layer = 9;
         }
     }
 
