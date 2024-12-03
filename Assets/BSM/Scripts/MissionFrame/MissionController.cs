@@ -38,7 +38,7 @@ public class MissionController : BaseMission
 
     private void Update()
     {
-        if(VoteScene.Instance != null)
+        if (VoteScene.Instance != null)
         {
             gameObject.SetActive(false);
             return;

@@ -24,11 +24,13 @@ public class GlobalLifeSupportMission : MonoBehaviour
     private int _randIndex;
     private bool nullCheck;
     private bool compareCheck;
+    private int _bgAnimHash;
 
     private RectTransform _emptyRect;
     private GameObject _waitObj;
     private GameObject _rightObj;
     private GameObject _compareSlotObj;
+    private Animator _bgAnim;
 
     public event EventHandler OnCheckedSlot;
 
@@ -59,6 +61,12 @@ public class GlobalLifeSupportMission : MonoBehaviour
         //리스트 순서 셔플
         LeftSlotShuffle();
         WaitSlotShuffle();
+    }
+
+    private void Start()
+    {
+        _bgAnim = _missionController.GetMissionObj<Animator>("BGSet");
+        _bgAnimHash = Animator.StringToHash("ShakeBG");
     }
 
     private void OnDisable()
@@ -98,7 +106,11 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
                     //raycast 설정 변경
                     _rightSlots[i].GetComponent<Image>().raycastTarget = true;
-                    
+                    Rigidbody2D rb2d = _rightSlots[i].transform.GetChild(0).GetChild(0).GetComponent<Rigidbody2D>();
+                    rb2d.bodyType = RigidbodyType2D.Kinematic;
+                    rb2d.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+                    rb2d.transform.rotation = Quaternion.identity;
+
                     //하이어라키 오브젝트 위치 변경
                     _rightSlots[i].transform.GetChild(0).SetParent(_returnSlots[j].transform);
 
@@ -318,8 +330,6 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
         if (compareCheck)
         {
-            Debug.Log("미션 클리어");
-
             MissionClear();
         }
         else
@@ -338,9 +348,31 @@ public class GlobalLifeSupportMission : MonoBehaviour
     private void MissionFail()
     {
         SoundManager.SFXPlay(_failCilp);
-        _missionController.MissionCoroutine(0.5f);
+        ChipGravityOn();
+        _missionController.MissionCoroutine(2f);
+         
+    }
 
+
+    /// <summary>
+    /// 미션 실패 후 Chip 흔들리면서 떨어지는 효과 기능
+    /// </summary>
+    private void ChipGravityOn()
+    {
+        _bgAnim.Play(_bgAnimHash);
+         
+        for(int i = 0; i < _rightSlots.Count; i++)
+        { 
+            RectTransform chipRect = _rightSlots[i].transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
+            float shakeX = chipRect.anchoredPosition.x + UnityEngine.Random.Range(-60f, 60f);
+            float shakeY = chipRect.anchoredPosition.y;
+
+            chipRect.anchoredPosition = new Vector2(shakeX, shakeY); 
+            Rigidbody2D rb2d = chipRect.gameObject.GetComponent<Rigidbody2D>();
+            rb2d.bodyType = RigidbodyType2D.Dynamic; 
+        }
 
     }
+
 
 }
