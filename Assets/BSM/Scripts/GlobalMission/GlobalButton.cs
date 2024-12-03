@@ -68,12 +68,12 @@ public class GlobalButton : MonoBehaviour
 
         if (ButtonActive)
         {
-            SoundManager.Instance.SFXPlay(_powerClips[1]);
+            SoundManager.SFXPlay(_powerClips[1]);
              
         }
         else
         {
-            SoundManager.Instance.SFXPlay(_powerClips[0]); 
+            SoundManager.SFXPlay(_powerClips[0]); 
         }
 
         _buttonAnimator.SetBool(_completeHash, ButtonActive);

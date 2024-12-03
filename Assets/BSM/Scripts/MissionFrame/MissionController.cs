@@ -78,7 +78,7 @@ public class MissionController : BaseMission
     /// </summary>
     private void CloseMissionPopUp()
     {
-        SoundManager.Instance.SFXPlay(_missionState._clips[2]);
+        SoundManager.SFXPlay(_missionState._clips[2]);
         MissionCoroutine(0.5f);
     }
 

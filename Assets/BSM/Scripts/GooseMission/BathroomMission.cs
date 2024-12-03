@@ -74,7 +74,7 @@ public class BathroomMission : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+            SoundManager.SFXPlay(_missionState._clips[0]);
             _sprayAnim.Play("SprayBody");
 
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a - 0.35f);
@@ -115,7 +115,7 @@ public class BathroomMission : MonoBehaviour
         {
             _missionState.IsAssign = false;
             _missionState.IsPerform = false;
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }
