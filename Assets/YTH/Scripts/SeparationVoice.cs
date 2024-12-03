@@ -10,6 +10,8 @@ public class SeparationVoice : MonoBehaviourPun
 
     private Speaker _speaker;
 
+    private PhotonView _playerView;
+
     IEnumerator Start()
     {
         yield return null;
@@ -20,10 +22,14 @@ public class SeparationVoice : MonoBehaviourPun
         StartCoroutine(SeparateVoice());
     }
 
+    private void Awake()
+    {
+        PhotonView playerView = GetComponentInParent<PhotonView>();
+        _playerView = playerView;
+    }
+
     private void Update()
     {
-      
-
         // ∞‘¿”¡ﬂ
         //  if (VoteScene.Instance == null)
         //  {
@@ -57,6 +63,9 @@ public class SeparationVoice : MonoBehaviourPun
     [PunRPC]
     public void SeparateVoiceRpc()
     {
+        if (_playerView.IsMine == false)
+            return;
+
         if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
         {
             _speaker.transform.position = new Vector3(0, 0, 30);
