@@ -83,7 +83,7 @@ public class BilliardsMission : MonoBehaviour
 
         IsCleaning = false; 
 
-        SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+        SoundManager.SFXPlay(_missionState._clips[0]);
 
         Image image = go.GetComponent<Image>();
         image.color = new Color(1, 1, 1, image.color.a - 0.35f);
@@ -124,7 +124,7 @@ public class BilliardsMission : MonoBehaviour
         {
             _missionState.IsAssign = false;
             _missionState.IsPerform = false;
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }

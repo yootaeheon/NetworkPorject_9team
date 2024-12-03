@@ -231,7 +231,7 @@ public class ReactorChargingMission : MonoBehaviour
         {
             _missionState.IsAssign = false;
             _missionState.IsPerform = false;
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }
@@ -249,11 +249,11 @@ public class ReactorChargingMission : MonoBehaviour
         {
             if(_energySlider.value < 1f)
             {
-                SoundManager.Instance.SFXPlay(_missionState._clips[0]); 
+                SoundManager.SFXPlay(_missionState._clips[0]); 
             }
             else
             {
-                SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+                SoundManager.SFXPlay(_missionState._clips[1]);
             }
             yield return Util.GetDelay(1f);
         }

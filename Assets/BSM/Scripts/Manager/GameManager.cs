@@ -221,7 +221,7 @@ public class GameManager : MonoBehaviourPun
         GlobalMissionClear = false;
         GlobalMissionState = value;
         GlobalState = GlobalMissionState;
-        SoundManager.Instance.BGMPlay(_sirenClip);
+        SoundManager.BGMPlay(_sirenClip);
         StartCoroutine(SirenCoroutine());
     }
 
@@ -364,7 +364,7 @@ public class GameManager : MonoBehaviourPun
         GlobalMissionState = false;
         GlobalState = GlobalMissionState;
         _sirenPanelImage.gameObject.SetActive(false);
-        SoundManager.Instance.BGMPlay(_bgmClip);
+        SoundManager.BGMPlay(_bgmClip);
     }
 
 }

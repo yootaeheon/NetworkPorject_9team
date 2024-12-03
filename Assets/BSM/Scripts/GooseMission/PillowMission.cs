@@ -70,7 +70,7 @@ public class PillowMission : MonoBehaviour
             if (_missionState.ObjectCount >= 1 && _flag == 1 << 0)
             {
                 _animator.Play(_pillowHash);
-                SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+                SoundManager.SFXPlay(_missionState._clips[0]);
                 _missionState.ObjectCount--;
             }
             else if (_missionState.ObjectCount < 1 && _flag == 1 << 0)
@@ -104,7 +104,7 @@ public class PillowMission : MonoBehaviour
     { 
         _missionState.IsAssign = false;
         _missionState.IsPerform = false;
-        SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+        SoundManager.SFXPlay(_missionState._clips[1]);
         _missionController.MissionCoroutine(0.5f);
         IncreaseTotalScore(); 
     }

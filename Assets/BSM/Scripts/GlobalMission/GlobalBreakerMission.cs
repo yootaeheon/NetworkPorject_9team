@@ -71,7 +71,7 @@ public class GlobalBreakerMission : MonoBehaviour
     {
         if (_missionState.ObjectCount > 0) return;
 
-        SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+        SoundManager.SFXPlay(_missionState._clips[1]);
         GameManager.Instance.CompleteGlobalMission();
         _missionController.MissionCoroutine(0.5f); 
     }

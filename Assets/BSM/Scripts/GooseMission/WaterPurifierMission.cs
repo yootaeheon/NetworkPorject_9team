@@ -159,7 +159,7 @@ public class WaterPurifierMission : MonoBehaviour
         if (_missionState.ObjectCount < 1)
         {
             _missionState.IsAssign = false; 
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             StartCoroutine(PluginCoroutine()); 
             IncreaseTotalScore();
         }

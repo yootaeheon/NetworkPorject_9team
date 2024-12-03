@@ -201,7 +201,7 @@ public class DrainageMission : MonoBehaviour
     private IEnumerator AnimationCoroutine()
     {
         _animator.Play(_commonHash);
-        SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+        SoundManager.SFXPlay(_missionState._clips[0]);
         _missionState.ObjectCount--;
         yield return Util.GetDelay(0.2f);
         _go.SetActive(false);
@@ -228,7 +228,7 @@ public class DrainageMission : MonoBehaviour
         {
             _missionState.IsAssign = false;
             _missionState.IsPerform = false;
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }

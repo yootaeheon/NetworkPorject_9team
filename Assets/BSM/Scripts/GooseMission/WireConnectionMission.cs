@@ -200,7 +200,7 @@ public class WireConnectionMission : MonoBehaviour
                 }
             }
 
-            SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+            SoundManager.SFXPlay(_missionState._clips[0]);
             _missionState.ObjectCount--;
 
         }
@@ -230,7 +230,7 @@ public class WireConnectionMission : MonoBehaviour
             isComplete = true;
             _missionState.IsAssign = false;
             _missionState.IsPerform = false;
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }

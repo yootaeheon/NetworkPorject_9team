@@ -136,7 +136,7 @@ public class AirLockMission : MonoBehaviour
         {
             _missionState.IsAssign = false;
             _missionState.IsPerform = false;
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             _missionController.MissionCoroutine(0.5f);
             IncreaseTotalScore();
         }
