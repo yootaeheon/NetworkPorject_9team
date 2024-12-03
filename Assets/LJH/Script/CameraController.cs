@@ -144,6 +144,4 @@ public class CameraController : MonoBehaviourPun
         }
 
     }
-
-    public void
 }
