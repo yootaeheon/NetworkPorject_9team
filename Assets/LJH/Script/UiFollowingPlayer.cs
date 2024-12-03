@@ -29,7 +29,7 @@ public class UiFollowingPlayer : MonoBehaviourPun
             photonView.RPC("RpcSetNicknamePanel", RpcTarget.AllBuffered, name);
             gameObject.AddComponent<TestNamePanelHide>();
             StartCoroutine(DelayNametoRed());
-           
+            
             
         }
     }
@@ -43,6 +43,7 @@ public class UiFollowingPlayer : MonoBehaviourPun
     {
         yield return 2f.GetDelay();
         NameToRed();
+        StartCoroutine(delayGhostCheck());
     }
     private void NameToRed()  // PlayerDataContainer.Instance 세팅된 이후에 호출해야함 
     {
@@ -79,12 +80,18 @@ public class UiFollowingPlayer : MonoBehaviourPun
         }
         
         transform.position = target.position+offset;
-
-        if (PlayerDataContainer.Instance.playerDataArray[0] !=null)
-            if (PlayerDataContainer.Instance.playerDataArray[PhotonNetwork.LocalPlayer.GetPlayerNumber()].IsGhost == true) 
+    }
+    IEnumerator delayGhostCheck()
+    {
+        yield return 3f.GetDelay();
+        while (true) 
+        {
+            yield return 1f.GetDelay();
+            if (PlayerDataContainer.Instance.playerDataArray[PhotonNetwork.LocalPlayer.GetPlayerNumber()].IsGhost == true)
             {
                 photonView.RPC("RpciconActive", RpcTarget.AllBuffered, false);
             }
+        }
     }
     
     public void Ready() 
