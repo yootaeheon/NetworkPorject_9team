@@ -6228,9 +6228,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1051911501}
-  - component: {fileID: 1051911500}
   - component: {fileID: 1051911499}
   - component: {fileID: 1051911498}
+  - component: {fileID: 1051911502}
   m_Layer: 0
   m_Name: VoiceManager
   m_TagString: Untagged
@@ -6295,8 +6295,8 @@ MonoBehaviour:
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   interestGroup: 0
-  useTargetPlayers: 0
-  targetPlayers: 
+  useTargetPlayers: 1
+  targetPlayers: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c000000
   debugEchoMode: 0
   reliableMode: 0
   encrypt: 0
@@ -6322,45 +6322,6 @@ MonoBehaviour:
   useOnAudioFilterRead: 0
   useMicrophoneTypeFallback: 1
   recordWhenJoined: 1
---- !u!114 &1051911500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1051911497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fcd1ccf6117c1847a2e308919899fec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speakingSigns:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _voiceViews:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _recorder: {fileID: 1051911499}
 --- !u!4 &1051911501
 Transform:
   m_ObjectHideFlags: 0
@@ -6376,6 +6337,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1051911502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051911497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fcd1ccf6117c1847a2e308919899fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _recorder: {fileID: 1051911499}
 --- !u!1 &1094769242
 GameObject:
   m_ObjectHideFlags: 0
