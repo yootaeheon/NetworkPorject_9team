@@ -55,9 +55,6 @@ public class CameraController : MonoBehaviourPun
             if (controller.isGhost == true)
             {
                 Camera.main.cullingMask = -1;
-                _audioListener = GetComponentInChildren<AudioListener>();
-                _audioListener.transform.SetParent(null);
-                _audioListener.transform.position = new Vector3(0, 0, -30);
             }
 
         }
