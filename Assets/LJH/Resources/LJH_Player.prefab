@@ -132,7 +132,6 @@ MonoBehaviour:
   eyeAnim: {fileID: 2878660863797681155}
   bodyAnim: {fileID: 2878660863447843462}
   feetAnim: {fileID: 2878660863164772043}
-  _abilityObject: {fileID: 7454712156121486537, guid: 41a6ef9403847d64b816c945a9f5a19b, type: 3}
   threshold: 0.01
   isGhost: 0
 --- !u!61 &4562735353716171432

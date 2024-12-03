@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPun
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviourPun
     [Header("글로벌 미션 Task Text")]
     [SerializeField] private TextMeshProUGUI _globalTaskText;
 
+    private Light2D _light2D;
     private Coroutine _globalTaskCo;
 
     [HideInInspector] public bool GlobalMissionState;
@@ -53,13 +55,6 @@ public class GameManager : MonoBehaviourPun
     }
 
     public static GameManager Instance { get; private set; }
-
-    [Header("Sabotage Ability")]
-    [SerializeField] private Image _armImage;   //게임 스폰 시 컬러 값 전달
-    [SerializeField] private GameObject _abilityPrefab;
-    private PlayerType _playerType;
-    
-
 
     [Header("미션 게이지 슬라이더")]
     [SerializeField] public Slider _missionScoreSlider;
@@ -133,18 +128,7 @@ public class GameManager : MonoBehaviourPun
 
     private void Start()
     {
-        StartCoroutine(SetPlayerCoroutine());
-    }
-
-    private void Update()
-    {
-        if (_playerType.Equals(PlayerType.Duck))
-        {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                _abilityPrefab.SetActive(true);
-            }
-        }
+        _light2D = Camera.main.transform.GetChild(0).GetComponent<Light2D>();
     }
 
     private void SetSingleton()
@@ -157,26 +141,6 @@ public class GameManager : MonoBehaviourPun
         {
             Destroy(gameObject);
         }
-    }
-    
-    /// <summary>
-    /// Ability 팝업창 정보 셋팅 코루틴
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator SetPlayerCoroutine()
-    {
-        yield return Util.GetDelay(3f);
-        SetPlayerInfo(); 
-    }
-
-    /// <summary>
-    /// 오리 플레이어 Ability 팝업창 정보 셋팅
-    /// </summary>
-    private void SetPlayerInfo()
-    {
-        _playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber());
-        PlayerData data = PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber());
-        _armImage.color = data.PlayerColor; 
     }
 
     /// <summary>
@@ -253,6 +217,8 @@ public class GameManager : MonoBehaviourPun
             case SabotageType.BlackOut:
                 SabotageBreaker = false;
                 _globalTaskName = "전등 고치기";
+                _light2D.pointLightInnerRadius = 2.5f;
+                _light2D.pointLightOuterRadius = 3f;
                 break;
 
             case SabotageType.OxygenBlock:
@@ -408,6 +374,12 @@ public class GameManager : MonoBehaviourPun
         GlobalState = GlobalMissionState;
         _sirenPanelImage.gameObject.SetActive(false);
         SoundManager.BGMPlay(_bgmClip);
+        
+        if(CurAbility.Equals(SabotageType.BlackOut))
+        {
+            _light2D.pointLightInnerRadius = 0f;
+            _light2D.pointLightOuterRadius = 26.7f;
+        }
     }
 
 }
