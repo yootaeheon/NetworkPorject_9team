@@ -14,14 +14,14 @@ public class FireExtinguisherSecond : MonoBehaviour
     [SerializeField] private GameObject _fire3;
 
 
-    private (float, float) _fire1PosX = (-180f, -60f);
-    private (float, float) _fire1PosY = (-34f, 65f);
+    private (float, float) _fire1PosX = (-200f, -60f);
+    private (float, float) _fire1PosY = (-50f, 100f);
 
-    private (float, float) _fire2PosX = (285f, 385f);
-    private (float, float) _fire2PosY = (109f, 223f);
+    private (float, float) _fire2PosX = (240f, 395f);
+    private (float, float) _fire2PosY = (109f, 293f);
 
-    private (float, float) _fire3PosX = (342f, 390f);
-    private (float, float) _fire3PosY = (-41f, 5f);
+    private (float, float) _fire3PosX = (300f, 390f);
+    private (float, float) _fire3PosY = (-80f, 15f);
      
     private Animator _powderAnim; 
     private RectTransform _rect;
