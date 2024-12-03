@@ -124,9 +124,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
         if (playerIndex == PhotonNetwork.LocalPlayer.GetPlayerNumber())
         {
-            PlayerController myController = GameLoadingScene.MyPlayer.GetComponent<PlayerController>();
-            // 사망
-            myController.Die();
+            StartCoroutine(DieSelectPlayerRoutine());
         }
 
         yield return 1f.GetDelay();
@@ -148,6 +146,16 @@ public class VoteManager : MonoBehaviourPunCallbacks
         //}
     }
 
+    IEnumerator DieSelectPlayerRoutine()
+    {
+        PlayerController myController = GameLoadingScene.MyPlayer.GetComponent<PlayerController>();
+        ReportingObject corpse = myController.GetComponentInChildren<ReportingObject>();
+       // 사망
+       myController.Die();
+        yield return null;
+        corpse.Reporting();
+       
+    }
 
     private void InitSingleTon()
     {

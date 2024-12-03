@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviourPun
     private Coroutine _globalTaskCo;
 
     [HideInInspector] public bool GlobalMissionState;
-    [HideInInspector] public bool TheWin;
+    [HideInInspector] public bool IsDuckWin;
     private string _globalTaskName;
     private float CountDown;
 
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviourPun
      
     private void OnEnable()
     {
-        TheWin = false;
+        IsDuckWin = false;
     }
 
     private void Start()
@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviourPun
     private IEnumerator TaskTextCoroutine()
     {
         float _elapsedTime = 0f;
-        float _limitTime = 60f;
+        float _limitTime = 10f;
         CountDown = _limitTime;
 
         while (_elapsedTime < _limitTime)
@@ -170,9 +170,7 @@ public class GameManager : MonoBehaviourPun
 
             yield return null;
         }
-
-        TheWin = CountDown <= 0f ? true : false;
-
+        IsDuckWin = CountDown <= 0f ? true : false;
         yield break;
     }
 
