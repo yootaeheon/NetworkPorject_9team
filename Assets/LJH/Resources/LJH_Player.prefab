@@ -374,6 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _recorder: {fileID: -6287053667063853016}
+  _playerController: {fileID: 2878660863728613726}
 --- !u!1001 &2122999579499882890
 PrefabInstance:
   m_ObjectHideFlags: 0

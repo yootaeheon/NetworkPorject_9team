@@ -14,6 +14,8 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     private bool _initTarget = false;
 
+    [SerializeField] PlayerController _playerController;
+
     private void Start()
     {
         StartCoroutine(SetTargetPlayerRoutine());
@@ -55,7 +57,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
                     // 죽은 사람 있으면 인덱스 번호 삭제
 
                     // 본인 플레이어 생존 상황
-                    if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == false)
+                    if (_playerController.isGhost == false)
                     {
                         // 사망 플레이어 인덱스 삭제
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -67,12 +69,10 @@ public class VoiceManager : MonoBehaviourPunCallbacks
                         }
                     }
 
-
                     // 본인 플레이어 사망 상황
-                    if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
+                    if (_playerController.isGhost == true)
                     {
-                        // 모든 인덱스 0으로 초기화 + 사망 플레이어 인덱스 추가
-                        // 이거 한번만 호출해주고 아래 반복문을 계속 체크 
+                        // 모든 인덱스 0으로 초기화(1번만 호출) + 사망 플레이어 인덱스 추가
                         if (_initTarget == false)
                         {
                             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
