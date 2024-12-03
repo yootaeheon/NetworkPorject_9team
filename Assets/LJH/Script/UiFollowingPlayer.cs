@@ -28,7 +28,7 @@ public class UiFollowingPlayer : MonoBehaviourPun
         {
             photonView.RPC("RpcSetNicknamePanel", RpcTarget.AllBuffered, name);
             gameObject.AddComponent<TestNamePanelHide>();
-           // StartCoroutine(DelayNametoRed());
+            StartCoroutine(DelayNametoRed());
            
             
         }
@@ -49,20 +49,20 @@ public class UiFollowingPlayer : MonoBehaviourPun
         if (LobbyScene.Instance == null) // 로비가 아니면
         {
             gameObject.GetComponent<BoxCollider2D>().enabled = false; // 게임 들어가면 본인 닉네임 가림
-            if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Goose)
-            {
-                Debug.Log("닉네임 색 변경");
+            //if (PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()) == PlayerType.Goose)
+            //{
+            //    Debug.Log("닉네임 색 변경");
                 
-                nameTxt.color = Color.red; // 본인
-                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                {
-                    if (PlayerDataContainer.Instance.GetPlayerJob(i) == PlayerType.Goose)
-                    {
-                        //photonView.Owner.ActorNumber
+            //    nameTxt.color = Color.red; // 본인
+            //    for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            //    {
+            //        if (PlayerDataContainer.Instance.GetPlayerJob(i) == PlayerType.Goose)
+            //        {
+            //            //photonView.Owner.ActorNumber
 
-                    }
-                }
-            }
+            //        }
+            //    }
+            //}
         }
     }
     public void setTarget(GameObject obj) 
