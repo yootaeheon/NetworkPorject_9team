@@ -77,6 +77,7 @@ public class EmergencyCall : BaseUIPun
     {
         Color reporterColor = PlayerDataContainer.Instance.GetPlayerData(playerNumber).PlayerColor;
         GameUI.ShowEmergency(reporterColor);
+        DeleteCorpse();
         yield return GameUI.Emergency.Duration.GetDelay();
         if (PhotonNetwork.IsMasterClient == true)
         {
@@ -84,7 +85,20 @@ public class EmergencyCall : BaseUIPun
         }
     }
 
+    /// <summary>
+    /// 시체들 삭제
+    /// </summary>
+    private void DeleteCorpse()
+    {
+        GameObject[] Corpse = GameObject.FindGameObjectsWithTag("Dead");
+        Debug.Log(Corpse.Length);
+        for (int i = 0; i < Corpse.Length; i++)
+        {
+            PhotonView targetView = Corpse[i].GetComponent<PhotonView>();
+            gameObject.SetActive(false);
+        }
 
+    }
     private void Close()
     {
         StartCoroutine(CloseRoutine());    
