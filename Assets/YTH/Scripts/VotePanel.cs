@@ -96,14 +96,13 @@ public class VotePanel : MonoBehaviourPunCallbacks
 
     private void SpawnPlayerPanel()
     {
-        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        for (int i = 0; i < _panelList.Length; i++)
         {
-            int index = i;
-
             PlayerData playerData = PlayerDataContainer.Instance.GetPlayerData(i);
             if (playerData.IsNone == true)
                 continue;
 
+            int index = i;         
             _panelList[index].SetActive(true);
             _panelList[index].GetComponent<VoteScenePlayerData>().VoteButton.onClick.AddListener(() => { VoteManager.Vote(index); });
 

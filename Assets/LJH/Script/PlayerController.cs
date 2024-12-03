@@ -108,7 +108,8 @@ public class PlayerController : MonoBehaviourPun
             if (GameLoadingScene.IsOnGame == false) // 게임진행값이 false 가 아니라면 중지
                 return;
         }
-
+        if (VoteScene.Instance != null) // 투표씬에서 움직임 금지
+            return;
 
         Move();
         MoveCheck();
