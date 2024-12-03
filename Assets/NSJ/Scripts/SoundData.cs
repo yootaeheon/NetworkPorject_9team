@@ -16,6 +16,7 @@ public class SoundData : ScriptableObject
         public AudioClip DuckIntro;
         public AudioClip GooseIntro;
         public AudioClip Vote;
+        public AudioClip GooseStep;
     }
     [SerializeField] private Sound _sound;
 
@@ -27,4 +28,5 @@ public class SoundData : ScriptableObject
     public AudioClip DuckIntro { get { return _sound.DuckIntro; } }
     public AudioClip GooseIntro { get {return _sound.GooseIntro; } }
     public AudioClip Vote { get { return _sound.Vote; } }
+    public AudioClip GooseStep { get { return _sound.GooseStep; } }
 }
