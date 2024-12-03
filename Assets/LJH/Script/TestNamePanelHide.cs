@@ -10,66 +10,74 @@ public class TestNamePanelHide : MonoBehaviour
 {
     [SerializeField] float Detectradius = 10;
     [SerializeField] GameObject[] namePanels;
+    [SerializeField] LayerMask layerMask = (1 << 0) | (1 << 8) | (1 << 10) | (1 << 14) | (1 << 15) | (1 << 16); // 레이어 마스크 
 
     private int num = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-    
+
     private void Start()
     {
         num = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         StartCoroutine(findNameobj());
     }
-    IEnumerator findNameobj() 
+    IEnumerator findNameobj()
     {
         yield return 3f.GetDelay();
         namePanels = GameObject.FindGameObjectsWithTag("NamePanel");
         StartCoroutine(DelayFindNamePanel());
     }
-    IEnumerator DelayFindNamePanel() 
+    IEnumerator DelayFindNamePanel()
     {
         while (true)
         {
             yield return 0.3f.GetDelay();
-            //if (PlayerDataContainer.Instance.GetPlayerData(num).IsGhost == true)
-            //{
-
-            //}
-            //else 
-            //{
-                FindNamePanel();
-            //}
+            FindNamePanel();
         }
     }
 
-    private void FindNamePanel() 
-    {   
+    private void FindNamePanel()
+    {
         for (int i = 0; i < namePanels.Length; i++)
         {
             Vector2 myPos = new Vector2(transform.position.x, transform.position.y - 1.5f);
-            Vector2 targetPos = new Vector2(namePanels[i].transform.position.x, namePanels[i].transform.position.y - 1.5f);
+            Vector2 targetPos = namePanels[i].transform.position;
+
+           
             if (Detectradius > Vector2.Distance(myPos, targetPos))
             {
-               
-                namePanels[i].layer = 16;
-                Vector2 dir = targetPos - myPos;
-                RaycastHit2D hit = Physics2D.Raycast(myPos, dir.normalized, Detectradius);
+                
+                RaycastHit2D hit = Physics2D.Linecast(myPos, targetPos,layerMask);
+                Debug.DrawLine(myPos, targetPos, Color.red);
 
-                if (hit.collider != null)
+                if (hit.collider != null&& hit.collider.gameObject)
                 {
+                    
                     if (hit.collider.gameObject == namePanels[i])
                     {
-                        GameObject obj = hit.collider.gameObject;
-                        obj.layer = 16;
-
-
+                        Debug.Log("시야 보임");
+                        namePanels[i].layer = 16;
                     }
+                    else
+                    {
+                        
+                        Debug.Log("다른 오브젝트에 막힘");
+                        namePanels[i].layer = 15;
+                    }
+                }
+                else
+                {
+                    
+                    Debug.Log("히트 없음");
+                    namePanels[i].layer = 15;
                 }
             }
             else
-            {   
-             
+            {
+                
                 namePanels[i].layer = 15;
-              
             }
         }
+
+
+
     }
 }
