@@ -103,7 +103,7 @@ public class GlobalFireMission : MonoBehaviour
         IsBurn = true;
 
         Debug.Log("미션 클리어");
-        SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+        SoundManager.SFXPlay(_missionState._clips[1]);
         GameManager.Instance.GlobalFire();
         GameManager.Instance.FirstFire();
         _missionController.MissionCoroutine(0.5f);

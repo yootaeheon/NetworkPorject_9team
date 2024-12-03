@@ -9,7 +9,7 @@ public class BurnSound : MonoBehaviour
 
     private void OnDisable()
     {
-        SoundManager.Instance.SFXPlay(_burnClip);
+        SoundManager.SFXPlay(_burnClip);
     }
 
 }

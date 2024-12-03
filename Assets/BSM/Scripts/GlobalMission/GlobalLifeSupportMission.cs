@@ -256,7 +256,7 @@ public class GlobalLifeSupportMission : MonoBehaviour
                     _emptyArr[index] = false;
                     _waitSlots[index] = null;
                      
-                    SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+                    SoundManager.SFXPlay(_missionState._clips[0]);
 
                 }
                 else
@@ -330,14 +330,14 @@ public class GlobalLifeSupportMission : MonoBehaviour
 
     private void MissionClear()
     {
-        SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+        SoundManager.SFXPlay(_missionState._clips[1]);
         GameManager.Instance.CompleteGlobalMission();
         _missionController.MissionCoroutine(0.5f);
     }
 
     private void MissionFail()
     {
-        SoundManager.Instance.SFXPlay(_failCilp);
+        SoundManager.SFXPlay(_failCilp);
         _missionController.MissionCoroutine(0.5f);
 
 

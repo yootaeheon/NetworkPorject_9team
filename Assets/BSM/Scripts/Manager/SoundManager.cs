@@ -11,10 +11,14 @@ public class SoundManager : BaseMission
 
     [Header("Sound Setting UI")]
     [SerializeField] private AudioMixer _audioMixer;
+    private static AudioMixer s_audioMixer { get { return Instance._audioMixer; } }
     //[SerializeField] private Slider _masterSlider;
     //[SerializeField] private Slider _sfxSlider;
     //[SerializeField] private Slider _bgmSlider;
-
+    private static AudioSource s_sfx {  get { return Instance._sfxSource; } }
+    private static AudioSource s_bgm { get { return Instance._bgmSource; } }
+    private static AudioSource s_loopSfx { get { return Instance._loopSfxSource; } }
+    private static AudioSource s_master { get { return Instance._masterSource; } }
 
     private AudioSource _sfxSource;
     private AudioSource _bgmSource;
@@ -59,27 +63,33 @@ public class SoundManager : BaseMission
     /// SFX 볼륨 조절
     /// </summary>
     /// <param name="volume"></param>
-    public void SetVolumeSFX(float volume)
+    public static void SetVolumeSFX(float volume)
     {
-        _audioMixer.SetFloat("SFX", volume * 20f); 
+        s_audioMixer.SetFloat("SFX", volume * 20f); 
+        
     }
 
+    public static float GetVolumeSFX()
+    {
+        s_audioMixer.GetFloat("SFX", out float volume);
+        return volume;
+    }
     /// <summary>
     /// BGM 볼륨 조절
     /// </summary>
     /// <param name="volume"></param>
-    public void SetVolumeBGM(float volume)
+    public static void SetVolumeBGM(float volume)
     {
-        _audioMixer.SetFloat("BGM", volume * 20f);
+        s_audioMixer.SetFloat("BGM", volume * 20f);
     }
 
     /// <summary>
     /// Master 볼륨 조절
     /// </summary>
     /// <param name="volume"></param>
-    public void SetVolumeMaster(float volume)
+    public static void SetVolumeMaster(float volume)
     {
-        _audioMixer.SetFloat("MASTER", volume * 20f);
+        s_audioMixer.SetFloat("MASTER", volume * 20f);
     }
 
 
@@ -87,26 +97,26 @@ public class SoundManager : BaseMission
     /// BGM 교체 후 재생
     /// </summary>
     /// <param name="clip"></param>
-    public void BGMPlay(AudioClip clip)
+    public static  void BGMPlay(AudioClip clip)
     {
-        _bgmSource.clip = clip;
-        _bgmSource.Play();
+        s_bgm.clip = clip;
+        s_bgm.Play();
     }
 
     /// <summary>
     /// SFX 교체 후 재생 
     /// </summary>
     /// <param name="clip"></param>
-    public void SFXPlay(AudioClip clip)
+    public static void SFXPlay(AudioClip clip)
     {
-        _sfxSource.clip = clip;
-        _sfxSource.Play(); 
+        s_sfx.clip = clip;
+        s_sfx.Play(); 
     }
 
-    public void LoopSFXPlay(AudioClip clip)
+    public static void LoopSFXPlay(AudioClip clip)
     {
-        _loopSfxSource.clip = clip;
-        _loopSfxSource.Play();
+        s_loopSfx.clip = clip;
+        s_loopSfx.Play();
     }
 
 }

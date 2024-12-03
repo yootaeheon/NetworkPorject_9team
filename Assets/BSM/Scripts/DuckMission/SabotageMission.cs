@@ -75,7 +75,7 @@ public class SabotageMission : MonoBehaviour
     {
 
         _inputText.text += value;
-        SoundManager.Instance.SFXPlay(_missionState._clips[0]);
+        SoundManager.SFXPlay(_missionState._clips[0]);
 
         if (_inputText.text.Length > 3)
         {
@@ -90,7 +90,7 @@ public class SabotageMission : MonoBehaviour
     {
         if (_codeText.text.Equals(_inputText.text))
         {
-            SoundManager.Instance.SFXPlay(_missionState._clips[1]);
+            SoundManager.SFXPlay(_missionState._clips[1]);
             _inputText.text = "성공!";
             _inputText.color = Color.green;
             _inputText.alignment = TextAlignmentOptions.Center;
@@ -113,7 +113,7 @@ public class SabotageMission : MonoBehaviour
         }
         else
         {
-            SoundManager.Instance.SFXPlay(_wrongClip);
+            SoundManager.SFXPlay(_wrongClip);
             _inputText.text = "실패";
             _inputText.color = Color.red;
             _inputText.alignment = TextAlignmentOptions.Center;
