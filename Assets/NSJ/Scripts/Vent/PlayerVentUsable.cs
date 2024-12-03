@@ -66,10 +66,8 @@ public class PlayerVentUsable : MonoBehaviourPun
         while (true)
         {
             // 벤트에서 왼쪽 쉬프트 클릭시
-            if (Input.GetKeyDown(KeyCode.LeftShift) || _isClickButton == true )
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                _isClickButton = false;
-
                 Vent vent = collision.GetComponent<Vent>();
                 if (vent == null)
                     yield break;
