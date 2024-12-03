@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviourPun
         _lifeBtn.onClick.AddListener(DuckLifeAbilityInvoke);
         _breakerBtn.onClick.AddListener(DuckBreakerAbilityInvoke);
     }
-     
+
     private void OnEnable()
     {
         IsDuckWin = false;
@@ -215,14 +215,14 @@ public class GameManager : MonoBehaviourPun
             case SabotageType.BlackOut:
                 SabotageBreaker = false;
                 _globalTaskName = "전등 고치기";
-                 
-                PlayerType playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()); 
+
+                PlayerType playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber());
 
                 if (playerType.Equals(PlayerType.Goose))
                 {
                     _light2D.pointLightInnerRadius = 2.5f;
                     _light2D.pointLightOuterRadius = 3f;
-                } 
+                }
                 break;
 
             case SabotageType.OxygenBlock:
@@ -234,6 +234,11 @@ public class GameManager : MonoBehaviourPun
         GlobalMissionClear = false;
         GlobalMissionState = value;
         GlobalState = GlobalMissionState;
+        
+
+        if (CurAbility.Equals(SabotageType.BlackOut))
+            return;
+
         SoundManager.BGMPlay(_sirenClip);
         StartCoroutine(SirenCoroutine());
     }
@@ -378,8 +383,8 @@ public class GameManager : MonoBehaviourPun
         GlobalState = GlobalMissionState;
         _sirenPanelImage.gameObject.SetActive(false);
         SoundManager.BGMPlay(_bgmClip);
-        
-        if(CurAbility.Equals(SabotageType.BlackOut))
+
+        if (CurAbility.Equals(SabotageType.BlackOut))
         {
             _light2D.pointLightInnerRadius = 0f;
             _light2D.pointLightOuterRadius = 26.7f;
