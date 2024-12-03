@@ -18,23 +18,11 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     PlayerDataContainer _playerDataContainer => PlayerDataContainer.Instance;
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("룸에 입장했습니다. Voice 설정을 확인합니다.");
-    }
+   // public override void OnJoinedRoom()
+   // {
+   //     Debug.Log("룸에 입장했습니다. Voice 설정을 확인합니다.");
+   // }
 
 
     // 말할 때 표시 기능
