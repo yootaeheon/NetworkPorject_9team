@@ -13,6 +13,7 @@ public class SoundData : ScriptableObject
         public AudioClip Report;
         public AudioClip EmergencyCall;
         public AudioClip Dead;
+        public AudioClip Kill;
         public AudioClip DuckIntro;
         public AudioClip GooseIntro;
         public AudioClip Vote;
@@ -24,6 +25,7 @@ public class SoundData : ScriptableObject
     public AudioClip Buttonoff { get { return _sound.ButtonOff; } }
     public AudioClip Report { get { return _sound.Report; } }
     public AudioClip Dead {  get { return _sound.Dead; } }
+    public AudioClip Kill {  get { return _sound.Kill; } }
     public AudioClip EmergencyCall { get { return _sound.EmergencyCall; } }
     public AudioClip DuckIntro { get { return _sound.DuckIntro; } }
     public AudioClip GooseIntro { get {return _sound.GooseIntro; } }

@@ -287,6 +287,8 @@ public class PlayerController : MonoBehaviourPun
                     if (canKill)
                     {
                         //Debug.Log("죽임!"); // 적 플레이어 처치
+                        SoundManager.SFXPlay(SoundManager.Data.Kill);
+
                         col.gameObject.GetComponent<PlayerController>().Die();
 
                         // 쿨타임 시작
@@ -360,7 +362,7 @@ public class PlayerController : MonoBehaviourPun
     {
         bool isGame = VoteScene.Instance == null ? true : false;
 
-        SoundManager.SFXPlay(isGame == true ? SoundManager.Data.Dead : null);
+        photonView.RPC(nameof(RPCDie), RpcTarget.All, isGame);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false, isGame);
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true, isGame);
         yield return new WaitForSeconds(1f);
@@ -456,7 +458,14 @@ public class PlayerController : MonoBehaviourPun
             yield return 0.748f.GetDelay();
         }
     }
-
+    [PunRPC]
+    private void RPCDie(bool isGame)
+    {
+        if (photonView.IsMine)
+        {
+            SoundManager.SFXPlay(isGame == true ? SoundManager.Data.Dead : null);
+        }
+    }
 
     [PunRPC]
     private void RpcChildActive(string name, bool isActive, bool isGame)
