@@ -177,7 +177,10 @@ public class GameLoadingScene : MonoBehaviourPun
         PhotonNetwork.CurrentRoom.IsOpen = true;
     }
 
-
+    public static void MovePlayerRandomPoint()
+    {
+        MyPlayer.transform.position = Instance.GetRandomSpawnPoint();
+    }
 
     private void RandomSpawner()
     {

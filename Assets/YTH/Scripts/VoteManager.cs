@@ -33,6 +33,12 @@ public class VoteManager : MonoBehaviourPunCallbacks
         InitSingleTon();
         _votePanel.gameObject.SetActive(true);
     }
+
+    private void Start()
+    {
+        MoveRandomPoint();
+    }
+
     public static void Vote(int index) // 플레이어 패널을 눌러 투표
     {
         Debug.LogWarning($"{index} 투표");
@@ -93,7 +99,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
                 top2 = _voteCounts[i];
                 Debug.Log("동점표로 없던 일~");
                 isKick = false;
-                break;
+                continue;
             }
         }
         Debug.Log($"{_voteData.SkipCount}표 기권!");
@@ -146,6 +152,14 @@ public class VoteManager : MonoBehaviourPunCallbacks
         //{
             SceneChanger.UnLoadScene("VoteScene");
         //}
+    }
+
+    /// <summary>
+    /// 플레이어 랜덤 포인트로 이동
+    /// </summary>
+    private void MoveRandomPoint()
+    {
+        GameLoadingScene.MovePlayerRandomPoint();
     }
 
     private void InitSingleTon()
