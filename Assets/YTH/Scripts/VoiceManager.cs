@@ -17,10 +17,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         _audioSource = GetComponentInChildren<AudioSource>();
-    }
 
-    private void Update()
-    {
         StartCoroutine(SetSpeaker());
         StartCoroutine(SetTargetPlayerRoutine());
     }
