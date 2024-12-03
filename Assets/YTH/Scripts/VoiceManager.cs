@@ -63,6 +63,9 @@ public class VoiceManager : MonoBehaviourPunCallbacks
                     if (PlayerDataContainer == null)
                         break;
 
+                    if (_recorder.TargetPlayers == null)
+                        continue;
+
                     // 액터넘버 == 타겟플레이어 배열에이 있는 인덱스
                     // 타겟플레이어 배열에 인덱스 번호로 보이스를 보냄
 
