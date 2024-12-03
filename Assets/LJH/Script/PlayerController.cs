@@ -225,9 +225,12 @@ public class PlayerController : MonoBehaviourPun
 
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    Debug.Log("신고함!");
+                    if (GameManager.IsStartVote == true)
+                        return;
+                    //Debug.Log("신고함!");
 
                     // 투표 열리는 기능 추가 해야함 
+                    StartCoroutine(StartVoteRoutine());
 
                     nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제, 씬 재진입이면 필요없을지도
                     int corpseID = nearCol.gameObject.GetComponent<PhotonView>().ViewID;
@@ -264,7 +267,7 @@ public class PlayerController : MonoBehaviourPun
         }
         else
         {
-            Debug.Log("탐색중");
+            //Debug.Log("탐색중");
         }
     }
 
@@ -283,7 +286,7 @@ public class PlayerController : MonoBehaviourPun
                 {
                     if (canKill)
                     {
-                        Debug.Log("죽임!"); // 적 플레이어 처치
+                        //Debug.Log("죽임!"); // 적 플레이어 처치
                         col.gameObject.GetComponent<PlayerController>().Die();
 
                         // 쿨타임 시작
@@ -311,6 +314,23 @@ public class PlayerController : MonoBehaviourPun
         Debug.Log("킬 가능!");
     }
 
+    /// <summary>
+    /// 투표씬 네트워크 중복 체크 금지 함수
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator StartVoteRoutine()
+    {
+        GameManager.Instance.SetIsStartVote(true);
+        while (true)
+        {
+            if (VoteScene.Instance != null)
+            {
+                GameManager.Instance.SetIsStartVote(false);
+                yield break;
+            }
+            yield return null;
+        }
+    }
 
     [PunRPC]
     private void RPCReport(int corpseID)

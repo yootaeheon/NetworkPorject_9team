@@ -118,6 +118,7 @@ MonoBehaviour:
   - StartJudgeGameOver
   - SetPlayerPanelRPC
   - SeparateVoiceRpc
+  - RPCSetIsStartVote
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

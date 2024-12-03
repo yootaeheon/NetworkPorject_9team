@@ -55,7 +55,8 @@ public class GameManager : MonoBehaviourPun
             }
         }
     }
-
+    private bool _isStartVote;
+    public static bool IsStartVote { get { return Instance._isStartVote; } set { Instance._isStartVote = value; } }
     public static GameManager Instance { get; private set; }
 
     [Header("미션 게이지 슬라이더")]
@@ -397,5 +398,15 @@ public class GameManager : MonoBehaviourPun
             _light2D.pointLightOuterRadius = 26.7f;
         }
     }
+    public void SetIsStartVote(bool isStartVote)
+    {
+        photonView.RPC(nameof(RPCSetIsStartVote),RpcTarget.AllBuffered, isStartVote);
+    }
 
+    [PunRPC]
+    private void RPCSetIsStartVote(bool isStartVote)
+    {
+        IsStartVote = isStartVote;
+        Debug.Log($"IsStartVote : {IsStartVote}");
+    }
 }
