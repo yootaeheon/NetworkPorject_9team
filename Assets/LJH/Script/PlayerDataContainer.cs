@@ -212,6 +212,10 @@ public class PlayerDataContainer : MonoBehaviourPun
             return;
 
         int index = playerNumber;
+
+        if (index == -1)
+            return;
+
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
 
         Debug.Log("¿£ÅÍ µð¹ö±ë");
@@ -234,6 +238,9 @@ public class PlayerDataContainer : MonoBehaviourPun
     private void RpcSetExitPlayerData(int playerNumber, string playerName, PlayerType type, float Rcolor, float Gcolor, float Bcolor, bool isGhost)
     {
         int index = playerNumber;
+
+        if (index == -1)
+            return;
 
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
 
