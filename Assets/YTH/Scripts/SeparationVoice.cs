@@ -16,7 +16,6 @@ public class SeparationVoice : MonoBehaviourPun
     {
         yield return null;
         Speaker speaker = GetComponentInChildren<Speaker>();
-        //   speaker.transform.SetParent(null);
         _speaker = speaker;
 
         StartCoroutine(SeparateVoice());
@@ -24,8 +23,8 @@ public class SeparationVoice : MonoBehaviourPun
 
     private void Awake()
     {
-        PhotonView playerView = GetComponentInParent<PhotonView>();
-        _playerView = playerView;
+       // PhotonView playerView = GetComponentInParent<PhotonView>();
+       // _playerView = playerView;
     }
 
     private void Update()
@@ -63,9 +62,6 @@ public class SeparationVoice : MonoBehaviourPun
     [PunRPC]
     public void SeparateVoiceRpc()
     {
-        if (_playerView.IsMine == false)
-            return;
-
         if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
         {
             _speaker.transform.position = new Vector3(0, 0, 30);
