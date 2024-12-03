@@ -57,6 +57,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
     {
         _voteCounts[index]++;
         _voteSignImage[votePlayer].SetActive(true);
+        SoundManager.SFXPlay(SoundManager.Data.Vote);
         Debug.Log($"{index}번 플레이어 득표수 {_voteCounts[index]} ");
     }
 
@@ -65,14 +66,16 @@ public class VoteManager : MonoBehaviourPunCallbacks
         if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
             return;
 
-        photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered);
+        photonView.RPC("OnClickSkipRPC", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.GetPlayerNumber());
         _votePanel.DisableButton();
     }
 
     [PunRPC]
-    public void OnClickSkipRPC()
+    public void OnClickSkipRPC(int votePlayer)
     {
         _voteData.SkipCount++;
+        _voteSignImage[votePlayer].SetActive(true);
+        SoundManager.SFXPlay(SoundManager.Data.Vote);
         Debug.Log($" 스킵 수 : {_voteData.SkipCount}");
     }
 

@@ -304,10 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a8dc3121453e5f478f836da5ce182f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _data: {fileID: 11400000, guid: fc259c3cb0ffa314d811a150f71f57cd, type: 2}
   _audioMixer: {fileID: 24100000, guid: 9b669685bb2fc7f43afd6a62c69fc7bb, type: 2}
-  _masterSlider: {fileID: 0}
-  _sfxSlider: {fileID: 0}
-  _bgmSlider: {fileID: 0}
 --- !u!1 &4629633775147272537
 GameObject:
   m_ObjectHideFlags: 0

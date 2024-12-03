@@ -46,6 +46,7 @@ namespace GameUIs
         /// </summary>
         IEnumerator DurationRoutine()
         {
+            SoundManager.SFXPlay(SoundManager.Data.Report);
             yield return Duration.GetDelay();
             GetUI("CorpseReportUI").SetActive(false);
         }

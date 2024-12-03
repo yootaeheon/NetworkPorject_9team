@@ -134,6 +134,7 @@ MonoBehaviour:
   eyeAnim: {fileID: 2878660863797681155}
   bodyAnim: {fileID: 2878660863447843462}
   feetAnim: {fileID: 2878660863164772043}
+  myNickPanel: {fileID: 0}
   threshold: 0.01
   isGhost: 0
 --- !u!61 &4562735353716171432

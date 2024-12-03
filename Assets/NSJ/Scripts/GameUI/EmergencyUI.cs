@@ -39,6 +39,7 @@ namespace GameUIs
         /// </summary>
         IEnumerator DurationRoutine()
         {
+            SoundManager.SFXPlay(SoundManager.Data.EmergencyCall);
             yield return Duration.GetDelay();
             GetUI("EmergencyCallUI").SetActive(false);
         }

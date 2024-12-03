@@ -71,9 +71,18 @@ public class OptionBox : BaseUI
     private void SubscribeEvents()
     {
         GetUI<Button>("CancelButton").onClick.AddListener(() => OptionPanel.SetActiveOption(false)); // X ¹öÆ° ´©¸£¸é ¿É¼ÇÃ¢ ²¨Áü
-        GetUI<Button>("SoundButton").onClick.AddListener(()=>ChangeBox(Box.Sound)); 
+        GetUI<Button>("CancelButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
+        GetUI<Button>("SoundButton").onClick.AddListener(()=>ChangeBox(Box.Sound));
+        GetUI<Button>("SoundButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("GameOptionButton").onClick.AddListener(()=>ChangeBox(Box.GameOption));
+        GetUI<Button>("GameOptionButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("QuitButton").onClick.AddListener(()=>ChangeBox(Box.Quit));
+        GetUI<Button>("QuitButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("DeleteButton").onClick.AddListener(()=>ChangeBox(Box.Delete));
+        GetUI<Button>("DeleteButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
 }

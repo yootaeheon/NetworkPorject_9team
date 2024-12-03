@@ -112,6 +112,7 @@ public class MainPanel : MonoBehaviour
     private void SubscribesEvent()
     {
         _settingButton.onClick.AddListener(() => OptionPanel.SetActiveOption(true));
+        _settingButton.onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
 
     /// <summary>

@@ -490,15 +490,25 @@ public class LoginPanel : BaseUI
     {
         #region LoginBox
         GetUI<Button>("LoginFindButton").onClick.AddListener(() => ChangeBox(Box.Find)); // 비밀번호 찾기 버튼
+        GetUI<Button>("LoginFindButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("LoginSignUpButton").onClick.AddListener(() => ChangeBox(Box.SignUp)); // 회원가입 버튼
+        GetUI<Button>("LoginSignUpButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("LoginButton").onClick.AddListener(Login);
+        GetUI<Button>("LoginButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         _loginEmailInput.onValueChanged.AddListener(ActivateLoginButton);
         _loginPasswordInput.onValueChanged.AddListener(ActivateLoginButton);
         #endregion
 
         #region SignUpBox
         GetUI<Button>("SignUpButton").onClick.AddListener(SignUp);
+        GetUI<Button>("SignUpButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("SignUpBackButton").onClick.AddListener(() => ChangeBox(Box.Login));
+        GetUI<Button>("SignUpBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         _signUpEmailInput.onValueChanged.AddListener(ActivateSignUpButton);
         _signUpPasswordInput.onValueChanged.AddListener(ActivateSignUpButton);
         _signUpConfirmInput.onValueChanged.AddListener(ActivateSignUpButton);
@@ -510,7 +520,10 @@ public class LoginPanel : BaseUI
         #region FindBox
 
         GetUI<Button>("FindBackButton").onClick.AddListener(() => ChangeBox(Box.Login));
+        GetUI<Button>("FindBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("FindButton").onClick.AddListener(FindPassword);
+        GetUI<Button>("FindButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
         _findEmailInput.onValueChanged.AddListener(ActivateFindButton);
 
         #endregion
@@ -518,21 +531,29 @@ public class LoginPanel : BaseUI
         #region FindSendBox
 
         GetUI<Button>("FindSendCheckButton").onClick.AddListener(() => ChangeBox(Box.Login));
+        GetUI<Button>("FindSendCheckButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
 
         #endregion
 
         #region SendSuccessBox
         GetUI<Button>("SendSuccessCheckButton").onClick.AddListener(CheckEmailVerify);
+        GetUI<Button>("SendSuccessCheckButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
         #endregion
 
         #region ConfirmSendBox
         GetUI<Button>("ConfirmSendRetryButton").onClick.AddListener(SendEmailVerify);
+        GetUI<Button>("ConfirmSendRetryButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("ConfirmSendOKButton").onClick.AddListener(CheckEmailVerify);
+        GetUI<Button>("ConfirmSendOKButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("ConfirmSendLogOutButton").onClick.AddListener(LogOut);
+        GetUI<Button>("ConfirmSendLogOutButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
         #endregion
 
         #region ErrorBox
-        GetUI<Button>("ErrorBackButton").onClick.AddListener(() => { GetUI("ErrorBox").SetActive(false); }); // 에러버튼은 팝업형식이기 때문에 본인만 닫아주면됨
+        GetUI<Button>("ErrorBackButton").onClick.AddListener(() => { GetUI("ErrorBox").SetActive(false); });
+        GetUI<Button>("ErrorBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
         #endregion
 
         GetUI<Button>("QuitButton").onClick.AddListener(() =>  // 종료 버튼
@@ -543,6 +564,7 @@ public class LoginPanel : BaseUI
              Application.Quit();
 #endif
         });
+        GetUI<Button>("QuitButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
     #endregion
 

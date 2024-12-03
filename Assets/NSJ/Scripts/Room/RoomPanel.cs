@@ -322,11 +322,23 @@ public class RoomPanel : BaseUI
         LobbyScene.Instance.OnPlayerPropertiesUpdateEvent += UpdatePlayerProperty;
 
         GetUI<Button>("RoomLeftButton").onClick.AddListener(LeftRoom);
+        GetUI<Button>("RoomLeftButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("RoomCodeActiveButton").onClick.AddListener(ToggleActiveRoomCode);
+        GetUI<Button>("RoomCodeActiveButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("RoomCopyButton").onClick.AddListener(CopyRoomCode);
+        GetUI<Button>("RoomCopyButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("RoomStartButton").onClick.AddListener(GameStart);
+        GetUI<Button>("RoomStartButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("RoomReadyButton").onClick.AddListener(GameReady);
+        GetUI<Button>("RoomReadyButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("SettingButton").onClick.AddListener(() => OptionPanel.SetActiveOption(true));
+        GetUI<Button>("SettingButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
     }
 
 

@@ -133,7 +133,9 @@ public class OptionQuitBox : BaseUI
     private void SubscribeEvent()
     {
         GetUI<Button>("GameQuitButton").onClick.AddListener(GameQuit);
+        GetUI<Button>("GameQuitButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
         GetUI<Button>("MainMenuButton").onClick.AddListener(ClickMainMenu);
+        GetUI<Button>("MainMenuButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
         ServerCallback.Instance.OnLeftRoomEvent += UnloadGameScene;
     }
 }
