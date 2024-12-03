@@ -17,8 +17,10 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] float moveSpeed;  // 이동속도 
     [SerializeField] float Detectradius;  // 탐색 범위
     [SerializeField] LayerMask layerMask;
-    //[SerializeField] string playerName;
-    // [SerializeField] Color highLightColor;
+    [SerializeField] float KillCoolDown = 10;
+    [SerializeField] public float RemainCoolDown = 0;
+
+   
 
     [SerializeField] AudioSource audioSource;
 
@@ -35,7 +37,7 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] Animator eyeAnim;
     [SerializeField] Animator bodyAnim;
     [SerializeField] Animator feetAnim;
-    [SerializeField] GameObject myNickPanel;
+    
    
     private Vector3 privPos;
     private Vector3 privDir;
@@ -48,7 +50,7 @@ public class PlayerController : MonoBehaviourPun
     Coroutine coroutine;
     private void Start()
     {
-
+        
         // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
@@ -69,7 +71,7 @@ public class PlayerController : MonoBehaviourPun
         SettingColor(randomColor.r, randomColor.g, randomColor.b);
 
         StartCoroutine(SetPlayerDataRoutine());
-        SetMyNickPanel();
+        
        
     }
     /// <summary>
@@ -121,19 +123,7 @@ public class PlayerController : MonoBehaviourPun
     /// <summary>
     /// 어빌리티 팝업창 오픈 기능
     /// </summary>
-    private void SetMyNickPanel() 
-    {
-        GameObject[] panels = GameObject.FindGameObjectsWithTag("NamePanel");
-
-        for (int i = 0; i < panels.Length; i++) 
-        {
-            if (panels[i].GetPhotonView().IsMine == true) 
-            {
-                myNickPanel = panels[i];
-            }
-        }
-
-    }
+   
 
     public void SettingColor(float r, float g , float b) 
     {
@@ -280,11 +270,13 @@ public class PlayerController : MonoBehaviourPun
             Debug.Log("탐색중");
         }
     }
+
+    private bool canKill = true;
     IEnumerator Kill(Collider2D col)
     {
         // 로비씬에서는 킬 금지
         if (LobbyScene.Instance != null)
-           yield break;
+            yield break;
 
         if (col.gameObject != this.gameObject)
         {
@@ -292,18 +284,36 @@ public class PlayerController : MonoBehaviourPun
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
+                    if (canKill)
+                    {
+                        Debug.Log("죽임!"); // 적 플레이어 처치
+                        col.gameObject.GetComponent<PlayerController>().Die();
 
-                    Debug.Log("죽임!"); // 쿨타임 추가해야함 
-
-                    col.gameObject.GetComponent<PlayerController>().Die();
+                        // 쿨타임 시작
+                        canKill = false;
+                        RemainCoolDown = KillCoolDown;
+                        StartCoroutine(CoolDown());
+                    }
+                    else
+                    {
+                        Debug.Log($"쿨타임 {RemainCoolDown:F1}초 남음");
+                    }
                 }
-
             }
-
         }
-        yield return 1f.GetDelay();
-
     }
+    private IEnumerator CoolDown()
+    {
+        while (RemainCoolDown > 0)
+        {
+            RemainCoolDown -= Time.deltaTime;
+            yield return null;
+        }
+        RemainCoolDown = 0;
+        canKill = true; // 쿨타임 종료
+        Debug.Log("킬 가능!");
+    }
+
 
     [PunRPC]
     private void RPCReport(int corpseID)
@@ -412,7 +422,7 @@ public class PlayerController : MonoBehaviourPun
         if (name == "GooseIdel")
         {
             IdleBody.SetActive(isActive);
-            myNickPanel.SetActive(isActive);
+            gameObject.layer = 9;
         }
         else if (name == "Goosecorpse")
         {
@@ -423,7 +433,7 @@ public class PlayerController : MonoBehaviourPun
         {
             isGhost = true;
             Ghost.SetActive(isActive);
-            gameObject.layer = 9;
+            
         }
     }
 
