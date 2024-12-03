@@ -20,9 +20,6 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] float KillCoolDown = 10;
     [SerializeField] public float RemainCoolDown = 0;
 
-   
-
-    [SerializeField] AudioSource audioSource;
 
     [SerializeField] GameObject IdleBody;
     [SerializeField] GameObject Ghost;
@@ -343,6 +340,7 @@ public class PlayerController : MonoBehaviourPun
     {
         bool isGame = VoteScene.Instance == null ? true : false;
 
+        SoundManager.SFXPlay(isGame == true ? SoundManager.Data.Dead : null);
         photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false, isGame);
         photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true, isGame);
         yield return new WaitForSeconds(1f);
@@ -397,7 +395,10 @@ public class PlayerController : MonoBehaviourPun
                 eyeAnim.SetBool("Running", true);
                 bodyAnim.SetBool("Running", true);
                 feetAnim.SetBool("Running", true);
-                audioSource.Play();
+                
+                // 발소리 사운드 시작
+                if(_playStepSound == null)
+                   _playStepSound= StartCoroutine(PlayStepSound());
 
             }
         }
@@ -409,11 +410,32 @@ public class PlayerController : MonoBehaviourPun
                 eyeAnim.SetBool("Running", false);
                 bodyAnim.SetBool("Running", false);
                 feetAnim.SetBool("Running", false);
-                audioSource.Stop();
+                
+                // 발소리 사운드 종료
+                if(_playStepSound != null)
+                {
+                    StopCoroutine(_playStepSound);
+                    _playStepSound = null;
+                }
             }
         }
         privPos = transform.position;
     }
+
+    Coroutine _playStepSound;
+    /// <summary>
+    /// 발소리 루프 코루틴
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PlayStepSound()
+    {
+        while (true) 
+        {
+            SoundManager.SFXPlay(SoundManager.Data.GooseStep);
+            yield return SoundManager.Data.GooseStep.length .GetDelay();
+        }
+    }
+
 
     [PunRPC]
     private void RpcChildActive(string name, bool isActive, bool isGame)

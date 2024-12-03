@@ -91,7 +91,6 @@ public class EmergencyCall : BaseUIPun
     private void DeleteCorpse()
     {
         GameObject[] Corpse = GameObject.FindGameObjectsWithTag("Dead");
-        Debug.Log(Corpse.Length);
         for (int i = 0; i < Corpse.Length; i++)
         {
             PhotonView targetView = Corpse[i].GetComponent<PhotonView>();

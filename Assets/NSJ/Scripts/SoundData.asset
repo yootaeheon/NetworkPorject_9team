@@ -17,7 +17,8 @@ MonoBehaviour:
     ButtonOff: {fileID: 8300000, guid: c9b59142bdeacbd49aaa473be69542aa, type: 3}
     Report: {fileID: 8300000, guid: 45d226fec6308484c890c9c6cbc2e72e, type: 3}
     EmergencyCall: {fileID: 8300000, guid: fe2fb07b167138846824b8871d92efdb, type: 3}
-    Dead: {fileID: 0}
+    Dead: {fileID: 8300000, guid: db2a85d4c0af7fd4dbd0d3d65133a477, type: 3}
     DuckIntro: {fileID: 8300000, guid: 7235e312fc0fe814395bd60127d5a4b7, type: 3}
     GooseIntro: {fileID: 8300000, guid: baa627f034f8cb745815ae11be8aef3e, type: 3}
     Vote: {fileID: 8300000, guid: 5a616944de24f6042bf1f147b30bcb2f, type: 3}
+    GooseStep: {fileID: 8300000, guid: c6e28f9da66005c438053ea86d06f50f, type: 3}
