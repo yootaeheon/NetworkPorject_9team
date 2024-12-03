@@ -125,7 +125,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 9600
-  audioSource: {fileID: 3949325273916533569}
+  KillCoolDown: 10
+  RemainCoolDown: 0
   IdleBody: {fileID: 2878660863419640593}
   Ghost: {fileID: 2396923184650015772}
   Corpse: {fileID: 7968691545538164818}
@@ -135,7 +136,6 @@ MonoBehaviour:
   eyeAnim: {fileID: 2878660863797681155}
   bodyAnim: {fileID: 2878660863447843462}
   feetAnim: {fileID: 2878660863164772043}
-  myNickPanel: {fileID: 0}
   threshold: 0.01
   isGhost: 0
 --- !u!61 &4562735353716171432

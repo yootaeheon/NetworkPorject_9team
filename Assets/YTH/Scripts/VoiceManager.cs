@@ -12,13 +12,13 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Recorder _recorder;
 
-    private AudioSource _audioSource;
+   
 
     private void Start()
     {
-        _audioSource = GetComponentInChildren<AudioSource>();
+       
 
-        StartCoroutine(SetSpeaker());
+       
         StartCoroutine(SetTargetPlayerRoutine());
     }
 
@@ -31,20 +31,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         // }
     }
 
-    IEnumerator SetSpeaker()
-    {
-        yield return null;
-        // VoteScene 전환 시 스피커 SpecialBlend 0(2D)으로 설정 
-        if (VoteScene.Instance != null)
-        {
-            _audioSource.spatialBlend = 0;
-        }
-        // GameScene 전환 시 스피커 SpecialBlend 1(3D)으로 설정 
-        else
-        {
-            _audioSource.spatialBlend = 1;
-        }
-    }
+  
 
     IEnumerator SetTargetPlayerRoutine()
     {
