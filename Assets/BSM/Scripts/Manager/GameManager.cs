@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviourPun
     private IEnumerator TaskTextCoroutine()
     {
         float _elapsedTime = 0f;
-        float _limitTime = 10f;
+        float _limitTime = 60f;
         CountDown = _limitTime;
 
         while (_elapsedTime < _limitTime)
@@ -215,8 +215,14 @@ public class GameManager : MonoBehaviourPun
             case SabotageType.BlackOut:
                 SabotageBreaker = false;
                 _globalTaskName = "전등 고치기";
-                _light2D.pointLightInnerRadius = 2.5f;
-                _light2D.pointLightOuterRadius = 3f;
+                 
+                PlayerType playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber()); 
+
+                if (playerType.Equals(PlayerType.Goose))
+                {
+                    _light2D.pointLightInnerRadius = 2.5f;
+                    _light2D.pointLightOuterRadius = 3f;
+                } 
                 break;
 
             case SabotageType.OxygenBlock:
