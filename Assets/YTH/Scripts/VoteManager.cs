@@ -99,7 +99,7 @@ public class VoteManager : MonoBehaviourPunCallbacks
                 top2 = _voteCounts[i];
                 Debug.Log("동점표로 없던 일~");
                 isKick = false;
-                break;
+                continue;
             }
         }
         Debug.Log($"{_voteData.SkipCount}표 기권!");
