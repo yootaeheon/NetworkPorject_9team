@@ -432,7 +432,8 @@ public class PlayerController : MonoBehaviourPun
         while (true) 
         {
             SoundManager.SFXPlay(SoundManager.Data.GooseStep);
-            yield return SoundManager.Data.GooseStep.length .GetDelay();
+            //yield return SoundManager.Data.GooseStep.length .GetDelay();
+            yield return 0.748f.GetDelay();
         }
     }
 
