@@ -4,6 +4,7 @@ using System.Collections;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class SetPlayerInfo : MonoBehaviour
 {
@@ -13,9 +14,11 @@ public class SetPlayerInfo : MonoBehaviour
     private PlayerType _playerType;
     private Coroutine _setCo;
 
+    private Light2D _light2D;
     private void Start()
     {
         _setCo = StartCoroutine(SetPlayerCoroutine());
+        _light2D = Camera.main.transform.GetChild(0).GetComponent<Light2D>();
     }
 
     private void Update()
