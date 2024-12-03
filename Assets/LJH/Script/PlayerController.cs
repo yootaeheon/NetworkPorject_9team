@@ -102,8 +102,9 @@ public class PlayerController : MonoBehaviourPun
     {
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
+        MoveCheck();
 
-        if(LobbyScene.Instance == null) // 로비씬이 아닐때 (게임중일때)
+        if (LobbyScene.Instance == null) // 로비씬이 아닐때 (게임중일때)
         {
             if (GameLoadingScene.IsOnGame == false) // 게임진행값이 false 가 아니라면 중지
                 return;
@@ -111,8 +112,7 @@ public class PlayerController : MonoBehaviourPun
         if (VoteScene.Instance != null) // 투표씬에서 움직임 금지
             return;
 
-        Move();
-        MoveCheck();
+        Move();       
         FindNearObject();
        
     }
