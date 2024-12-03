@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 7407736591267279870}
   - component: {fileID: -6287053667063853016}
   - component: {fileID: 8277027104668373415}
+  - component: {fileID: -249141432288723030}
   m_Layer: 7
   m_Name: LJH_Player
   m_TagString: Player
@@ -320,8 +321,8 @@ MonoBehaviour:
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   interestGroup: 0
-  useTargetPlayers: 0
-  targetPlayers: 
+  useTargetPlayers: 1
+  targetPlayers: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c000000
   debugEchoMode: 0
   reliableMode: 0
   encrypt: 0
@@ -360,6 +361,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InVent: 0
+--- !u!114 &-249141432288723030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2878660863728613669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fcd1ccf6117c1847a2e308919899fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _recorder: {fileID: -6287053667063853016}
 --- !u!1001 &2122999579499882890
 PrefabInstance:
   m_ObjectHideFlags: 0

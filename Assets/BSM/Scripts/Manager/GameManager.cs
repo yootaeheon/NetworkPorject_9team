@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviourPun
     [Header("글로벌 미션 Task Text")]
     [SerializeField] private TextMeshProUGUI _globalTaskText;
 
+    public PlayerType playerType;
     private Light2D _light2D;
     private Coroutine _globalTaskCo;
 
@@ -215,14 +217,19 @@ public class GameManager : MonoBehaviourPun
             case SabotageType.BlackOut:
                 SabotageBreaker = false;
                 _globalTaskName = "전등 고치기";
-
-                PlayerType playerType = PlayerDataContainer.Instance.GetPlayerJob(PhotonNetwork.LocalPlayer.GetPlayerNumber());
+                Debug.Log("전등 꺼짐");
 
                 if (playerType.Equals(PlayerType.Goose))
                 {
+                    Debug.Log($"타입 일치 {playerType}");
                     _light2D.pointLightInnerRadius = 2.5f;
                     _light2D.pointLightOuterRadius = 3f;
                 }
+                else
+                {
+                    Debug.Log($"타입 다름:{playerType}");    
+                }
+
                 break;
 
             case SabotageType.OxygenBlock:
