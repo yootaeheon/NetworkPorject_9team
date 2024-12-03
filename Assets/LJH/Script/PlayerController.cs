@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine.Rendering.Universal;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.SceneManagement;
+using UnityEditor.U2D.Path;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -316,10 +317,12 @@ public class PlayerController : MonoBehaviourPun
     }
     IEnumerator switchGhost()
     {
-        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false);
-        photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
+        bool isGame = VoteScene.Instance == null ? true : false;
+
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false, isGame);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true, isGame);
         yield return new WaitForSeconds(1f);
-        photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true, isGame);
         gameObject.layer = 9;    // ghost 레이어로 바꾸기 
         PlayerDataContainer.Instance.UpdatePlayerGhostList(PlayerNumber);
     }
@@ -389,7 +392,7 @@ public class PlayerController : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RpcChildActive(string name, bool isActive)
+    private void RpcChildActive(string name, bool isActive, bool isGame)
     {
 
         if (name == "GooseIdel")
@@ -398,7 +401,7 @@ public class PlayerController : MonoBehaviourPun
         }
         else if (name == "Goosecorpse")
         {
-            Corpse.SetActive(isActive);
+            Corpse.SetActive(isGame? true : false);
             Corpse.transform.SetParent(null);
         }
         else if (name == "GoosePolter")
