@@ -39327,7 +39327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisconnectAfterKeepAlive: 0
   KeepAliveInBackground: 60000
-  ApplyDontDestroyOnLoad: 1
+  ApplyDontDestroyOnLoad: 0
   runInBackground: 1
   statsResetInterval: 1000
   speakerPrefab: {fileID: 5092267446494578992, guid: e101e4a15dac1f44cb7221cae376e7bc, type: 3}
@@ -39424,11 +39424,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fcd1ccf6117c1847a2e308919899fec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: {fileID: 0}
-  _voiceClient: {fileID: 2026549446}
-  _recorder: {fileID: 2026549447}
   _speakingSigns: []
   _voiceViews: []
+  _recorder: {fileID: 2026549447}
 --- !u!1 &2028256323
 GameObject:
   m_ObjectHideFlags: 0
