@@ -218,8 +218,6 @@ public class PlayerDataContainer : MonoBehaviourPun
 
         Color color = new Color(Rcolor, Gcolor, Bcolor, 255f);
 
-        Debug.Log("¿£ÅÍ µð¹ö±ë");
-        Debug.Log(playerDataArray[index]);
         if (playerDataArray[index] == null)
         {
             playerDataArray[index] = new PlayerData(playerName, type, color, isGhost);
