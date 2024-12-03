@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviourPun
         SettingColor(randomColor.r, randomColor.g, randomColor.b);
 
         StartCoroutine(SetPlayerDataRoutine());
+        SetMyNickPanel();
        
     }
     /// <summary>
@@ -126,9 +127,9 @@ public class PlayerController : MonoBehaviourPun
 
         for (int i = 0; i < panels.Length; i++) 
         {
-            if (photonView) 
+            if (panels[i].GetPhotonView().IsMine == true) 
             {
-
+                myNickPanel = panels[i];
             }
         }
 
@@ -411,6 +412,7 @@ public class PlayerController : MonoBehaviourPun
         if (name == "GooseIdel")
         {
             IdleBody.SetActive(isActive);
+            myNickPanel.SetActive(isActive);
         }
         else if (name == "Goosecorpse")
         {
