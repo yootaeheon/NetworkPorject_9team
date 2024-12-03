@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerType: 0
+  PlayerNumber: -1
   moveSpeed: 7
   Detectradius: 1.5
   layerMask:
@@ -824,6 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9002403d715af384daa9ddb70d9df449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CorpseColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &7968691545538164819 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2368936015205160107, guid: 35e7b7ef8d6b9c545ac63dd183ca8a09, type: 3}

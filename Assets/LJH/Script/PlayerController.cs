@@ -7,11 +7,13 @@ using Unity.VisualScripting;
 using UnityEngine.Rendering.Universal;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.SceneManagement;
+using UnityEditor.U2D.Path;
 
 public class PlayerController : MonoBehaviourPun
 {
     // 플레이어 타입 거위(시민) 오리(임포스터) 
     [SerializeField] public PlayerType playerType;
+    [HideInInspector] public int PlayerNumber = -1;
     [SerializeField] float moveSpeed;  // 이동속도 
     [SerializeField] float Detectradius;  // 탐색 범위
     [SerializeField] LayerMask layerMask;
@@ -32,11 +34,9 @@ public class PlayerController : MonoBehaviourPun
 
     [SerializeField] Animator eyeAnim;
     [SerializeField] Animator bodyAnim;
-    [SerializeField] Animator feetAnim;
+    [SerializeField] Animator feetAnim; 
 
    
-
-    private int _playerNumber;
     private Vector3 privPos;
     private Vector3 privDir;
     [SerializeField] float threshold = 0.001f;
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviourPun
     [PunRPC]
     private void RPCSetPlayerNumber(int playerNumber)
     {
-        _playerNumber = playerNumber;
+        PlayerNumber = playerNumber;
     }
 
     private void Update()
@@ -228,12 +228,12 @@ public class PlayerController : MonoBehaviourPun
 
                     // 투표 열리는 기능 추가 해야함 
 
-                    nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제, 씬 재진입이면 필요없을지도 
-
+                    nearCol.gameObject.GetComponent<ReportingObject>().Reporting(); //신고시 시체 삭제, 씬 재진입이면 필요없을지도
+                    int corpseID = nearCol.gameObject.GetComponent<PhotonView>().ViewID;
 
                     //GameFlowManager.Instance.ReportingOn();
                     // 신고 On, UI 띄우기 및 씬 전환
-                    photonView.RPC(nameof(RPCReport),RpcTarget.All);
+                    photonView.RPC(nameof(RPCReport),RpcTarget.All,corpseID);
 
                 }
             }
@@ -292,15 +292,18 @@ public class PlayerController : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RPCReport()
+    private void RPCReport(int corpseID)
     {
-        StartCoroutine(ReportRoutine());
+        StartCoroutine(ReportRoutine(corpseID));
     }
 
-    IEnumerator ReportRoutine()
+    IEnumerator ReportRoutine(int corpseID)
     {
-        Color reporterColor = PlayerDataContainer.Instance.GetPlayerData(_playerNumber).PlayerColor;
-        GameUI.ShowReport(reporterColor, Random.ColorHSV());
+        Color reporterColor = PlayerDataContainer.Instance.GetPlayerData(PlayerNumber).PlayerColor;
+        PhotonView corpseView  = PhotonView.Find(corpseID);
+        ReportingObject reportingObject = corpseView.GetComponent<ReportingObject>();
+
+        GameUI.ShowReport(reporterColor, reportingObject.CorpseColor);
         yield return GameUI.Report.Duration.GetDelay();
         if (PhotonNetwork.IsMasterClient == true)
         {
@@ -314,12 +317,14 @@ public class PlayerController : MonoBehaviourPun
     }
     IEnumerator switchGhost()
     {
-        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false);
-        photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true);
+        bool isGame = VoteScene.Instance == null ? true : false;
+
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GooseIdel", false, isGame);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "Goosecorpse", true, isGame);
         yield return new WaitForSeconds(1f);
-        photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true);
+        photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true, isGame);
         gameObject.layer = 9;    // ghost 레이어로 바꾸기 
-        PlayerDataContainer.Instance.UpdatePlayerGhostList(_playerNumber);
+        PlayerDataContainer.Instance.UpdatePlayerGhostList(PlayerNumber);
     }
 
 
@@ -387,7 +392,7 @@ public class PlayerController : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RpcChildActive(string name, bool isActive)
+    private void RpcChildActive(string name, bool isActive, bool isGame)
     {
 
         if (name == "GooseIdel")
@@ -396,7 +401,7 @@ public class PlayerController : MonoBehaviourPun
         }
         else if (name == "Goosecorpse")
         {
-            Corpse.SetActive(isActive);
+            Corpse.SetActive(isGame? true : false);
             Corpse.transform.SetParent(null);
         }
         else if (name == "GoosePolter")

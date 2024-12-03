@@ -1284,7 +1284,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 24d8195775aca9a46bc72a7189b17468, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c03d85010f540a54a9befbc2da400e70, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8773,13 +8773,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 431158270}
+  - component: {fileID: 431158271}
   m_Layer: 5
   m_Name: SoundBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &431158270
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8803,6 +8804,18 @@ RectTransform:
   m_AnchoredPosition: {x: 393.96, y: -197.63997}
   m_SizeDelta: {x: 526.08, y: 348.21}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &431158271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431158269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb42296a2373eaf448dfc805e035c823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &432040039
 GameObject:
   m_ObjectHideFlags: 0
@@ -12267,7 +12280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &591937348
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19772,7 +19785,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 183286839}
   m_HandleRect: {fileID: 183286838}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 1.0000001
   m_Size: 0.5609651
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -19846,7 +19859,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d9529278f363c5c4d99f0d065ba6fa0d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6f1cd24fb57b15842923e80f34600dfc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -21679,7 +21692,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bd33f7f242b902d41909db21e61d8605, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7048536a888eee644804f9bdb54acab6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -30171,7 +30184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1519436711
 RectTransform:
   m_ObjectHideFlags: 0
@@ -39327,7 +39340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisconnectAfterKeepAlive: 0
   KeepAliveInBackground: 60000
-  ApplyDontDestroyOnLoad: 1
+  ApplyDontDestroyOnLoad: 0
   runInBackground: 1
   statsResetInterval: 1000
   speakerPrefab: {fileID: 5092267446494578992, guid: e101e4a15dac1f44cb7221cae376e7bc, type: 3}

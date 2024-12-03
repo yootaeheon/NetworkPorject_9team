@@ -4828,7 +4828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skipCount: 0
   _reportTimeCount: 10
-  _voteTimeCount: 60
+  _voteTimeCount: 10
 --- !u!114 &825037835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6389,7 +6389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisconnectAfterKeepAlive: 0
   KeepAliveInBackground: 60000
-  ApplyDontDestroyOnLoad: 1
+  ApplyDontDestroyOnLoad: 0
   runInBackground: 1
   statsResetInterval: 1000
   speakerPrefab: {fileID: 5092267446494578992, guid: e101e4a15dac1f44cb7221cae376e7bc, type: 3}

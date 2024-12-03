@@ -148,7 +148,6 @@ public class VoteManager : MonoBehaviourPunCallbacks
         //}
     }
 
-
     private void InitSingleTon()
     {
         if(Instance  == null)
