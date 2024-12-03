@@ -48,5 +48,6 @@ public class GameOverUI : BaseUI
     private void SubscribesEvent()
     {
         GetUI<Button>("BackButton").onClick.AddListener(() => { GameLoadingScene.BackLobby(); });
+        GetUI<Button>("BackButton").onClick.AddListener(() => { SoundManager.SFXPlay(SoundManager.Data.ButtonClick); });
     }
 }

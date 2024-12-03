@@ -38,6 +38,8 @@ namespace GameUIs
         /// </summary>
         public void SetUI(PlayerType type, Color color)
         {
+            SoundManager.SFXPlay(type == PlayerType.Goose ? SoundManager.Data.GooseIntro : SoundManager.Data.DuckIntro);
+
             _gooseUI.SetActive(type == PlayerType.Goose);
             _duckUI.SetActive(type == PlayerType.Duck);
 

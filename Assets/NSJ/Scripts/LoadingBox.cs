@@ -55,8 +55,9 @@ public class LoadingBox : BaseUI
     }
     private void SubscribesEvents()
     {
-        GetUI<Button>("LoadingCancelButton").onClick.AddListener(StopLoading);
+        GetUI<Button>("LoadingCancelButton").onClick.AddListener(StopLoading);      
         GetUI<Button>("LoadingCancelButton").onClick.AddListener(ClickStopButton);
+        GetUI<Button>("LoadingCancelButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
 
     /// <summary>

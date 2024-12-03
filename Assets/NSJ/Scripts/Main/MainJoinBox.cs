@@ -117,10 +117,19 @@ public class MainJoinBox : BaseUI
     private void SubscribesEvent()
     {
         GetUI<Button>("JoinBackButton").onClick.AddListener(() => MainPanel.ChangeBox(MainPanel.Box.Main));
+        GetUI<Button>("JoinBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("JoinCreateRoomButton").onClick.AddListener(() => MainPanel.ChangeBox(MainPanel.Box.Create));
+        GetUI<Button>("JoinCreateRoomButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         _joinRoomInput.onValueChanged.AddListener(ChangeRoomCodeToUpper);
         GetUI<Button>("JoinInvisibleButton").onClick.AddListener(ChangeRoomCodeInvisible);
+        GetUI<Button>("JoinInvisibleButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("JoinLobbyButton").onClick.AddListener(JoinLobby);
+        GetUI<Button>("JoinLobbyButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("JoinRoomButton").onClick.AddListener(JoinRoomCode);
+        GetUI<Button>("JoinRoomButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
 }

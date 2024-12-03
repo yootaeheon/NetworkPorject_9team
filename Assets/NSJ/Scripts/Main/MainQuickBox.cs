@@ -77,7 +77,12 @@ public class MainQuickBox : BaseUI
     {
         LobbyScene.Instance.OnJoinRandomFailedEvent += CreateRandomRoom;
         GetUI<Button>("QuickColorButton").onClick.AddListener(() => { _quickColorBox.SetActive(!_quickColorBox.activeSelf); });
+        GetUI<Button>("QuickColorButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("QuickStartButton").onClick.AddListener(StartRandomMatch);
+        GetUI<Button>("QuickStartButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+
         GetUI<Button>("QuickBackButton").onClick.AddListener(() => MainPanel.ChangeBox(MainPanel.Box.Main));
+        GetUI<Button>("QuickBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
     }
 }
