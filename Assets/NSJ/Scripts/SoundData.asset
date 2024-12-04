@@ -23,3 +23,4 @@ MonoBehaviour:
     GooseIntro: {fileID: 8300000, guid: baa627f034f8cb745815ae11be8aef3e, type: 3}
     Vote: {fileID: 8300000, guid: 5a616944de24f6042bf1f147b30bcb2f, type: 3}
     GooseStep: {fileID: 8300000, guid: ae0680f1c7e7eb941b6d6a0a1ce272b9, type: 3}
+    LightOff: {fileID: 8300000, guid: b546b803d5a58b94aa12273ec8f1b67c, type: 3}
