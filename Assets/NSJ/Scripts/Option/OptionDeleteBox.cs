@@ -64,6 +64,7 @@ public class OptionDeleteBox : BaseUI
     private void DeleteUser()
     {
         FirebaseUser user = BackendManager.Auth.CurrentUser;
+        string userID = user.UserId;
         // 계정 삭제 시도
         user.DeleteAsync()
             .ContinueWithOnMainThread(task =>
@@ -73,6 +74,9 @@ public class OptionDeleteBox : BaseUI
                     ChangeBox(Box.Error); 
                     return;
                 }
+
+                // 데이터 삭제
+                userID.GetUserDataRef().RemoveValueAsync();
 
                 ChangeBox(Box.Success);
             });
