@@ -3,6 +3,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
@@ -61,7 +62,7 @@ public class GameManager : MonoBehaviourPun
     [Header("미션 게이지 슬라이더")]
     [SerializeField] public Slider _missionScoreSlider;
 
-    private int _totalMissionScore = 30;
+    [SerializeField] private int _totalMissionScore = 30;
     private int _clearMissionScore = 0;
 
     //글로벌 미션 팝업창 종료 조건 변수
@@ -129,7 +130,12 @@ public class GameManager : MonoBehaviourPun
     }
 
     private void Start()
-    {
+    { 
+        if(PhotonNetwork.InRoom == true)
+        {
+            _totalMissionScore = PhotonNetwork.CurrentRoom.PlayerCount * 3;
+        }
+
         _light2D = Camera.main.transform.GetChild(0).GetComponent<Light2D>();
     }
 
