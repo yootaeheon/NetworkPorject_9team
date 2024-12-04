@@ -8,6 +8,7 @@ using UnityEngine.Rendering.Universal;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.SceneManagement;
 using UnityEditor.U2D.Path;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -20,7 +21,9 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] float Detectradius;  // 탐색 범위
     [SerializeField] LayerMask layerMask;
     [SerializeField] float KillCoolDown = 10;
-    [SerializeField] public float RemainCoolDown = 0;
+    [SerializeField] public float _remainCoolDown = 0;
+    public float RemainCoolDown { get { return _remainCoolDown; } set { _remainCoolDown = value; OnChangeRemainCoolDownEvent?.Invoke(_remainCoolDown); } }
+    public event UnityAction<float> OnChangeRemainCoolDownEvent;
 
 
     [SerializeField] GameObject IdleBody;

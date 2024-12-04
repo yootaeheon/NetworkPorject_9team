@@ -15,6 +15,9 @@ public class GameLoadingScene : MonoBehaviourPun
 
     private GameObject player;
     public static GameObject MyPlayer { get { return Instance.player; } }
+
+    private PlayerController _myController;
+    public static PlayerController MyPlayerController { get { return Instance._myController; } }
     private Color color;
 
     private bool isOnGame = false;
@@ -190,6 +193,7 @@ public class GameLoadingScene : MonoBehaviourPun
     private void spawnPlayer(Vector3 Pos)
     {
         player = PhotonNetwork.Instantiate("LJH_Player", Pos, Quaternion.identity);
+        _myController = player.GetComponent<PlayerController>();
         color = PlayerDataContainer.Instance.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).PlayerColor;
         GameObject panel = PhotonNetwork.Instantiate("NamePanel", Pos, Quaternion.identity);
         panel.GetComponent<UiFollowingPlayer>().setTarget(player);
