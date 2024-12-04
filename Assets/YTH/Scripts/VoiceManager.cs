@@ -9,22 +9,16 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     PlayerDataContainer PlayerDataContainer => PlayerDataContainer.Instance;
 
+    [SerializeField] TargetPlayersController _targetPlayersController;
+
     [SerializeField] Recorder _recorder;
 
-    private bool _initTarget = false;
-
     [SerializeField] PlayerController _playerController;
-
-    private int[] _aliveTargetPlayers;
-
-    private int[] _deadTargetPlayers;
 
 
     private void Start()
     {
-        _aliveTargetPlayers = new int[12];
-        _deadTargetPlayers = new int[12];
-
+        _targetPlayersController = FindAnyObjectByType<TargetPlayersController>();
         _recorder = FindAnyObjectByType<Recorder>();
 
         SetAliveTargetPlayers();
@@ -43,42 +37,57 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     private void SetAliveTargetPlayers()
     {
 
-        for (int i = 0; i < _aliveTargetPlayers.Length; i++)
+        for (int i = 0; i < _targetPlayersController._aliveTargetPlayers.Length; i++)
         {
             if (i != PhotonNetwork.LocalPlayer.GetPlayerNumber())
             {
-                _aliveTargetPlayers[i] = i + 1;
+                _targetPlayersController._aliveTargetPlayers[i] = i + 1;
+            }
+            else
+            {
+                _targetPlayersController._aliveTargetPlayers[i] = 0;
             }
         }
-        _recorder.TargetPlayers = _aliveTargetPlayers;
+        _recorder.TargetPlayers = _targetPlayersController._aliveTargetPlayers;
     }
 
     private void SetDeadTargetPlayers()
     {
-        for (int i = 0; i < _deadTargetPlayers.Length; i++)
+        for (int i = 0; i < _targetPlayersController._deadTargetPlayers.Length; i++)
         {
-            _deadTargetPlayers[i] = 0;
+            _targetPlayersController._deadTargetPlayers[i] = 0;
         }
     }
 
-    public void MeDead()
+    public void MeDead(int playerNumber)
     {
-        photonView.RPC(nameof(MeDeadRpc), RpcTarget.All, PhotonNetwork.LocalPlayer.GetPlayerNumber());
+        photonView.RPC(nameof(MeDeadRpc), RpcTarget.All, playerNumber);
+        Debug.Log($"겟플레이어넘버 = {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
+        Debug.Log($"액터넘버 = {PhotonNetwork.LocalPlayer.ActorNumber}");
     }
 
     [PunRPC]
     public void MeDeadRpc(int index)
     {
-        _aliveTargetPlayers[index] = 0;
+       
+
+        _targetPlayersController._aliveTargetPlayers[index] = 0;
+        Debug.Log($"인덱스 = {index}");
 
         if (index != PhotonNetwork.LocalPlayer.GetPlayerNumber())
         {
-            _deadTargetPlayers[index] = index + 1;
+            _targetPlayersController._deadTargetPlayers[index] = index + 1;
         }
 
-        if (_playerController.isGhost == true)
+        if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost == true)
         {
-            _recorder.TargetPlayers = _deadTargetPlayers;
+            Debug.Log("이즈 고스트 true");
+            _recorder.TargetPlayers = _targetPlayersController._deadTargetPlayers;
+        }
+        else
+        {
+            Debug.Log("이즈 고스트 falsse");
+            _recorder.TargetPlayers = _targetPlayersController._aliveTargetPlayers;
         }
     }
 }

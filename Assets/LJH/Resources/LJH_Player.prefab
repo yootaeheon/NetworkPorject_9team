@@ -330,6 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fcd1ccf6117c1847a2e308919899fec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _targetPlayersController: {fileID: 366217060164669963, guid: 9b2b522f6819f3847ab7a8e3b637b36f, type: 3}
   _recorder: {fileID: 0}
   _playerController: {fileID: 2878660863728613726}
 --- !u!1001 &2122999579499882890

@@ -380,6 +380,7 @@ public class PlayerController : MonoBehaviourPun
         photonView.RPC("RpcChildActive", RpcTarget.All, "GoosePolter", true, isGame);
         gameObject.layer = 9;    // ghost 레이어로 바꾸기 
         PlayerDataContainer.Instance.UpdatePlayerGhostList(PlayerNumber);
+        voiceManager.MeDead(PlayerNumber);
     }
 
 
@@ -495,7 +496,7 @@ public class PlayerController : MonoBehaviourPun
         else if (name == "GoosePolter")
         {
             isGhost = true;
-            voiceManager.MeDead();
+          
             Ghost.SetActive(isActive);
             
         }

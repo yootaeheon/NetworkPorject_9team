@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9056012220508649495
+--- !u!1 &6288668966610224320
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9056012220508649496}
-  - component: {fileID: 9056012220508649497}
-  - component: {fileID: 9056012220508649494}
-  - component: {fileID: 9056012220508649499}
+  - component: {fileID: 6288668966610224335}
+  - component: {fileID: 6288668966610224334}
+  - component: {fileID: 6288668966610224321}
+  - component: {fileID: 366217060164669963}
   m_Layer: 0
   m_Name: VoiceManager
   m_TagString: Untagged
@@ -19,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9056012220508649496
+--- !u!4 &6288668966610224335
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056012220508649495}
+  m_GameObject: {fileID: 6288668966610224320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 891.17285, y: 292.68454, z: -8.8325205}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,13 +34,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9056012220508649497
+--- !u!114 &6288668966610224334
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056012220508649495}
+  m_GameObject: {fileID: 6288668966610224320}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81d9debcbaf99472bb70ffc2f99cb23f, type: 3}
@@ -52,7 +52,7 @@ MonoBehaviour:
   runInBackground: 1
   statsResetInterval: 1000
   speakerPrefab: {fileID: 5092267446494578992, guid: e101e4a15dac1f44cb7221cae376e7bc, type: 3}
-  primaryRecorder: {fileID: 9056012220508649494}
+  primaryRecorder: {fileID: 6288668966610224321}
   usePrimaryRecorder: 0
   cppCompatibilityMode: 0
   Settings:
@@ -75,13 +75,13 @@ MonoBehaviour:
   AutoConnectAndJoin: 1
   usePunAppSettings: 1
   usePunAuthValues: 1
---- !u!114 &9056012220508649494
+--- !u!114 &6288668966610224321
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056012220508649495}
+  m_GameObject: {fileID: 6288668966610224320}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91175dcc15224463780e01a8a98b1b60, type: 3}
@@ -91,8 +91,8 @@ MonoBehaviour:
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   interestGroup: 0
-  useTargetPlayers: 0
-  targetPlayers: 
+  useTargetPlayers: 1
+  targetPlayers: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   debugEchoMode: 0
   reliableMode: 0
   encrypt: 0
@@ -118,18 +118,17 @@ MonoBehaviour:
   useOnAudioFilterRead: 0
   useMicrophoneTypeFallback: 1
   recordWhenJoined: 1
---- !u!114 &9056012220508649499
+--- !u!114 &366217060164669963
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056012220508649495}
+  m_GameObject: {fileID: 6288668966610224320}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fcd1ccf6117c1847a2e308919899fec, type: 3}
+  m_Script: {fileID: 11500000, guid: a13f2176375c66d4cbd168c052e351f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speakingSigns: []
-  _voiceViews: []
-  _recorder: {fileID: 0}
+  _aliveTargetPlayers: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  _deadTargetPlayers: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
