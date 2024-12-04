@@ -577,7 +577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 998600890285384945, guid: d6bf0eb681dddde49b9ea1e7590623ef, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5367447220617869897, guid: d6bf0eb681dddde49b9ea1e7590623ef, type: 3}
       propertyPath: m_Name
@@ -652,46 +652,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2816329665823397700}
     m_Modifications:
-    - target: {fileID: 4871089001625008361, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089001821689300, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_Name
-      value: EnterVentButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089001895160592, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -586
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089001963600434, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -481
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089001963600434, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -816
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089002500896512, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -352
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089002500896513, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_Name
-      value: EnterVentIcon
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089003476816998, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -352.00003
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089003476816999, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_Name
-      value: ExitVentIcon
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871089003572872487, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
-      propertyPath: m_Name
-      value: ExitVentButton
-      objectReference: {fileID: 0}
     - target: {fileID: 7140586164803143384, guid: c0721211ec0e3924192eaa4d9240cff5, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -831,7 +791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8219676357649440720, guid: 8e8926b3c6089af40905fe451c1f2d6b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8219676357649440723, guid: 8e8926b3c6089af40905fe451c1f2d6b, type: 3}
       propertyPath: m_SortingOrder
