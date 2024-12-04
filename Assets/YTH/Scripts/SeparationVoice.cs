@@ -31,7 +31,6 @@ public class SeparationVoice : MonoBehaviourPun
             if (PlayerDataContainer == null || LobbyScene.Instance != null || _speaker == null)
             {
                 yield return null;
-                Debug.Log("일드 리턴 널");
             }
             else
             {
@@ -40,7 +39,6 @@ public class SeparationVoice : MonoBehaviourPun
 
                 yield return 0.5f.GetDelay();
                 photonView.RPC(nameof(SeparateVoiceRpc), RpcTarget.All, PhotonNetwork.LocalPlayer.GetPlayerNumber());
-                Debug.Log("알피시 호출");
             }
         }
 
