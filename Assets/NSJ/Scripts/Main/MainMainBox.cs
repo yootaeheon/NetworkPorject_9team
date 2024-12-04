@@ -59,7 +59,7 @@ public class MainMainBox :BaseUI
     private void SubscribesEvent()
     {
         GetUI<Button>("MainLogOutButton").onClick.AddListener(LogOut);
-        GetUI<Button>("MainLogOutButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+        GetUI<Button>("MainLogOutButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonOff));
 
         GetUI<Button>("MainQuickMatchButton").onClick.AddListener(() => MainPanel.ChangeBox(MainPanel.Box.Quick));
         GetUI<Button>("MainQuickMatchButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
