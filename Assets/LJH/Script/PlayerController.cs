@@ -42,12 +42,17 @@ public class PlayerController : MonoBehaviourPun
     private Color randomColor;
     bool isOnMove = false;
     public bool isGhost = false;
-
+    private PlayerVentUsable _playerVentUsable;
 
     Coroutine coroutine;
+    private void Awake()
+    {
+        _playerVentUsable = GetComponent<PlayerVentUsable>();
+    }
     private void Start()
     {
-        
+        name = $"{photonView.Owner.NickName}_Player";
+
         // 랜덤으로 역할 지정하는 기능이 필요 (대기실 입장에는 필요없고 게임 입장시 필요)
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
@@ -102,7 +107,11 @@ public class PlayerController : MonoBehaviourPun
     {
         if (photonView.IsMine == false)  // 소유권자 구분
             return;
+
         MoveCheck();
+
+        if (_playerVentUsable.InVent == true)
+            return;
 
         if (LobbyScene.Instance == null) // 로비씬이 아닐때 (게임중일때)
         {

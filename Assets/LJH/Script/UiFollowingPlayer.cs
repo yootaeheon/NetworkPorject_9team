@@ -13,11 +13,13 @@ public class UiFollowingPlayer : MonoBehaviourPun
     [SerializeField] TMP_Text nameTxt;
     // [SerializeField] GameObject MasterIcon;
     //[SerializeField] GameObject ReadyIcon;
-    
 
+    private string nickName;
     private void Start()
-    {   
-        name = PhotonNetwork.LocalPlayer.NickName; // ¹Ù²ã¾ß ÇÒµí? 
+    {
+        name = $"{photonView.Owner.NickName}_NamePanel";
+
+        nickName = PhotonNetwork.LocalPlayer.NickName; // ¹Ù²ã¾ß ÇÒµí? 
 
         if (PhotonNetwork.IsMasterClient == true) 
         {
@@ -26,7 +28,7 @@ public class UiFollowingPlayer : MonoBehaviourPun
         }
         if (photonView.IsMine == true)
         {
-            photonView.RPC("RpcSetNicknamePanel", RpcTarget.AllBuffered, name);
+            photonView.RPC("RpcSetNicknamePanel", RpcTarget.AllBuffered, nickName);
             gameObject.AddComponent<TestNamePanelHide>();
             StartCoroutine(DelayNametoRed());
             
