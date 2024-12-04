@@ -18,9 +18,8 @@ GameObject:
   - component: {fileID: 3949325273916533569}
   - component: {fileID: 303560568322161268}
   - component: {fileID: 7407736591267279870}
-  - component: {fileID: -6287053667063853016}
   - component: {fileID: 8277027104668373415}
-  - component: {fileID: -249141432288723030}
+  - component: {fileID: 4680655458888512515}
   m_Layer: 7
   m_Name: LJH_Player
   m_TagString: Player
@@ -118,6 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4a930f280a9ddc469a8900c234b7033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  voiceManager: {fileID: 4680655458888512515}
   playerType: 0
   PlayerNumber: -1
   moveSpeed: 7
@@ -305,49 +305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0759072b61a2f37419222cf22cac3e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6287053667063853016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2878660863728613669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91175dcc15224463780e01a8a98b1b60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  voiceDetection: 0
-  voiceDetectionThreshold: 0.01
-  voiceDetectionDelayMs: 500
-  interestGroup: 0
-  useTargetPlayers: 1
-  targetPlayers: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c000000
-  debugEchoMode: 0
-  reliableMode: 0
-  encrypt: 0
-  transmitEnabled: 1
-  samplingRate: 48000
-  frameDuration: 20000
-  bitrate: 30000
-  sourceType: 0
-  microphoneType: 1
-  audioClip: {fileID: 0}
-  loopAudioClip: 1
-  recordingEnabled: 1
-  audioSessionParameters:
-    Category: 4
-    Mode: 1
-    CategoryOptions: 0800000004000000
-  editorAudioSessionPreset: 1
-  androidMicrophoneSettings:
-    EnableAEC: 1
-    EnableAGC: 1
-    EnableNS: 1
-  stopRecordingWhenPaused: 0
-  useOnAudioFilterRead: 0
-  useMicrophoneTypeFallback: 1
-  recordWhenJoined: 1
 --- !u!114 &8277027104668373415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InVent: 0
---- !u!114 &-249141432288723030
+--- !u!114 &4680655458888512515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -373,7 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fcd1ccf6117c1847a2e308919899fec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _recorder: {fileID: -6287053667063853016}
+  _recorder: {fileID: 0}
   _playerController: {fileID: 2878660863728613726}
 --- !u!1001 &2122999579499882890
 PrefabInstance:

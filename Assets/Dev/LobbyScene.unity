@@ -41048,8 +41048,8 @@ MonoBehaviour:
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   interestGroup: 0
-  useTargetPlayers: 0
-  targetPlayers: 000000000000000000000000
+  useTargetPlayers: 1
+  targetPlayers: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   debugEchoMode: 0
   reliableMode: 0
   encrypt: 0

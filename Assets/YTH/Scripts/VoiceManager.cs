@@ -1,6 +1,6 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Voice.Unity;
-using System.Collections;
 using UnityEngine;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
@@ -15,11 +15,20 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] PlayerController _playerController;
 
-    private int[] _targetPlayers;
+    private int[] _aliveTargetPlayers;
+
+    private int[] _deadTargetPlayers;
+
 
     private void Start()
     {
-        StartCoroutine(SetTargetPlayerRoutine());
+        _aliveTargetPlayers = new int[12];
+        _deadTargetPlayers = new int[12];
+
+        _recorder = FindAnyObjectByType<Recorder>();
+
+        SetAliveTargetPlayers();
+        SetDeadTargetPlayers();
     }
 
     public void DisableVoice()
@@ -31,83 +40,48 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         // }
     }
 
-    IEnumerator SetTargetPlayerRoutine()
+    private void SetAliveTargetPlayers()
     {
 
-        while (true)
+        for (int i = 0; i < _aliveTargetPlayers.Length; i++)
         {
-            // 씬 이동 시 useTargetPlayers이 해제됨
-            // bool 변수 수정이 안 되는 듯
-            // if (_recorder.useTargetPlayers == false)
-            // {
-            //     _recorder.useTargetPlayers = true;
-            // }
-
-            if (PlayerDataContainer == null)
+            if (i != PhotonNetwork.LocalPlayer.GetPlayerNumber())
             {
-                yield return null;
+                _aliveTargetPlayers[i] = i + 1;
             }
-            else
-            {
-                while (true)
-                {
-                    yield return 1f.GetDelay();
-                    if (PlayerDataContainer == null)
-                        break;
-                    Debug.Log("데이터 컨테이너 널 X ");
-                    if (_recorder.TargetPlayers == null)
-                        continue;
+        }
+        _recorder.TargetPlayers = _aliveTargetPlayers;
+    }
 
-                    // 액터넘버 == 타겟플레이어 배열에이 있는 인덱스
-                    // 타겟플레이어 배열에 인덱스 번호로 보이스를 보냄
+    private void SetDeadTargetPlayers()
+    {
+        for (int i = 0; i < _deadTargetPlayers.Length; i++)
+        {
+            _deadTargetPlayers[i] = 0;
+        }
+    }
 
-                    // 플레이어데이터를 코루틴으로 계속 받음
-                    // 죽은 사람 있으면 인덱스 번호 삭제
+    public void MeDead()
+    {
+        photonView.RPC(nameof(MeDeadRpc), RpcTarget.All, PhotonNetwork.LocalPlayer.GetPlayerNumber());
+    }
 
-                    // 본인 플레이어 생존 상황
-                    if (_playerController.isGhost == false)
-                    {
-                        // 사망 플레이어 인덱스 삭제
-                        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                        {
-                            if (PlayerDataContainer.GetPlayerData(i).IsGhost == true)
-                            {
-                                // 캐싱한 배열에 넣어줌
-                                _targetPlayers[i] = 0;
-                            }
-                        }
-                        _recorder.TargetPlayers = _targetPlayers;
-                    }
+    [PunRPC]
+    public void MeDeadRpc(int index)
+    {
+        _aliveTargetPlayers[index] = 0;
 
-                    // 본인 플레이어 사망 상황
-                    if (_playerController.isGhost == true)
-                    {
-                        Debug.Log("이즈 고스트 트루!");
-                        // 모든 인덱스 0으로 초기화(1번만 호출) + 사망 플레이어 인덱스 추가
-                        if (_initTarget == false)
-                        {
-                            Debug.Log("이닛 타겟 !");
-                            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                            {
-                                Debug.Log("0으로 초기화하겠음 !");
-                                _targetPlayers[i] = 0;
-                            }
-                            _recorder.TargetPlayers = _targetPlayers;
-                            _initTarget = true;
-                            Debug.Log("0으로 초기화 완료 !");
-                        }
+        if (index != PhotonNetwork.LocalPlayer.GetPlayerNumber())
+        {
+            _deadTargetPlayers[index] = index + 1;
+        }
 
-                        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                        {
-                            if (PlayerDataContainer.GetPlayerData(i).IsGhost == true)
-                            {
-                                _targetPlayers[i] = i + 1;
-                            }
-                        }
-                        _recorder.TargetPlayers = _targetPlayers;
-                    }
-                }
-            }
+        if (_playerController.isGhost == true)
+        {
+            _recorder.TargetPlayers = _deadTargetPlayers;
         }
     }
 }
+
+
+

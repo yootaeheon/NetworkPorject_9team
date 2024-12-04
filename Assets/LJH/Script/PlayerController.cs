@@ -11,6 +11,8 @@ using UnityEditor.U2D.Path;
 
 public class PlayerController : MonoBehaviourPun
 {
+    [SerializeField] VoiceManager voiceManager;
+
     // 플레이어 타입 거위(시민) 오리(임포스터) 
     [SerializeField] public PlayerType playerType;
     [HideInInspector] public int PlayerNumber = -1;
@@ -493,6 +495,7 @@ public class PlayerController : MonoBehaviourPun
         else if (name == "GoosePolter")
         {
             isGhost = true;
+            voiceManager.MeDead();
             Ghost.SetActive(isActive);
             
         }
