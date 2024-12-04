@@ -7,7 +7,6 @@ using Unity.VisualScripting;
 using UnityEngine.Rendering.Universal;
 using Photon.Pun.UtilityScripts;
 using UnityEngine.SceneManagement;
-using UnityEditor.U2D.Path;
 using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviourPun

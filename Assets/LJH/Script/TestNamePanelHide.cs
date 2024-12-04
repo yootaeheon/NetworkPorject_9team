@@ -3,7 +3,6 @@ using Photon.Pun.UtilityScripts;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class TestNamePanelHide : MonoBehaviour
