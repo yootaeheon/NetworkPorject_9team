@@ -140,10 +140,10 @@ public class VoteManager : MonoBehaviourPunCallbacks
 
         yield return 1f.GetDelay();
 
-        //if (PhotonNetwork.IsMasterClient == true)
-        //{
-        SceneChanger.UnLoadScene("VoteScene");
-        //}
+        if (PhotonNetwork.IsMasterClient == true)
+        {
+            SceneChanger.UnLoadScene("VoteScene");
+        }
     }
     IEnumerator ShowVoteSkipRoutine()
     {
@@ -151,10 +151,10 @@ public class VoteManager : MonoBehaviourPunCallbacks
         GameUI.ShowVoteSkip();
         yield return 7f.GetDelay();
 
-        //if (PhotonNetwork.IsMasterClient == true)
-        //{
+        if (PhotonNetwork.IsMasterClient == true)
+        {
             SceneChanger.UnLoadScene("VoteScene");
-        //}
+        }
     }
 
     /// <summary>
