@@ -496,7 +496,7 @@ public class PlayerController : MonoBehaviourPun
         else if (name == "GoosePolter")
         {
             isGhost = true;
-          
+            Debug.Log($"액터넘버 = {PhotonNetwork.LocalPlayer.ActorNumber}");
             Ghost.SetActive(isActive);
             
         }

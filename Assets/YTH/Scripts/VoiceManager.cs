@@ -45,7 +45,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                _targetPlayersController._aliveTargetPlayers[i] = 0;
+                _targetPlayersController._aliveTargetPlayers[i] = 50;
             }
         }
         _recorder.TargetPlayers = _targetPlayersController._aliveTargetPlayers;
@@ -55,7 +55,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < _targetPlayersController._deadTargetPlayers.Length; i++)
         {
-            _targetPlayersController._deadTargetPlayers[i] = 0;
+            _targetPlayersController._deadTargetPlayers[i] = 50;
         }
     }
 
@@ -71,7 +71,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     {
        
 
-        _targetPlayersController._aliveTargetPlayers[index] = 0;
+        _targetPlayersController._aliveTargetPlayers[index] = 50;
         Debug.Log($"인덱스 = {index}");
 
         if (index != PhotonNetwork.LocalPlayer.GetPlayerNumber())
