@@ -15,14 +15,21 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] PlayerController _playerController;
 
+    [SerializeField] VoiceConnection _connection;
+
+    [SerializeField] byte[] ALIVE;
+
+    [SerializeField] byte[] DEAD;
+
 
     private void Start()
     {
-        _targetPlayersController = FindAnyObjectByType<TargetPlayersController>();
-        _recorder = FindAnyObjectByType<Recorder>();
-
-        SetAliveTargetPlayers();
-        SetDeadTargetPlayers();
+        //  _targetPlayersController = FindAnyObjectByType<TargetPlayersController>();
+        //  _recorder = FindAnyObjectByType<Recorder>();
+        _connection = FindAnyObjectByType<VoiceConnection>();
+        _connection.Client.OpChangeGroups(null, ALIVE);
+      // SetAliveTargetPlayers();
+      // SetDeadTargetPlayers();
     }
 
     public void DisableVoice()
@@ -59,11 +66,13 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void MeDead(int playerNumber)
+    public void MeDead()
     {
-        photonView.RPC(nameof(MeDeadRpc), RpcTarget.All, playerNumber);
-        Debug.Log($"겟플레이어넘버 = {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
-        Debug.Log($"액터넘버 = {PhotonNetwork.LocalPlayer.ActorNumber}");
+        // photonView.RPC(nameof(MeDeadRpc), RpcTarget.All, playerNumber);
+        // Debug.Log($"겟플레이어넘버 = {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
+        // Debug.Log($"액터넘버 = {PhotonNetwork.LocalPlayer.ActorNumber}");
+
+        _connection.Client.OpChangeGroups(ALIVE, DEAD);
     }
 
     [PunRPC]
