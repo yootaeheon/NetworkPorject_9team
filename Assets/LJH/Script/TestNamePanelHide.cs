@@ -39,6 +39,8 @@ public class TestNamePanelHide : MonoBehaviour
     {
         for (int i = 0; i < namePanels.Length; i++)
         {
+            if (namePanels[i] == null)
+                return;
             Vector2 myPos = new Vector2(transform.position.x, transform.position.y - 1.5f);
             Vector2 targetPos = namePanels[i].transform.position;
 
