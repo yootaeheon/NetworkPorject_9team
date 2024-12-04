@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 303560568322161268}
   - component: {fileID: 8277027104668373415}
   - component: {fileID: 4680655458888512515}
+  - component: {fileID: 7930591231104807188}
   m_Layer: 7
   m_Name: LJH_Player
   m_TagString: Player
@@ -320,6 +321,19 @@ MonoBehaviour:
   _targetPlayersController: {fileID: 366217060164669963, guid: 9b2b522f6819f3847ab7a8e3b637b36f, type: 3}
   _recorder: {fileID: 0}
   _playerController: {fileID: 2878660863728613726}
+--- !u!114 &7930591231104807188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2878660863728613669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0759072b61a2f37419222cf22cac3e75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speaker: {fileID: 0}
 --- !u!1001 &2122999579499882890
 PrefabInstance:
   m_ObjectHideFlags: 0

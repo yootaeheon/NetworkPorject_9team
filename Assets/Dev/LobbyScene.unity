@@ -23887,7 +23887,6 @@ GameObject:
   - component: {fileID: 1176695394}
   - component: {fileID: 1176695393}
   - component: {fileID: 1176695391}
-  - component: {fileID: 1176695395}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -23986,14 +23985,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &1176695395
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176695390}
-  m_Enabled: 1
 --- !u!1 &1178264748
 GameObject:
   m_ObjectHideFlags: 0
@@ -40998,6 +40989,10 @@ PrefabInstance:
     - target: {fileID: 6288668966610224320, guid: 9b2b522f6819f3847ab7a8e3b637b36f, type: 3}
       propertyPath: m_Name
       value: VoiceManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6288668966610224321, guid: 9b2b522f6819f3847ab7a8e3b637b36f, type: 3}
+      propertyPath: useTargetPlayers
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6288668966610224335, guid: 9b2b522f6819f3847ab7a8e3b637b36f, type: 3}
       propertyPath: m_RootOrder

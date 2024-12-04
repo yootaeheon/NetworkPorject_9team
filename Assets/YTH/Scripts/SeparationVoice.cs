@@ -2,13 +2,14 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Voice.Unity;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SeparationVoice : MonoBehaviourPun
 {
     PlayerDataContainer PlayerDataContainer => PlayerDataContainer.Instance;
 
-    private Speaker _speaker;
+    [SerializeField] Speaker _speaker;
 
     private PhotonView _playerView;
 
@@ -21,38 +22,25 @@ public class SeparationVoice : MonoBehaviourPun
         StartCoroutine(SeparateVoice());
     }
 
-    private void Awake()
-    {
-       // PhotonView playerView = GetComponentInParent<PhotonView>();
-       // _playerView = playerView;
-    }
-
-    private void Update()
-    {
-        // 게임중
-        //  if (VoteScene.Instance == null)
-        //  {
-        //      _speaker.gameObject.SetActive(true);
-        //  }
-        //  // 투표중
-        //  else
-        //  {
-        //      _speaker.gameObject.SetActive(false);
-        //  }
-    }
-
     public IEnumerator SeparateVoice()
     {
         while (true)
         {
+          
+
             if (PlayerDataContainer == null || LobbyScene.Instance != null || _speaker == null)
             {
                 yield return null;
+                Debug.Log("일드 리턴 널");
             }
             else
             {
+                if (photonView.IsMine == false)
+                    yield break;
+
                 yield return 0.5f.GetDelay();
-                photonView.RPC(nameof(SeparateVoiceRpc), RpcTarget.AllBuffered);
+                photonView.RPC(nameof(SeparateVoiceRpc), RpcTarget.All, PhotonNetwork.LocalPlayer.GetPlayerNumber());
+                Debug.Log("알피시 호출");
             }
         }
 
@@ -60,9 +48,9 @@ public class SeparationVoice : MonoBehaviourPun
 
     // 플레이어 사망 시 스피커 위치 변경하여 보이스 분리
     [PunRPC]
-    public void SeparateVoiceRpc()
+    public void SeparateVoiceRpc(int index)
     {
-        if (PlayerDataContainer.GetPlayerData(PhotonNetwork.LocalPlayer.GetPlayerNumber()).IsGhost)
+        if (PlayerDataContainer.GetPlayerData(index).IsGhost)
         {
             _speaker.transform.position = new Vector3(0, 0, 30);
         }
