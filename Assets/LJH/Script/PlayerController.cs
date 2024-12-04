@@ -20,10 +20,10 @@ public class PlayerController : MonoBehaviourPun
     [SerializeField] float moveSpeed;  // 이동속도 
     [SerializeField] float Detectradius;  // 탐색 범위
     [SerializeField] LayerMask layerMask;
-    [SerializeField] float KillCoolDown = 10;
-    [SerializeField] public float _remainCoolDown = 0;
-    public float RemainCoolDown { get { return _remainCoolDown; } set { _remainCoolDown = value; OnChangeRemainCoolDownEvent?.Invoke(_remainCoolDown); } }
-    public event UnityAction<float> OnChangeRemainCoolDownEvent;
+    [SerializeField] int KillCoolDown = 10;
+    [SerializeField] public int _remainCoolDown = 0;
+    public int RemainCoolDown { get { return _remainCoolDown; } set { _remainCoolDown = value; OnChangeRemainCoolDownEvent?.Invoke( _remainCoolDown); } }
+    public event UnityAction<int> OnChangeRemainCoolDownEvent;
 
 
     [SerializeField] GameObject IdleBody;
@@ -322,8 +322,8 @@ public class PlayerController : MonoBehaviourPun
     {
         while (RemainCoolDown > 0)
         {
-            RemainCoolDown -= Time.deltaTime;
-            yield return null;
+            RemainCoolDown--;
+            yield return 1f.GetDelay();
         }
         RemainCoolDown = 0;
         canKill = true; // 쿨타임 종료

@@ -19,6 +19,7 @@ namespace GameUIs
         private GameObject _gooseUI => GetUI("GooseUI");
         private GameObject _duckUI => GetUI("DuckUI");
 
+        private Image _killIcon => GetUI<Image>("KillIcon");
         private GameObject _killCoolTimeIcon => GetUI("KillCoolTimeIcon");
         private TMP_Text _killCoolTimeText => GetUI<TMP_Text>("KillCoolTimeText");
 
@@ -44,8 +45,9 @@ namespace GameUIs
         /// <summary>
         /// 킬쿨타임 업데이트
         /// </summary>
-        private void UpdateKillCoolTime(float value)
+        private void UpdateKillCoolTime(int value)
         {
+            _killIcon.color = GameLoadingScene.MyPlayerController.RemainCoolDown > 0 ? Color.gray : Color.white;
             _killCoolTimeIcon.SetActive(GameLoadingScene.MyPlayerController.RemainCoolDown > 0);
             _killCoolTimeText.SetText($"{value}");
         }
