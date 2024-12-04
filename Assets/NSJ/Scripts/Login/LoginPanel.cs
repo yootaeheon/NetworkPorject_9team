@@ -507,7 +507,7 @@ public class LoginPanel : BaseUI
         GetUI<Button>("SignUpButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
 
         GetUI<Button>("SignUpBackButton").onClick.AddListener(() => ChangeBox(Box.Login));
-        GetUI<Button>("SignUpBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+        GetUI<Button>("SignUpBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonOff));
 
         _signUpEmailInput.onValueChanged.AddListener(ActivateSignUpButton);
         _signUpPasswordInput.onValueChanged.AddListener(ActivateSignUpButton);
@@ -520,7 +520,7 @@ public class LoginPanel : BaseUI
         #region FindBox
 
         GetUI<Button>("FindBackButton").onClick.AddListener(() => ChangeBox(Box.Login));
-        GetUI<Button>("FindBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+        GetUI<Button>("FindBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonOff));
 
         GetUI<Button>("FindButton").onClick.AddListener(FindPassword);
         GetUI<Button>("FindButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));

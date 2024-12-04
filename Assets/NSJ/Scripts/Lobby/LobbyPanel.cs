@@ -188,7 +188,7 @@ public class LobbyPanel : BaseUI
         LobbyScene.Instance.OnRoomListUpdateEvent += UpdateRoomList;
         LobbyScene.Instance.OnLeftLobbyEvent += ClearRoomEntry;
         GetUI<Button>("LobbyBackButton").onClick.AddListener(LeftLobby);
-        GetUI<Button>("LobbyBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+        GetUI<Button>("LobbyBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonOff));
 
         GetUI<Button>("LobbyStartButton").onClick.AddListener(JoinRoom);
         GetUI<Button>("LobbyStartButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));

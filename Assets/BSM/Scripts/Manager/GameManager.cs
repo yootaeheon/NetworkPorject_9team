@@ -218,6 +218,8 @@ public class GameManager : MonoBehaviourPun
             case SabotageType.BlackOut:
                 SabotageBreaker = false;
                 _globalTaskName = "전등 고치기";
+
+                SoundManager.SFXPlay(SoundManager.Data.LightOff);
                 Debug.Log("전등 꺼짐");
 
                 if (playerType.Equals(PlayerType.Goose))

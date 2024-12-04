@@ -18,11 +18,12 @@ public class SoundData : ScriptableObject
         public AudioClip GooseIntro;
         public AudioClip Vote;
         public AudioClip GooseStep;
+        public AudioClip LightOff;
     }
     [SerializeField] private Sound _sound;
 
     public AudioClip ButtonClick { get { return _sound.ButtonClick; } }
-    public AudioClip Buttonoff { get { return _sound.ButtonOff; } }
+    public AudioClip ButtonOff { get { return _sound.ButtonOff; } }
     public AudioClip Report { get { return _sound.Report; } }
     public AudioClip Dead {  get { return _sound.Dead; } }
     public AudioClip Kill {  get { return _sound.Kill; } }
@@ -31,4 +32,5 @@ public class SoundData : ScriptableObject
     public AudioClip GooseIntro { get {return _sound.GooseIntro; } }
     public AudioClip Vote { get { return _sound.Vote; } }
     public AudioClip GooseStep { get { return _sound.GooseStep; } }
+    public AudioClip LightOff { get { return _sound.LightOff; } }
 }

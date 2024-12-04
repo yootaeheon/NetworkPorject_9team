@@ -83,6 +83,6 @@ public class MainQuickBox : BaseUI
         GetUI<Button>("QuickStartButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
 
         GetUI<Button>("QuickBackButton").onClick.AddListener(() => MainPanel.ChangeBox(MainPanel.Box.Main));
-        GetUI<Button>("QuickBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+        GetUI<Button>("QuickBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonOff));
     }
 }

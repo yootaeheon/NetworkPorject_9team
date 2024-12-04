@@ -118,7 +118,7 @@ public class MainCreateRoomBox : BaseUI
         _createPlayerCountSlider.onValueChanged.AddListener(UpdatePlayerCount);
         _createRoomOpenSlider.onValueChanged.AddListener(UpdateIsVisible);
         GetUI<Button>("CreateBackButton").onClick.AddListener(() => MainPanel.ChangeBox(MainPanel.Box.Join));
-        GetUI<Button>("CreateBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));
+        GetUI<Button>("CreateBackButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonOff));
 
         GetUI<Button>("CreateRoomButton").onClick.AddListener(CreateRoom);
         GetUI<Button>("CreateRoomButton").onClick.AddListener(() => SoundManager.SFXPlay(SoundManager.Data.ButtonClick));

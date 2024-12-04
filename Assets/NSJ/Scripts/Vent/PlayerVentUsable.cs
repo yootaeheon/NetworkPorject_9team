@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerVentUsable : MonoBehaviourPun
 {
-    public bool InVent;
+    [HideInInspector] public bool InVent;
 
     private PlayerController _player;
     private Vent _vent;
@@ -134,7 +134,7 @@ public class PlayerVentUsable : MonoBehaviourPun
     {
         // 카메라 다시 플레이어 기준
         // TODO : 시네머신에 따라 코드 변경해야함
-        Camera.main.transform.SetParent(transform);
+        Camera.main.transform.SetParent(null);
         Camera.main.transform.localPosition = new Vector3(0, 0, -10);
 
         // 벤트 이벤트 구독 해제
