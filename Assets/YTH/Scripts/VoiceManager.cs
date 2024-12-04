@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Voice.Unity;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class VoiceManager : MonoBehaviourPunCallbacks
 {
@@ -11,7 +12,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
     [SerializeField] TargetPlayersController _targetPlayersController;
 
-    [SerializeField] Recorder _recorder;
+    [SerializeField] Photon.Voice.Unity.Recorder _recorder;
 
     [SerializeField] PlayerController _playerController;
 
@@ -25,9 +26,10 @@ public class VoiceManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         //  _targetPlayersController = FindAnyObjectByType<TargetPlayersController>();
-        //  _recorder = FindAnyObjectByType<Recorder>();
+        _recorder = FindAnyObjectByType<Photon.Voice.Unity.Recorder>();
         _connection = FindAnyObjectByType<VoiceConnection>();
         _connection.Client.OpChangeGroups(null, ALIVE);
+     
       // SetAliveTargetPlayers();
       // SetDeadTargetPlayers();
     }
@@ -71,7 +73,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
         // photonView.RPC(nameof(MeDeadRpc), RpcTarget.All, playerNumber);
         // Debug.Log($"겟플레이어넘버 = {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
         // Debug.Log($"액터넘버 = {PhotonNetwork.LocalPlayer.ActorNumber}");
-
+        _recorder.InterestGroup = 2;
         _connection.Client.OpChangeGroups(ALIVE, DEAD);
     }
 
