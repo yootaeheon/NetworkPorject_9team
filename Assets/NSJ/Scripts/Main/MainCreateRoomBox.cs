@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MainCreateRoomBox : BaseUI
 {
     [SerializeField] int _minPlayer = 5;
-    [SerializeField] int _maxPlayer = 16;
+    [SerializeField] int _maxPlayer = 12;
 
     private TMP_InputField _createNickNameInput => GetUI<TMP_InputField>("CreateNickNameInput");
     private TMP_Text _createPlayerCountText => GetUI<TMP_Text>("CreatePlayerCountText");
