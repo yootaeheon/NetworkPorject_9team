@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 0a54467e-ae51-459b-8648-95ef7b6bf767
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: kr
     Server: 
     Port: 0
     ProxyServer: 
@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: hk
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -42,6 +42,85 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - SyncObjectActiveState
+  - SyncObjectActiveStateRPC
+  - StateActiveRPC
+  - RpcStateActive
+  - SyncChildActiveRPC
+  - RpcSyncChildActive
+  - RpcTest
+  - RpcChildActive
+  - RpcsetLayer
+  - SetParentRPC
+  - VotePanelClickedRPC
+  - SpawnPlayerPanelRPC
+  - VotePlayerRPC
+  - 
+  - RpcSetColors
+  - GlobalMissionRPC
+  - MissionTotalScore
+  - SecondFireRPC
+  - FirstFireRPC
+  - FireCountSync
+  - DuckAbilityRPC
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - RpcUnActive
+  - RpcUpdatePlayerGhostList
+  - RpciconActive
+  - RpcSetNicknamePanel
+  - RpcSetPlayerData
+  - RpcSetJobs
+  - RpcRandomSpawner
+  - RpcRandomSetjob
+  - 
+  - 
+  - 
+  - 
+  - 
+  - RPCDelete
+  - RPCUnLoadSceneString
+  - RPCUnLoadSceneInt
+  - RPCLoadSceneString
+  - RPCLoadSceneInt
+  - RPCVent
+  - RPCSetPlayerToOrigin
+  - RPCSetPlayerToNewPlayer
+  - RPCSetPlayerProperty
+  - RPCLoadScene
+  - RPCUnLoadScene
+  - Test
+  - RPCSetParent
+  - RPCEmergencyCall
+  - 
+  - SpawnSkipAnonymImageRPC
+  - SpawnAnonymImageRPC
+  - OnClickSkipRPC
+  - RpcSetEnterPlayerData
+  - SubscribesEventLobbySceneRoutine
+  - RpcSetDuckPlayer
+  - RpcSetExitPlayerData
+  - RpcShowGameStartUI
+  - RpcSyncPlayerData
+  - RPCReport
+  - RPCSetPlayerNumber
+  - DestroyMyPlayer
+  - RPCClearPlayerData
+  - StartJudgeGameOver
+  - SetPlayerPanelRPC
+  - SeparateVoiceRpc
+  - RPCSetIsStartVote
+  - RPCDie
+  - MeDeadRpc
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1

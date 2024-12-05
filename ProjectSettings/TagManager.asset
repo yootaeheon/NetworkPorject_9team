@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Test
+  - RightSlot
+  - WaitSlot
+  - NamePanel
+  - Dead
   layers:
   - Default
   - TransparentFX
@@ -12,17 +17,17 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Mission
+  - Ghost
+  - Sabotage
+  - Test
+  - MiniMap
+  - Dead
+  - OutWall
+  - NamePanel
+  - NamePanelSee
+  - GhostName
   - 
   - 
   - 
@@ -38,6 +43,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: MiniMap
+    uniqueID: 2684135839
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ground
+    uniqueID: 2796250131
+    locked: 0
+  - name: player
+    uniqueID: 1668482325
     locked: 0

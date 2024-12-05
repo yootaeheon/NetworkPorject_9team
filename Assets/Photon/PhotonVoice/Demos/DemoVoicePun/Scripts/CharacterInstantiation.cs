@@ -243,7 +243,7 @@ namespace ExitGames.Demos.DemoPunVoice
 
         private void OnEnable()
         {
-            this.spawnPoints = this.serializedObject.FindProperty("SpawnPoints");
+            this.spawnPoints = this.serializedObject.FindProperty("_spawnPoints");
             this.prefabsToInstantiate = this.serializedObject.FindProperty("PrefabsToInstantiate");
             this.useRandomOffset = this.serializedObject.FindProperty("UseRandomOffset");
             this.positionOffset = this.serializedObject.FindProperty("PositionOffset");
@@ -327,7 +327,7 @@ namespace ExitGames.Demos.DemoPunVoice
             }
             else
             {
-                // List Elements and Delete buttons
+                // _panelList Elements and Delete buttons
                 for (int i = 0; i < list.arraySize; ++i)
                 {
                     EditorGUILayout.BeginHorizontal();
