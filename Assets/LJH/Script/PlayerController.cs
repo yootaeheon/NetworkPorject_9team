@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviourPun
 
         StartCoroutine(SetPlayerDataRoutine());
 
-        RemainCoolDown = 30;
+        RemainCoolDown = 15;
         StartCoroutine(CoolDown());
     }
     /// <summary>
