@@ -77,8 +77,9 @@ public class PlayerController : MonoBehaviourPun
         SettingColor(randomColor.r, randomColor.g, randomColor.b);
 
         StartCoroutine(SetPlayerDataRoutine());
-        
-       
+
+        RemainCoolDown = 30;
+        StartCoroutine(CoolDown());
     }
     /// <summary>
     /// 플레이어 데이터 세팅
