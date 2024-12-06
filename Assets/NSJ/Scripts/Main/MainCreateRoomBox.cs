@@ -107,9 +107,13 @@ public class MainCreateRoomBox : BaseUI
         _createPrivacyCheck.SetActive(false);
     }
     private void Init()
-    {        
+    {
         // TODO : 추후 게임매니저 같은곳에서 최대최소 인원 연동해서 가져와야할 필요가 있음
+#if UNITY_EDITOR
+        _createPlayerCountSlider.minValue = 1;
+#else
         _createPlayerCountSlider.minValue = _minPlayer;
+#endif
         _createPlayerCountSlider.maxValue = _maxPlayer;
 
     }
